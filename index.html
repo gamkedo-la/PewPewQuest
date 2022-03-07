@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <header>
+        <title>MVG</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </header>
+    <body>
+        <div id = 'gamebox'>
+            <canvas id = 'canvas'></canvas>
+        </div>
+        <!-- start with the browser check -->
+        <script src="js/core/browsercheck.js"></script>
+
+        <!-- core stuff -->
+        <script src="js/core/animation.js"></script>
+        <script src="js/core/spritesheet.js"></script>
+        <script src="js/core/AssetLoader.js"></script>
+        <script src="js/core/audio.js"></script>
+        <script src="js/core/graphics.js"></script>
+        <script src="js/core/Signal.js"></script>
+        <script src="js/core/util.js"></script>
+        
+        <!--our one bit of external code, mr doobs FPS checker -->
+        <script src = 'js/stats.js'></script>
+
+         <!-- game states -->
+        <script src="js/screens/titleScreen.js"></script>
+        <script src="js/screens/gameScreen.js"></script>
+        <script src="js/screens/gameOverScreen.js"></script>
+        <script src="js/screens/creditsScreen.js"></script>
+
+
+        <!-- and finally our main entry point -->
+        <script src = "js/main.js"></script>
+        <script src="js/events.js"></script>
+
+    </body>
+</html>

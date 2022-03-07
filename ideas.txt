@@ -1,0 +1,41 @@
+Things I want to learn/tackle in this game:
+    ray collisions / rotated collisions, "non tile" / "non AABB" collisions and response
+    procedural character animation
+        walks with multiple legs
+            bipedal
+            quadruped/spider
+            dynamic number of limbs
+    complex child/parent relationships, multi-sprite entities (bosses/big characters)
+    complex-looking enemy behavior using sensors
+    an elegant 2.5d solution with proper draw sorting
+        "tall tiles" ?
+fun feature ideas:
+    tilemap-based objects
+        use small 4px or 8x tilemap designs as objects in game
+    some kind of dynamic lighting
+        pre-rendered light/dark copies of tilesheet graphics
+    dynamic tilemap effects
+    pre-rendered sprite rotations ? 
+
+
+
+
+top-down shooter roguelike where you can pilot multiple machines in the world
+    abandon them when damaged or need a smaller one to proceed
+    some roll, some walk, will have to swap to traverse some terrains / fit in tight spaces
+
+a hunter/gatherer roguelike with a day/night cycle.  At night monsters come to eat you.
+    single-map game, but big enough for a scrolling camera
+    arcade-like loop, less content creation, more iteration on fun-ness
+    See pico8 fisher game
+
+a peaceful big-world exploration walkabout with lots of unique collectibles
+    multiple creature types, all peaceful
+    opportunity to code big multi-page inventory UI
+    crafting? -scope
+
+
+
+
+
+    
