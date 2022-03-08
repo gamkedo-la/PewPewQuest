@@ -7,7 +7,7 @@ canvas = document.getElementById("canvas");
 canvasContext = canvas.getContext("2d");
 canvas.imageSmoothingEnabled = false;
 canvas.width = 320;
-canvas.height = 180;
+canvas.height = 160;
 
 //globals and constants
 
@@ -15,17 +15,23 @@ const GAMESTATE_TITLE = 0
 const GAMESTATE_PLAY = 1;
 const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
+const FRAMES_PER_SECOND = 60;
 
-var gameState = GAMESTATE_TITLE;
+var gameState = GAMESTATE_PLAY;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();
 var img, gameFont, tinyFont;
+var view = {
+    x: 0,
+    y: 0
+}
 
 const imageList = [
-    //image loader assumes .png and appends it. all images should be in /src/img/.
+    //image loader assumes .png and appends it. all images should be in img/.
     'smallFont',
     '3x5font',
+    'map',
 ]
 
 const soundList = [
@@ -55,6 +61,10 @@ function loadSounds(){
 }
 
 function loadingComplete(){
+    console.log('loading complete, initializing game');
+    world = new World(img['map'].width, img['map'].height, 8);
+    world.populateWithImage(img['map']);
+    player.placeAtTile(1220, 589 )
     console.log('loading complete, starting game')
 
      //create spriteFont
@@ -77,7 +87,7 @@ function loadingComplete(){
     })
 
 
-    setInterval(gameLoop, 1000/60);
+    setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
 }
 
 function gameLoop() {

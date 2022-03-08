@@ -123,4 +123,32 @@ World.prototype.tileFillCircle = function tileFillCircle( tx, ty, radius, value 
     }
 }
 
-export default World;
+World.prototype.populateWithImage = function populateWithImage(image){
+    let c = document.createElement('canvas');
+    c.width = image.width;
+    c.height = image.height;
+    let ctx = c.getContext('2d');
+    ctx.drawImage(image, 0, 0);
+    let data = new Uint32Array(ctx.getImageData(0, 0, image.width, image.height).data.buffer);
+    // for(let i = 0; i < data.length; i++){
+    //     this.data[i] = data[i];
+    // }
+    this.data = data;
+}
+
+World.prototype.drawMap = function drawMap(){
+    let left = Math.floor(view.x/8);
+    let right = Math.ceil((view.x+canvas.width)/8);
+    let top = Math.floor(view.y/8);
+    let screenWidth = Math.ceil(canvas.width/8);
+    let bottom = Math.ceil((view.y+canvas.height)/8);
+    for(let i = left; i < right; i++){
+        for(let j = top; j < bottom; j++){
+            let tile = this.getTileAtPosition(i, j);
+            if(tile != 0){
+                fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, convertUint32ToRGBA(tile));
+            }
+        }
+    }
+}   
+

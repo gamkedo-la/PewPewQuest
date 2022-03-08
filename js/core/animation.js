@@ -1,5 +1,13 @@
+/**
+ * Create an animation object.
+ * @param  {} spriteSheet - The sprite sheet to use for the animation.
+ * @param  {} frames - The frames to use for the animation.
+ * @param  {} frameRate - The frame rate of the animation.
+ * @param  {} loop=true - Whether the animation should loop.
+ */
+
 class Animation {
-  constructor({spriteSheet, frames, frameRate, loop = true} = {}) {
+  constructor(spriteSheet, frames, frameRate, loop = true) {
 
     
     this.spriteSheet = spriteSheet;

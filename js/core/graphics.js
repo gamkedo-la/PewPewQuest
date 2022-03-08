@@ -1,8 +1,12 @@
+/**
+ * clears the screen by filling it with the background color. Assumes canvasContext exists
+ * @param  {} color='#040408' : background color to clear with
+ */
 function clearScreen(color='#040408'){
     canvasContext.save();
     canvasContext.setTransform(1,0,0,1,0,0);
     canvasContext.fillStyle = color;
-    canvasContext.fillRect(0, 0, c.width, c.height);
+    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
     canvasContext.restore();
 }
 
@@ -57,8 +61,21 @@ function fillPolygon(x,y,r,sides, rotation=0){
  * @param  {} width: width of rectangle
  * @param  {} height: height of rectangle
  */
-function fillRect(x,y,width,height,filled = true){
+function fillRect(x,y,width,height, color='white'){
+    canvasContext.fillStyle = color;
     canvasContext.fillRect(x, y,width, height );
+}
+
+/**
+ * draws a stroked rectangle. assumes canvasContext exists
+ * @param  {} x: x position of center
+ * @param  {} y: y position of center
+ * @param  {} width: width of rectangle
+ * @param  {} height: height of rectangle
+ */
+ function strokeRect(x,y,width,height, color='white'){
+    canvasContext.strokeStyle =`1px solid ${color}`;
+    canvasContext.strokeRect(x, y,width, height );
 }
 
 
@@ -72,22 +89,6 @@ function fillRect(x,y,width,height,filled = true){
 function pset(x,y, color='#FF00FF'){
     canvasContext.fillStyle = color;
     canvasContext.fillRect(x,y, 1, 1);
-}
-
-function onScreen(position, width = 0, height = 0,){
-
-    let x = position.x;
-    let y = position.y;
-
-    //none of this is right, also needs to account for padding
-    //TODO: rewrite as AABB check instead of point in rect
-    const left = view.x - width;
-    const top = view.y - height;
-    const right = view.x + canvas.width;
-    const bottom = view.y + canvas.height;
-
-  return x > left && x < right && y > top && y < bottom
-  
 }
 function spriteFont({
     width, 
@@ -149,4 +150,12 @@ spriteFont.prototype.textLine = function textLine({ textString, pos={x: 0, y: 0}
     })
 }
 
+convertUint32ToRGBA = function convertUint32ToRGBA(color){
+    return `rgba(${(color)&255},${(color>>8)&255},${color>>16&255},${(color>>24)&255})`;
+}
+
+convertUint32ToHex = function convertUint32ToHex(color){
+    //return `#${(color>>16)&255}${(color>>8)&255}${color&255}`;
+   return`#${(color>>16)&255}${(color>>8)&255},${color&255}${(color>>24)&255}`;z
+}
 
