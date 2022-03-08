@@ -24,7 +24,9 @@ var audio = new AudioGlobal();
 var img, gameFont, tinyFont;
 var view = {
     x: 0,
-    y: 0
+    y: 0,
+    targetX: 0,
+    targetY: 0,
 }
 
 const imageList = [
@@ -50,6 +52,8 @@ function loadImages(){
 }
 
 function initAudio(){
+    world = new World(img['map'].width, img['map'].height, 8);
+    world.populateWithImage(img['map']);
     audio.init(loadSounds);
 }
 
@@ -62,10 +66,8 @@ function loadSounds(){
 
 function loadingComplete(){
     console.log('loading complete, initializing game');
-    world = new World(img['map'].width, img['map'].height, 8);
-    world.populateWithImage(img['map']);
-    player.placeAtTile(1220, 589 )
-    console.log('loading complete, starting game')
+
+   
 
      //create spriteFont
      gameFont = new spriteFont({
@@ -86,6 +88,7 @@ function loadingComplete(){
         //remaining options are in spriteFont defaults
     })
 
+    signal.dispatch('startGame');
 
     setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
 }

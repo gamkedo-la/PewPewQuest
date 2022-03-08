@@ -69,6 +69,9 @@ function calculateMousePos(evt) {
 function lerp(v0, v1, t) {
     return v0*(1-t)+v1*t
 }
+function intLerp(v0, v1, t) {
+    return Math.round(v0*(1-t)+v1*t);
+}
 
 function inView(x,y){
     let screenX = x - view.x,

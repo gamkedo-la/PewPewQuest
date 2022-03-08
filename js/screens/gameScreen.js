@@ -11,10 +11,7 @@ var gameScreen = {
     },
     hitCounter: 0,
     reset: function () {
-        this.box.x = 0;
-        this.box.y = 0;
-        this.timerbox.width = 320;
-        this.hitCounter = 0;
+        player.placeAtTile(1220, 589 )
     },
     draw: function () {
         clearScreen('black');
@@ -22,6 +19,8 @@ var gameScreen = {
         player.draw();
        },
     update: function () {
+        view.x = intLerp(view.x, view.targetX, 0.3);
+        view.y = intLerp(view.y, view.targetY, 0.3);
         player.update();
     }
 }
