@@ -144,7 +144,7 @@ World.prototype.drawMap = function(){
             
                 switch(tile){
                     case 0:
-                        this.drawLightGridRadius(i,j,player,90, "#020203");
+                        this.drawLightGridRadius(i,j,player,90, "#202030");
                         break;
                     default:
                         this.drawFilledTile(i,j,tile);
