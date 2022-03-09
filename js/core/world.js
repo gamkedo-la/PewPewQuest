@@ -2,7 +2,7 @@ const World = function World(widthInTiles=100, heightInTiles=100, tileSize=8){
     this.heightInTiles = heightInTiles;
     this.widthInTiles = widthInTiles;
     this.tileSize = tileSize;
-    this.data = new Uint16Array(widthInTiles * heightInTiles);
+    this.data = new Uint32Array(widthInTiles * heightInTiles);
     this.portals = [];
     this.spawnPoints = [];
     this.spawnPoints = [];
@@ -130,6 +130,7 @@ World.prototype.populateWithImage = function populateWithImage(image){
     ctx.drawImage(image, 0, 0);
     let data = new Uint32Array(ctx.getImageData(0, 0, image.width, image.height).data.buffer);
     this.data = data;
+    this.populateMapObjects();
 }
 
 World.prototype.drawMap = function(){
@@ -187,4 +188,17 @@ World.prototype.drawDiamondOverlay = function(i,j){
 
 World.prototype.drawFilledTile = function(i,j,tile){
     fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, convertUint32ToRGBA(tile));
+}
+
+World.prototype.populateMapObjects = function(){
+    for(let i = 0; i < this.widthInTiles; i++){
+        for(let j = 0; j < this.heightInTiles; j++){
+            let tile = this.getTileAtPosition(i, j);
+            if(tile == 4294902015){
+                let obj = new Item(i * 8, j * 8, tile);
+                this.entities.push(obj);
+                this.setTileAtPosition(i, j, 0);
+            }
+        }
+    }
 }

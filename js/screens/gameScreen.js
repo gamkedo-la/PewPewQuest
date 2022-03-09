@@ -16,11 +16,22 @@ var gameScreen = {
     draw: function () {
         clearScreen('black');
         world.drawMap();
+        world.entities.forEach(function (entity) {
+            if(inView(entity.x, entity.y)){
+                entity.draw()
+            } 
+        });
         player.draw();
        },
     update: function () {
         view.x = intLerp(view.x, view.targetX, 0.3);
         view.y = intLerp(view.y, view.targetY, 0.3);
+
+        world.entities.forEach(function (entity) {
+            if(inView(entity.x, entity.y)){
+                entity.update()
+            } 
+        });
         player.update();
     }
 }

@@ -13,15 +13,17 @@ var titleScreen = {
 
         //fun polygon background
         for(let i = 0; i < 20; i++){
-            canvasContext.strokeStyle = `
+            color = `
             rgb(
                 ${Math.floor(255*Math.sin(ticker/300*i))},
                 ${Math.floor(255*Math.cos(ticker/100*i/20))},
                 ${Math.floor(255*Math.sin(ticker/60))})`;
 
-            strokePolygon(canvas.width/2, canvas.height/2, 10*i, 7, ticker/100*i/2);
+            strokePolygon(canvas.width/2, canvas.height/2, 10*i, 7, ticker/100*i/2, color);
             
         }
+        // strokePolygon(canvas.width/2, canvas.height/2, 50, 3, 0, "white");
+        // pixelLine(100,100,150,150,"red");
         
         //title text
         gameFont.drawText("Minimum Viable Game", { x: 10, y: 10 }, 0, 0, 2);

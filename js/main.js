@@ -17,18 +17,6 @@ const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
 const FRAMES_PER_SECOND = 60;
 
-var gameState = GAMESTATE_TITLE;
-var ticker = 0;
-var loader = new AssetLoader();
-var audio = new AudioGlobal();
-var img, gameFont, tinyFont;
-var view = {
-    x: 0,
-    y: 0,
-    targetX: 0,
-    targetY: 0,
-}
-
 const imageList = [
     //image loader assumes .png and appends it. all images should be in img/.
     'smallFont',
@@ -41,6 +29,18 @@ const soundList = [
     { name: "test2", url:"snd/test2.mp3" }
 ]
 
+var gameState = GAMESTATE_TITLE;
+var ticker = 0;
+var loader = new AssetLoader();
+var audio = new AudioGlobal();
+var img, gameFont, tinyFont;
+var view = {
+    x: 0,
+    y: 0,
+    targetX: 0,
+    targetY: 0,
+}
+
 function init(){
     
     loadImages();
@@ -52,8 +52,7 @@ function loadImages(){
 }
 
 function initAudio(){
-    world = new World(img['map'].width, img['map'].height, 8);
-    world.populateWithImage(img['map']);
+
     audio.init(loadSounds);
 }
 
@@ -66,11 +65,12 @@ function loadSounds(){
 
 function loadingComplete(){
     console.log('loading complete, initializing game');
-
+    world = new World(img['map'].width, img['map'].height, 8);
+    world.populateWithImage(img['map']);
    
 
      //create spriteFont
-     gameFont = new spriteFont({
+    gameFont = new spriteFont({
         width: 255,
         height: 128,
         characterHeight: 9,

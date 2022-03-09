@@ -3,11 +3,8 @@
  * @param  {} color='#040408' : background color to clear with
  */
 function clearScreen(color='#040408'){
-    canvasContext.save();
-    canvasContext.setTransform(1,0,0,1,0,0);
     canvasContext.fillStyle = color;
     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-    canvasContext.restore();
 }
 
 /**
@@ -42,17 +39,22 @@ function fillPolygon(x,y,r,sides, rotation=0, color='white'){
  * @param  {} filled=true : if true, will draw a filled polygon otherwise stroke, with current context fillStyle or strokeStyle
  * @param  {} rotation=0 : rotation of polygon in radians
  */
- function strokePolygon(x,y,r,sides, rotation=0){
+; function strokePolygon(x,y,r,sides, rotation=0, color='white'){
     sides = sides || Math.floor( 120 * (r*2) )+16;
-    canvasContext.beginPath();
+    
     for(let i = 0; i < sides; i++){
+
         let j = i/sides * 6.283185; //tau radians
-        let px = x + Math.cos(j+rotation)*r;
-        let py = y + Math.sin(j+rotation)*r;
-        canvasContext.lineTo(px,py);
+        let j2 = (i+1)/sides * 6.283185; //tau radians
+
+        var sx = x + Math.cos(j+rotation)*r;
+        var sy = y + Math.sin(j+rotation)*r;
+
+        let px = x + Math.cos(j2+rotation)*r;
+        let py = y + Math.sin(j2+rotation)*r;
+
+        pixelLine(sx,sy,px,py,color);
     }
-    canvasContext.closePath();
-    canvasContext.stroke();
 }
 
 /**
@@ -147,6 +149,59 @@ spriteFont.prototype.textLine = function textLine({ textString, pos={x: 0, y: 0}
             self.characterHeight * scale
         )
     })
+}
+
+pixelLine = function(x1, y1, x2, y2, color='white') {
+
+    x1 = x1 | 0,
+        x2 = x2 | 0,
+        y1 = y1 | 0,
+        y2 = y2 | 0;
+
+    var dy = (y2 - y1);
+    var dx = (x2 - x1);
+    var stepx, stepy;
+
+    if (dy < 0) {
+        dy = -dy;
+        stepy = -1;
+    } else {
+        stepy = 1;
+    }
+    if (dx < 0) {
+        dx = -dx;
+        stepx = -1;
+    } else {
+        stepx = 1;
+    }
+    dy <<= 1; // dy is now 2*dy
+    dx <<= 1; // dx is now 2*dx
+
+    pset(x1, y1, color);
+    if (dx > dy) {
+        var fraction = dy - (dx >> 1); // same as 2*dy - dx
+        while (x1 != x2) {
+            if (fraction >= 0) {
+                y1 += stepy;
+                fraction -= dx; // same as fraction -= 2*dx
+            }
+            x1 += stepx;
+            fraction += dy; // same as fraction -= 2*dy
+            pset(x1, y1, color);
+        };
+    } else {
+        fraction = dx - (dy >> 1);
+        while (y1 != y2) {
+            if (fraction >= 0) {
+                x1 += stepx;
+                fraction -= dy;
+            }
+            y1 += stepy;
+            fraction += dx;
+            pset(x1, y1, color);
+        }
+    }
+
 }
 
 convertUint32ToRGBA = function convertUint32ToRGBA(color){

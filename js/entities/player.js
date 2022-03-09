@@ -101,6 +101,7 @@ var player = {
     },
 
     updateCollider(x, y) {
+        
         this.collider.top = this.y - this.height / 2;
         this.collider.bottom = this.y + this.height / 2;
         this.collider.left = this.x - this.width / 2;
@@ -119,17 +120,10 @@ var player = {
 
     tileCollisionCheck: function(world, tileCheck){
         
-        // //update body edges
-        // this.rect.top = this.pos.y - this.height/2 + EXTRA_HEADROOM;
-        // this.rect.bottom = this.pos.y + this.height/2;
-        // this.rect.left = this.pos.x - this.width/2;
-        // this.rect.right = this.pos.x + this.width/2;
-
         let leftTile =      Math.floor(this.collider.left / world.tileSize),
             rightTile =     Math.floor(this.collider.right / world.tileSize),
             topTile =       Math.floor(this.collider.top / world.tileSize),
             bottomTile =    Math.floor(this.collider.bottom / world.tileSize)
-            //collision = false;
 
         for(let i = leftTile; i <=rightTile; i++){
             for(let j = topTile; j<= bottomTile; j++){
