@@ -19,7 +19,7 @@ function clearScreen(color='#040408'){
  * @param  {} filled=true : if true, will draw a filled polygon otherwise stroke, with current context fillStyle or strokeStyle
  * @param  {} rotation=0 : rotation of polygon in radians
  */
-function fillPolygon(x,y,r,sides, rotation=0){
+function fillPolygon(x,y,r,sides, rotation=0, color='white'){
     sides = sides || Math.floor( 120 * (r*2) )+16;
     canvasContext.beginPath();
     for(let i = 0; i < sides; i++){
@@ -28,6 +28,7 @@ function fillPolygon(x,y,r,sides, rotation=0){
         let py = y + Math.sin(j+rotation)*r;
         canvasContext.lineTo(px,py);
     }
+    canvasContext.fillStyle=color;
     canvasContext.closePath();
     canvasContext.fill();
 }
@@ -133,7 +134,6 @@ spriteFont.prototype.textLine = function textLine({ textString, pos={x: 0, y: 0}
         let spriteX = (keyIndex % self.widthInCharacters) * self.characterWidth;
         let spriteY = Math.floor( keyIndex / self.widthInCharacters ) * self.characterHeight;
         //draw
-        //console.log(character);
         canvasContext.imageSmoothingEnabled = false;
         canvasContext.drawImage(
             self.image,
@@ -146,7 +146,6 @@ spriteFont.prototype.textLine = function textLine({ textString, pos={x: 0, y: 0}
             self.characterWidth * scale,
             self.characterHeight * scale
         )
-        //console.log(keyIndex);
     })
 }
 

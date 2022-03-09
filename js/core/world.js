@@ -118,7 +118,6 @@ World.prototype.tileFillCircle = function tileFillCircle( tx, ty, radius, value 
             if(x*x+y*y <= rad*rad){
                 this.data[this.getIndexAtPosition(tx+x, ty+y)] = value;
             }
-            
         }
     }
 }
@@ -130,13 +129,10 @@ World.prototype.populateWithImage = function populateWithImage(image){
     let ctx = c.getContext('2d');
     ctx.drawImage(image, 0, 0);
     let data = new Uint32Array(ctx.getImageData(0, 0, image.width, image.height).data.buffer);
-    // for(let i = 0; i < data.length; i++){
-    //     this.data[i] = data[i];
-    // }
     this.data = data;
 }
 
-World.prototype.drawMap = function drawMap(){
+World.prototype.drawMap = function(){
     let left = Math.floor(view.x/8);
     let right = Math.ceil((view.x+canvas.width)/8);
     let top = Math.floor(view.y/8);
@@ -145,10 +141,50 @@ World.prototype.drawMap = function drawMap(){
     for(let i = left; i < right; i++){
         for(let j = top; j < bottom; j++){
             let tile = this.getTileAtPosition(i, j);
-            if(tile != 0){
-                fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, convertUint32ToRGBA(tile));
-            }
+            
+                switch(tile){
+                    case 0:
+                        this.drawLightGridRadius(i,j,player,90, "#020203");
+                        break;
+                    default:
+                        this.drawFilledTile(i,j,tile);
+                        this.drawCheckeredOverlay(i,j);
+                        break;
+
+                }
+            
         }
     }
-}   
+}
 
+World.prototype.drawLightGridRadius = function(i, j, location, radius, color = '#101010'){
+    let tilePosition = {x: i*8, y: j*8};
+    let distanceFromLocation = Math.sqrt(Math.pow(location.x - tilePosition.x, 2) + Math.pow(location.y - tilePosition.y, 2));
+    if(distanceFromLocation < radius){
+        normalizedDistance = distanceFromLocation/radius;
+        fillRect(
+        (i*this.tileSize-view.x+4*normalizedDistance),
+        (j*this.tileSize-view.y+4*normalizedDistance),
+        8-(this.tileSize-2)*normalizedDistance,
+        8-(this.tileSize-2)*normalizedDistance,
+        color
+        );
+    }
+}
+
+World.prototype.drawCheckeredOverlay = function(i,j){
+    if((i+j)%2 == 0){
+        fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, "rgba(16,0,8,0.2)");
+    }
+}
+
+World.prototype.drawDiamondOverlay = function(i,j){
+    if((i+j)%2 == 0){
+        //filledPolygon(
+        //fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, "rgba(0,0,0,0.2)");
+    }
+}
+
+World.prototype.drawFilledTile = function(i,j,tile){
+    fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, convertUint32ToRGBA(tile));
+}

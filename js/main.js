@@ -17,7 +17,7 @@ const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
 const FRAMES_PER_SECOND = 60;
 
-var gameState = GAMESTATE_PLAY;
+var gameState = GAMESTATE_TITLE;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();
@@ -88,7 +88,8 @@ function loadingComplete(){
         //remaining options are in spriteFont defaults
     })
 
-    signal.dispatch('startGame');
+    gameScreen.reset();
+    //signal.dispatch('startGame');
 
     setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
 }

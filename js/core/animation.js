@@ -8,31 +8,14 @@
 
 class Animation {
   constructor(spriteSheet, frames, frameRate, loop = true) {
-
-    
     this.spriteSheet = spriteSheet;
-
-   
     this.frames = frames;
-
-    
     this.frameRate = frameRate;
-
-    
     this.loop = loop;
-
     let { width, height, margin = 0 } = spriteSheet.frame;
-
-    
     this.width = width;
-
-    
     this.height = height;
-
-    
     this.margin = margin;
-
-    
     this.currentFrame = 0;
     this.accumulator = 0;
   }
