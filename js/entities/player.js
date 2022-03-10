@@ -4,7 +4,7 @@ var player = {
     previousX: 0,
     previousY: 0,
     width: 9,
-    height: 18,
+    height: 9,
     speed: 0,
     xVelocity: 0,
     yVelocity: 0,
@@ -26,12 +26,12 @@ var player = {
     },
 
     draw: function () {
-        fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height);
-        pset(Math.round(this.x-view.x), Math.round(this.y-view.y), 'magenta');
-        pset(Math.round(this.collider.leftFeeler.x-view.x), Math.round(this.collider.leftFeeler.y-view.y), "red");
-        pset(Math.round(this.collider.rightFeeler.x-view.x), Math.round(this.collider.rightFeeler.y-view.y), "yellow");
-        pset(Math.round(this.collider.topFeeler.x-view.x), Math.round(this.collider.topFeeler.y-view.y),    "green");
-        pset(Math.round(this.collider.bottomFeeler.x-view.x), Math.round(this.collider.bottomFeeler.y-view.y), "blue");
+        fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, "yellow");
+        // pset(Math.round(this.x-view.x), Math.round(this.y-view.y), 'magenta');
+        // pset(Math.round(this.collider.leftFeeler.x-view.x), Math.round(this.collider.leftFeeler.y-view.y), "red");
+        // pset(Math.round(this.collider.rightFeeler.x-view.x), Math.round(this.collider.rightFeeler.y-view.y), "yellow");
+        // pset(Math.round(this.collider.topFeeler.x-view.x), Math.round(this.collider.topFeeler.y-view.y),    "green");
+        // pset(Math.round(this.collider.bottomFeeler.x-view.x), Math.round(this.collider.bottomFeeler.y-view.y), "blue");
 
     },
 
@@ -101,7 +101,7 @@ var player = {
     },
 
     updateCollider(x, y) {
-        
+
         this.collider.top = this.y - this.height / 2;
         this.collider.bottom = this.y + this.height / 2;
         this.collider.left = this.x - this.width / 2;
