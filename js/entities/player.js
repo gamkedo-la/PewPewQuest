@@ -13,6 +13,8 @@ var player = {
     maxSpeed: 20,
     maxAcceleration: 70,
     friction: 0.7,
+    xFacing: 0,
+    yFacing: 0,
 
     collider: {
         left: 0,
@@ -49,16 +51,24 @@ var player = {
         
         if (Key.isDown(Key.LEFT)) {
             this.xVelocity -= this.maxAcceleration;
+            this.xFacing = -1;
         }
-        if (Key.isDown(Key.RIGHT)) {
+        else if (Key.isDown(Key.RIGHT)) {
             this.xVelocity += this.maxAcceleration;
+            this.xFacing = 1;
         }
+        else {this.xFacing = 0}
         if (Key.isDown(Key.UP)) {
             this.yVelocity -= this.maxAcceleration;
+            this.yFacing = -1;
         }
-        if (Key.isDown(Key.DOWN)) {
+        else if (Key.isDown(Key.DOWN)) {
             this.yVelocity += this.maxAcceleration;
-        }
+            this.yFacing = 1;
+        } else {this.yFacing = 0}
+       
+
+        if (Key.justReleased(Key.z)) { this.fireBullet(); }
 
         if(this.collider.right - view.x < 0) {
             view.targetX -= canvas.width;
@@ -142,6 +152,11 @@ var player = {
 
     tilesThatCollide: function(tile){
         return tile >= 0;
+    },
+
+    fireBullet: function(){
+        let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
+        world.entities.push(bullet);
     }
 
     

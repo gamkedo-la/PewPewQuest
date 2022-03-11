@@ -41,57 +41,6 @@ World.prototype.pixelToTileGrid = function pixelToTileGrid(x, y){
             y: Math.round(y / this.tileSize)
             }
 }
-//the following functions meant for use when you want to dynamically add tiles to the world. 
-//also good for prototyping before you have a map.
-World.prototype.drawLine = function drawLine( x1, x2, y1, y2, value ) {
-    
-    var x1 = x1|0;
-    var x2 = x2|0;
-    var y1 = y1|0;
-    var y2 = y2|0;
-    var value = value|0;
-
-    var dy = (y2 - y1);
-    var dx = (x2 - x1);
-    var stepx, stepy;
-
-    if (dy < 0) { dy = -dy; stepy = -1;
-    } else { stepy = 1; }
-
-    if (dx < 0) { dx = -dx; stepx = -1;
-    } else { stepx = 1; }
-
-    dy <<= 1;        // dy is now 2*dy
-    dx <<= 1;        // dx is now 2*dx
-
-    this.setTileAtPosition(x1, y1, value);
-
-    if (dx > dy) {
-      var fraction = dy - (dx >> 1);  // same as 2*dy - dx
-      while (x1 != x2) {
-        if (fraction >= 0) {
-          y1 += stepy;
-          fraction -= dx;          // same as fraction -= 2*dx
-        }
-        x1 += stepx;
-        fraction += dy;              // same as fraction -= 2*dy
-        this.setTileAtPosition(x1, y1, value);
-      }
-      ;
-    } else {
-      fraction = dx - (dy >> 1);
-      while (y1 != y2) {
-        if (fraction >= 0) {
-          x1 += stepx;
-          fraction -= dy;
-        }
-        y1 += stepy;
-        fraction += dx;
-        this.setTileAtPosition(x1, y1, value);
-      }
-    }
-
-  }
 
 World.prototype.tileFillRect = function tileFillRect( tx, ty, width, height, value ){
     for(let i = ty; i <= ty + height; i++){
