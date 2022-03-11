@@ -164,10 +164,10 @@ World.prototype.drawLightGridRadius = function(i, j, location, radius, color = '
     if(distanceFromLocation < radius){
         normalizedDistance = distanceFromLocation/radius;
         fillRect(
-        (i*this.tileSize-view.x+4*normalizedDistance),
-        (j*this.tileSize-view.y+4*normalizedDistance),
-        8-(this.tileSize-2)*normalizedDistance,
-        8-(this.tileSize-2)*normalizedDistance,
+        Math.round ( (i*this.tileSize-view.x+4*normalizedDistance) ),
+        Math.round ( (j*this.tileSize-view.y+4*normalizedDistance) ),
+        Math.round ( 8-(this.tileSize-2)*normalizedDistance ),
+        Math.round ( 8-(this.tileSize-2)*normalizedDistance ),
         color
         );
     }

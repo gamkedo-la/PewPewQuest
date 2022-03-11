@@ -65,6 +65,7 @@ function loadSounds(){
 
 function loadingComplete(){
     console.log('loading complete, initializing game');
+    console.log(img['map'].width)
     world = new World(img['map'].width, img['map'].height, 8);
     world.populateWithImage(img['map']);
    

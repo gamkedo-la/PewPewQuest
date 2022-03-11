@@ -12,6 +12,10 @@ var gameScreen = {
     hitCounter: 0,
     reset: function () {
         player.placeAtTile(1220, 589 )
+        view.targetX = Math.floor((1220 * world.tileSize) / canvas.width) * canvas.width
+        view.targetY = Math.floor((589 * world.tileSize) / canvas.height) * canvas.height
+        view.x = view.targetX
+        view.y = view.targetY
     },
     draw: function () {
         clearScreen('black');

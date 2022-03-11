@@ -1,6 +1,6 @@
 var player = {
-    x: 1220*8,
-    y: 500*8,
+    x: 0,
+    y: 0,
     previousX: 0,
     previousY: 0,
     width: 9,
@@ -133,7 +133,7 @@ var player = {
                    return tileCheck(tile);
                 }
                 else if(tile > tileCheck){
-                    console.log(tile);
+                    //console.log(tile);
                     return true;
                 }
             }
