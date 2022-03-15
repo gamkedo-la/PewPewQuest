@@ -98,7 +98,7 @@ World.prototype.drawMap = function(){
                         break;
                     default:
                         this.drawFilledTile(i,j,tile);
-                        this.drawCheckeredOverlay(i,j);
+                        //this.drawCheckeredOverlay(i,j);
                         break;
 
                 }

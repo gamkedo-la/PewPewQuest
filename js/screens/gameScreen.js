@@ -1,15 +1,5 @@
 var gameScreen = {
-    box: {
-        x: 0,
-        y: 0,
-    },
-    timerbox: {
-        x: 0,
-        y: 0,
-        width: 320,
-        height: 10
-    },
-    hitCounter: 0,
+   
     reset: function () {
         player.placeAtTile(1220, 589 )
         view.targetX = Math.floor((1220 * world.tileSize) / canvas.width) * canvas.width
@@ -28,8 +18,8 @@ var gameScreen = {
         player.draw();
        },
     update: function () {
-        view.x = intLerp(view.x, view.targetX, 0.3);
-        view.y = intLerp(view.y, view.targetY, 0.3);
+        view.x = intLerp(view.x, view.targetX, 0.2);
+        view.y = intLerp(view.y, view.targetY, 0.2);
 
         world.entities.forEach(function (entity) {
             if(inView(entity.x, entity.y)){

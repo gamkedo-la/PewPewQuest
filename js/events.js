@@ -25,5 +25,6 @@ function gotoTitleScreen(event){
 
 function gotoCreditScreen(event){
     console.log('gotoCreditScreen triggered');
+    creditsScreen.reset();
     gameState = GAMESTATE_CREDITS;
 }

@@ -1,10 +1,5 @@
 var titleScreen = {
 
-    box: {
-        x: 0,
-        y: 0,
-    },
-
     draw: function () {
 
         //fill background
@@ -26,8 +21,9 @@ var titleScreen = {
         // pixelLine(100,100,150,150,"red");
         
         //title text
-        gameFont.drawText("Minimum Viable Game", { x: 10, y: 10 }, 0, 0, 2);
+        gameFont.drawText("PewPewQuest", { x: 10, y: 10 }, 0, 0, 2);
         gameFont.drawText("Press Z to Start", { x: 10, y: 30 }, 0, 0);
+        gameFont.drawText("Press C for Credits", { x: 10, y: 50 }, 0, 0);
 
     },
 
@@ -37,10 +33,7 @@ var titleScreen = {
         }
         if(Key.justReleased(Key.z)) { signal.dispatch('startGame'); }
 
-        this.box.x = canvas.width/2 - 5;
-        this.box.y = canvas.height/2 - 5;
-        this.box.x += Math.sin(ticker/10) * 100;
-        this.box.y += Math.cos(ticker/10) * 100;
+       if(Key.justReleased(Key.c)) { signal.dispatch('creditScreen'); }
         
     }
 }

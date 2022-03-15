@@ -10,8 +10,8 @@ var player = {
     yVelocity: 0,
     xAcceleration: 0,
     yAcceleration: 0,
-    maxSpeed: 20,
-    maxAcceleration: 70,
+    maxSpeed: 150,
+    maxAcceleration: 90,
     friction: 0.7,
     xFacing: 0,
     yFacing: 0,
@@ -29,21 +29,17 @@ var player = {
 
     draw: function () {
         fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, "yellow");
-        // pset(Math.round(this.x-view.x), Math.round(this.y-view.y), 'magenta');
-        // pset(Math.round(this.collider.leftFeeler.x-view.x), Math.round(this.collider.leftFeeler.y-view.y), "red");
-        // pset(Math.round(this.collider.rightFeeler.x-view.x), Math.round(this.collider.rightFeeler.y-view.y), "yellow");
-        // pset(Math.round(this.collider.topFeeler.x-view.x), Math.round(this.collider.topFeeler.y-view.y),    "green");
-        // pset(Math.round(this.collider.bottomFeeler.x-view.x), Math.round(this.collider.bottomFeeler.y-view.y), "blue");
-
     },
 
     update: function () {
         this.updateCollider(this.x, this.y);
         //apply x movement
         this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
+        this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
         this.xVelocity *= this.friction;
         //apply y movement
         this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
+        this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
         this.yVelocity *= this.friction;
 
         //update rect:

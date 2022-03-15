@@ -56,6 +56,7 @@ const Key = {
         this._released = {};
     }
 };
+
 function calculateMousePos(evt) {
     var rect = c.getBoundingClientRect();
     var root = document.documentElement;
@@ -97,6 +98,10 @@ function pointInRect(x, y, rect){
             x <= rect.right &&
             y >= rect.top &&
             y <= rect.bottom
+}
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
 }
 
 

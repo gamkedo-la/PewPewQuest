@@ -1,19 +1,42 @@
-var creditScreen = {
-    box: {
-        x: 0,
-        y: 0,
+credits =
+`
+HomeTeam GameDev Presents:
+PewPewQuest
+
+a JS game led by Ryan Malm from
+March 21st thru May 22th 2022
+
+John Doe: thing 1 and thing 2
+Jane Doe: thing 3 and thing 4
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+Credits Scroller
+`
+var creditsScreen = {
+    reset: function(){
+        ticker = 0;
     },
+
     draw: function () {
-        canvasContext.fillStyle = 'black';
-        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-        canvasContext.fillStyle = 'white';
-        canvasContext.fillRect(this.box.x, this.box.y, 10, 10);
-        tinyFont.drawText("Credits Scroller", { x: 10, y: 10 }, 0, 0);
+        clearScreen('black');
+        //todo: add centered text function to spriteFont
+        verticalSpacing = 4;
+        creditsLength = credits.split(/\r?\n/).length * ( gameFont.characterHeight + verticalSpacing) + canvas.height;
+        console.log(credits.split(/\r?\n/).length);
+        gameFont.drawText( credits, { x: 10, y: canvas.height - (ticker/2) % creditsLength }, 0, verticalSpacing);
+        gameFont.drawText( credits, { x: 10, y: creditsLength + (ticker/2) % creditsLength }, 0, verticalSpacing);
     },
+
     update: function () {
-        this.box.x = canvas.width/2 - 5;
-        this.box.y = canvas.height/2 - 5;
-        this.box.x += Math.sin(ticker/10) * 50;
-        this.box.y += Math.cos(ticker/10) * 50;
+       if(Key.justReleased(Key.ENTER)) { signal.dispatch('titleScreen'); }
     }
 }
