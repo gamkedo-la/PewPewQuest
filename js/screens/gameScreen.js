@@ -16,6 +16,7 @@ var gameScreen = {
             } 
         });
         player.draw();
+        inventory.draw();
        },
     update: function () {
         view.x = intLerp(view.x, view.targetX, 0.2);
@@ -27,5 +28,6 @@ var gameScreen = {
             } 
         });
         player.update();
+        inventory.update();
     }
 }

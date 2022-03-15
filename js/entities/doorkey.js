@@ -1,4 +1,4 @@
-class Item {
+class DoorKey {
     constructor(x,y,type) {
         this.x = x;
         this.y = y;
@@ -16,7 +16,8 @@ class Item {
     }
 
     collect() {
+        
         console.log('collected item');
-        world.entities.splice(world.entities.indexOf(this), 1);
+        signal.dispatch('getKey', {item: this});
     }
 }

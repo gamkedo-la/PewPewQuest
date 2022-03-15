@@ -67,16 +67,16 @@ var player = {
         if (Key.justReleased(Key.z)) { this.fireBullet(); }
 
         if(this.collider.right - view.x < 0) {
-            view.targetX -= canvas.width;
+            view.targetX -= view.width;
         }
-        if(this.collider.left - view.x > canvas.width - this.width) {
-            view.targetX += canvas.width;
+        if(this.collider.left - view.x > view.width - this.width) {
+            view.targetX += view.width;
         }
         if(this.collider.bottom - view.y < 0) {
-            view.targetY -= canvas.height;
+            view.targetY -= view.height;
         }
-        if(this.collider.top - view.y > canvas.height - this.height) {
-            view.targetY += canvas.height;
+        if(this.collider.top - view.y > view.height - this.height) {
+            view.targetY += view.height;
             //this.y += 2;
         }
 

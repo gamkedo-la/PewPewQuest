@@ -59,8 +59,8 @@ function fillPolygon(x,y,r,sides, rotation=0, color='white'){
 
 /**
  * draws a filled rectangle. assumes canvasContext exists
- * @param  {} x: x position of center
- * @param  {} y: y position of center
+ * @param  {} x: x position of top left corner
+ * @param  {} y: y position of top left corner
  * @param  {} width: width of rectangle
  * @param  {} height: height of rectangle
  */

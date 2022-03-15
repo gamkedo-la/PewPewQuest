@@ -79,9 +79,9 @@ function inView(x,y){
         screenY = y - view.y,
         padding = 200;
         return (screenX > -padding &&
-               screenX < (canvas.width + padding) &&
+               screenX < (view.width + padding) &&
                screenY > -padding &&
-               screenY < (canvas.height+padding))
+               screenY < (view.height+padding))
 }
 
 function rectCollision(rect1, rect2) {

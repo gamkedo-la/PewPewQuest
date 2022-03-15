@@ -7,7 +7,8 @@ canvas = document.getElementById("canvas");
 canvasContext = canvas.getContext("2d");
 canvas.imageSmoothingEnabled = false;
 canvas.width = 320;
-canvas.height = 160;
+canvas.height = 180;
+
 
 //globals and constants
 
@@ -33,10 +34,14 @@ var gameState = GAMESTATE_TITLE;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();
+var sounds = loader.sounds;
+var play = audio.playSound;
 var img, gameFont, tinyFont;
 var view = {
     x: 0,
     y: 0,
+    width: 320,
+    height: 160,
     targetX: 0,
     targetY: 0,
 }
@@ -68,6 +73,7 @@ function loadingComplete(){
     console.log(img['map'].width)
     world = new World(img['map'].width, img['map'].height, 8);
     world.populateWithImage(img['map']);
+
    
 
      //create spriteFont

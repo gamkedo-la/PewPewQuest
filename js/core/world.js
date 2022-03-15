@@ -84,10 +84,10 @@ World.prototype.populateWithImage = function populateWithImage(image){
 
 World.prototype.drawMap = function(){
     let left = Math.floor(view.x/8);
-    let right = Math.ceil((view.x+canvas.width)/8);
+    let right = Math.ceil((view.x+view.width)/8);
     let top = Math.floor(view.y/8);
-    let screenWidth = Math.ceil(canvas.width/8);
-    let bottom = Math.ceil((view.y+canvas.height)/8);
+    let screenWidth = Math.ceil(view.width/8);
+    let bottom = Math.ceil((view.y+view.height)/8);
     for(let i = left; i < right; i++){
         for(let j = top; j < bottom; j++){
             let tile = this.getTileAtPosition(i, j);
@@ -128,13 +128,6 @@ World.prototype.drawCheckeredOverlay = function(i,j){
     }
 }
 
-World.prototype.drawDiamondOverlay = function(i,j){
-    if((i+j)%2 == 0){
-        //filledPolygon(
-        //fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, "rgba(0,0,0,0.2)");
-    }
-}
-
 World.prototype.drawFilledTile = function(i,j,tile){
     fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, convertUint32ToRGBA(tile));
 }
@@ -144,7 +137,7 @@ World.prototype.populateMapObjects = function(){
         for(let j = 0; j < this.heightInTiles; j++){
             let tile = this.getTileAtPosition(i, j);
             if(tile == 4294902015){
-                let obj = new Item(i * 8, j * 8, tile);
+                let obj = new DoorKey(i * 8, j * 8, tile);
                 this.entities.push(obj);
                 this.setTileAtPosition(i, j, 0);
             }
