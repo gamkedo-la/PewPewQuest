@@ -1,9 +1,9 @@
 var gameScreen = {
    
     reset: function () {
-        player.placeAtTile(1220, 589 )
-        view.targetX = Math.floor((1220 * world.tileSize) / canvas.width) * canvas.width
-        view.targetY = Math.floor((589 * world.tileSize) / canvas.height) * canvas.height
+        player.placeAtTile(32, 15 )
+        view.targetX = Math.floor((32 * world.tileSize) / canvas.width) * canvas.width
+        view.targetY = Math.floor((15 * world.tileSize) / canvas.height) * canvas.height
         view.x = view.targetX
         view.y = view.targetY
     },

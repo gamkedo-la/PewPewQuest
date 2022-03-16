@@ -18,6 +18,12 @@ const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
 const FRAMES_PER_SECOND = 60;
 
+// [ northTile, southTile, eastTile, westTile ];
+const NORTH = 0;
+const SOUTH = 1;
+const EAST = 2;
+const WEST = 3;
+
 const imageList = [
     //image loader assumes .png and appends it. all images should be in img/.
     'smallFont',
@@ -42,9 +48,12 @@ var view = {
     y: 0,
     width: 320,
     height: 160,
+    widthInTiles: 40,
+    heightInTiles: 20,
     targetX: 0,
     targetY: 0,
 }
+var palette = [];
 
 function init(){
     
@@ -73,7 +82,6 @@ function loadingComplete(){
     console.log(img['map'].width)
     world = new World(img['map'].width, img['map'].height, 8);
     world.populateWithImage(img['map']);
-
    
 
      //create spriteFont

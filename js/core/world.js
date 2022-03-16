@@ -79,6 +79,8 @@ World.prototype.populateWithImage = function populateWithImage(image){
     ctx.drawImage(image, 0, 0);
     let data = new Uint32Array(ctx.getImageData(0, 0, image.width, image.height).data.buffer);
     this.data = data;
+    palette = this.data.slice(0, 256);
+    this.populateMapPalette(palette);
     this.populateMapObjects();
 }
 
@@ -88,13 +90,15 @@ World.prototype.drawMap = function(){
     let top = Math.floor(view.y/8);
     let screenWidth = Math.ceil(view.width/8);
     let bottom = Math.ceil((view.y+view.height)/8);
+
+    //--------------
     for(let i = left; i < right; i++){
         for(let j = top; j < bottom; j++){
             let tile = this.getTileAtPosition(i, j);
             
                 switch(tile){
                     case 0:
-                        this.drawLightGridRadius(i,j,player,90, "#202030");
+                        //this.drawLightGridRadius(i,j,player,90, "#202030");
                         break;
                     default:
                         this.drawFilledTile(i,j,tile);
@@ -136,11 +140,43 @@ World.prototype.populateMapObjects = function(){
     for(let i = 0; i < this.widthInTiles; i++){
         for(let j = 0; j < this.heightInTiles; j++){
             let tile = this.getTileAtPosition(i, j);
-            if(tile == 4294902015){
+           switch (tile){
+                case DOORKEY:
                 let obj = new DoorKey(i * 8, j * 8, tile);
                 this.entities.push(obj);
                 this.setTileAtPosition(i, j, 0);
+                break;
+                case BARRIER:
+                    let neighbors = this.getNeighbors(i, j);
+                    let barrier = new Barrier(i, j, ...neighbors);
+                    world.entities.push(barrier);
+                    console.log(barrier);
+                break;
+
+
             }
         }
     }
+}
+
+
+World.prototype.populateMapPalette = function(palette){
+    DOORKEY = palette[32];
+    BARRIER = palette[33];
+    ONE_KEY = palette[34];
+    TWO_KEY = palette[35];
+    THREE_KEY = palette[36];
+    FOUR_KEY = palette[37];
+    FIVE_KEY = palette[38];
+
+    world.data.fill(0, 0, 256);
+
+}
+
+World.prototype.getNeighbors = function(i, j){
+    let north = this.getTileAtPosition(i, j-1);
+    let south = this.getTileAtPosition(i, j+1);
+    let east = this.getTileAtPosition(i+1, j);
+    let west = this.getTileAtPosition(i-1, j);
+    return [north, south, east, west];
 }

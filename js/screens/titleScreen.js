@@ -23,7 +23,7 @@ var titleScreen = {
         //title text
         gameFont.drawText("PewPewQuest", { x: 10, y: 10 }, 0, 0, 2);
         gameFont.drawText("Press Z to Start", { x: 10, y: 30 }, 0, 0);
-        gameFont.drawText("Press C for Credits", { x: 10, y: 50 }, 0, 0);
+        gameFont.drawText("Press C for Credits", { x: 10, y: 40 }, 0, 0);
 
     },
 
@@ -33,7 +33,7 @@ var titleScreen = {
         }
         if(Key.justReleased(Key.z)) { signal.dispatch('startGame'); }
 
-       if(Key.justReleased(Key.c)) { signal.dispatch('creditScreen'); }
+         if(Key.justReleased(Key.c)) { signal.dispatch('creditScreen'); }
         
     }
 }
