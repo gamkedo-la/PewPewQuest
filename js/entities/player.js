@@ -3,15 +3,15 @@ var player = {
     y: 0,
     previousX: 0,
     previousY: 0,
-    width: 9,
-    height: 9,
+    width: 6,
+    height: 6,
     speed: 0,
     xVelocity: 0,
     yVelocity: 0,
     xAcceleration: 0,
     yAcceleration: 0,
-    maxSpeed: 150,
-    maxAcceleration: 90,
+    maxSpeed: 130,
+    maxAcceleration: 70,
     friction: 0.7,
     xFacing: 0,
     yFacing: 0,
@@ -48,21 +48,24 @@ var player = {
         
         if (Key.isDown(Key.LEFT)) {
             this.xVelocity -= this.maxAcceleration;
+            this.yFacing = 0;
             this.xFacing = -1;
         }
         else if (Key.isDown(Key.RIGHT)) {
             this.xVelocity += this.maxAcceleration;
+            this.yFacing = 0;
             this.xFacing = 1;
         }
-        else {this.xFacing = 0}
         if (Key.isDown(Key.UP)) {
             this.yVelocity -= this.maxAcceleration;
+            this.xFacing = 0;
             this.yFacing = -1;
         }
         else if (Key.isDown(Key.DOWN)) {
             this.yVelocity += this.maxAcceleration;
+            this.xFacing = 0;
             this.yFacing = 1;
-        } else {this.yFacing = 0}
+        }
        
 
         if (Key.justReleased(Key.z)) { this.fireBullet(); }

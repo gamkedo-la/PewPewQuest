@@ -83,14 +83,14 @@ class Barrier {
 
     draw() {
         fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, `hsl(${Math.random()*360}, 100%, 40%)`);
-        strokeRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, "yellow");
+        //strokeRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, "yellow");
 
         for(let i = 0; i < this.keysRequiredToUnlock; i++) {
             if(this.collider.width > this.collider.height) {
-                let spacing = this.collider.width/this.keysRequiredToUnlock;
+                let spacing = Math.floor(this.collider.width/this.keysRequiredToUnlock);
                 fillRect(this.x - view.x + i*spacing, this.y-1 - view.y, 2, 10, `white`);
             } else {
-                let spacing = this.collider.height/this.keysRequiredToUnlock;
+                let spacing = Math.floor(this.collider.height/this.keysRequiredToUnlock);
                 fillRect(this.x-1 - view.x, this.y - view.y + i*spacing, 10, 2, `white`);
             }
         }
