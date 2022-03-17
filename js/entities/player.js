@@ -15,6 +15,7 @@ var player = {
     friction: 0.7,
     xFacing: 0,
     yFacing: 0,
+    //items: inventory.items,
 
     collider: {
         left: 0,
@@ -153,7 +154,14 @@ var player = {
     fireBullet: function(){
         let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
         world.entities.push(bullet);
+    },
+
+    collisionResponse: function(entity){
+
+        this.xVelocity = -this.xVelocity * 2;
+        this.yVelocity = -this.yVelocity * 2;
     }
+                
 
     
 

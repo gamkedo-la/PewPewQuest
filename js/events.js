@@ -3,8 +3,9 @@ signal.addEventListener('gameOver', gameOver);
 signal.addEventListener('titleScreen', gotoTitleScreen);
 signal.addEventListener('creditScreen', gotoCreditScreen);
 
-signal.addEventListener('getKey', getKey);
 
+signal.addEventListener('getKey', getKey);
+signal.addEventListener ('removeBarrier', removeBarrier);
 
 
 
@@ -46,4 +47,10 @@ function getKey(event){
             'You have too many keys! You can only carry 5 keys at a time.'
         )
     }
+}
+
+function removeBarrier(event){
+    console.log('removeBarrier triggered');
+    barrierItem = event.detail.item;
+    world.entities.splice(world.entities.indexOf(barrierItem), 1);
 }

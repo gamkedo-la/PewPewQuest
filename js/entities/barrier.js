@@ -12,13 +12,20 @@ class Barrier {
         this.neighbors = [ northTile, southTile, eastTile, westTile ];
         this.keysNeeded = this.keyQuantities.filter(element => this.neighbors.includes(element) );
         this.direction = this.neighbors.indexOf(this.keysNeeded[0]);
+        this.keysRequiredToUnlock = 1 + this.keyQuantities.indexOf(this.keysNeeded[0]);
         this.height = 0;
         this.width = 0;
         this.collider = {
             x: this.x,
             y: this.y,
             width: 8,
-            height: 8
+            height: 8,
+            left: this.x,
+            right: this.x + 8,
+            top: this.y,
+            bottom: this.y + 8,
+
+
         }
 
         switch(this.direction) {
@@ -71,14 +78,53 @@ class Barrier {
         if(this.height == 0) {
             this.height = 1;
         }
+       this.updateCcollider();
     }
 
     draw() {
-        fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, `hsl(${Math.random()*360}, 100%, 80%)`);
+        fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, `hsl(${Math.random()*360}, 100%, 40%)`);
+        strokeRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, "yellow");
+
+        for(let i = 0; i < this.keysRequiredToUnlock; i++) {
+            if(this.collider.width > this.collider.height) {
+                let spacing = this.collider.width/this.keysRequiredToUnlock;
+                fillRect(this.x - view.x + i*spacing, this.y-1 - view.y, 2, 10, `white`);
+            } else {
+                let spacing = this.collider.height/this.keysRequiredToUnlock;
+                fillRect(this.x-1 - view.x, this.y - view.y + i*spacing, 10, 2, `white`);
+            }
+        }
     }
 
     update() {
+        if(rectCollision(this.collider, player.collider)) {
+            if(inventory.items.keys >= this.keysRequiredToUnlock) {
+                inventory.items.keys -= this.keysRequiredToUnlock;
+                this.removeBarrier();
+            }
+            else {
+                this.keysRequiredToUnlock -= inventory.items.keys;
+                inventory.items.keys = 0;
+                player.collisionResponse(this);
+            }
+
+        }
         
+    }
+
+    removeBarrier() {
+        signal.dispatch("removeBarrier", {item: this});
+    }
+
+    updateCcollider() {
+        this.collider.x = this.x;
+        this.collider.y = this.y;
+        this.collider.width = 8*this.width;
+        this.collider.height = 8*this.height;
+        this.collider.left = this.x;
+        this.collider.right = this.x + 8*this.width;
+        this.collider.top = this.y;
+        this.collider.bottom = this.y + 8*this.height;
     }
 
 
