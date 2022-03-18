@@ -66,6 +66,28 @@ var player = {
             this.xFacing = 0;
             this.yFacing = 1;
         }
+
+        //-------------------------------------
+        if (Key.isDown(Key.a)) {
+            this.xVelocity -= this.maxAcceleration;
+            this.yFacing = 0;
+            this.xFacing = -1;
+        }
+        else if (Key.isDown(Key.d)) {
+            this.xVelocity += this.maxAcceleration;
+            this.yFacing = 0;
+            this.xFacing = 1;
+        }
+        if (Key.isDown(Key.w)) {
+            this.yVelocity -= this.maxAcceleration;
+            this.xFacing = 0;
+            this.yFacing = -1;
+        }
+        else if (Key.isDown(Key.s)) {
+            this.yVelocity += this.maxAcceleration;
+            this.xFacing = 0;
+            this.yFacing = 1;
+        }
        
 
         if (Key.justReleased(Key.z)) { this.fireBullet(); }

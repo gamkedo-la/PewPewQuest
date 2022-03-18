@@ -2,10 +2,16 @@ class DoorKey {
     constructor(x,y) {
         this.x = x;
         this.y = y;
+        this.width = 8;
+        this.height = 8;
+        this.left = x-4;
+        this.right = x + 8;
+        this.top = y-4;
+        this.bottom = y + 8;
     }
 
     update() {
-        if(pointInRect(this.x, this.y, player.collider)){
+        if(rectCollision(this, player.collider)) {
             this.collect();
         }
     }
