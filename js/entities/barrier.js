@@ -86,16 +86,16 @@ class Barrier {
     }
 
     draw() {
-        fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, COLORS.dirtyRed);
+        fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, ticker%2 == 0 ? COLORS.dirtyRed : COLORS.tahitiGold);
         //strokeRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, "yellow");
 
         for(let i = 1; i < this.keysRequiredToUnlock + this.bump; i++) {
             if(this.collider.width > this.collider.height) {
                 let spacing = Math.floor(this.collider.width/(this.keysDrawTarget + this.bump));
-                fillRect(this.x - view.x + i*spacing, this.y-1 - view.y, 2, 10, `black`);
+                fillRect(this.x - view.x + i*spacing, this.y-1 - view.y, 2, 10, `white`);
             } else {
                 let spacing = Math.floor(this.collider.height/(this.keysDrawTarget + this.bump));
-                fillRect(this.x-1 - view.x, this.y - view.y + i*spacing, 10, 2, `black`);
+                fillRect(this.x-1 - view.x, this.y - view.y + i*spacing, 10, 2, `white`);
             }
         }
     }
