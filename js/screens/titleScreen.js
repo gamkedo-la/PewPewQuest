@@ -17,13 +17,13 @@ var titleScreen = {
             strokePolygon(canvas.width/2, canvas.height/2, 10*i, 7, ticker/100*i/2, color);
             
         }
-        // strokePolygon(canvas.width/2, canvas.height/2, 50, 3, 0, "white");
-        // pixelLine(100,100,150,150,"red");
         
         //title text
         gameFont.drawText("PewPewQuest", { x: 10, y: 10 }, 0, 0, 2);
         gameFont.drawText("Press Z to Start", { x: 10, y: 30 }, 0, 0);
         gameFont.drawText("Press C for Credits", { x: 10, y: 40 }, 0, 0);
+
+
 
     },
 

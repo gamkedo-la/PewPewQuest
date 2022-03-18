@@ -69,6 +69,8 @@ var player = {
        
 
         if (Key.justReleased(Key.z)) { this.fireBullet(); }
+        console.log(mouse.pressed);
+        if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
 
         if(this.collider.right - view.x < 0) {
             view.targetX -= view.width;
@@ -139,7 +141,7 @@ var player = {
             for(let j = topTile; j<= bottomTile; j++){
                 let tile = world.getTileAtPosition(i, j)
 
-                if(typeof tileCheck === "function"){
+                if(typeof tileCheck === "function"){ 
                    return tileCheck(tile);
                 }
                 else if(tile > tileCheck){
@@ -156,6 +158,18 @@ var player = {
 
     fireBullet: function(){
         let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
+        world.entities.push(bullet);
+    },
+
+    mouseFireBullet: function(){
+        let worldMouseY = mouse.y + view.y;
+        let worldMouseX = mouse.x + view.x;
+        let bulletXDistance = worldMouseX - this.x;
+        let bulletYDistance = worldMouseY - this.y;
+        let bulletAngle = Math.atan2(bulletYDistance, bulletXDistance);
+        let bulletXVelocity = Math.cos(bulletAngle) * 8;
+        let bulletYVelocity = Math.sin(bulletAngle) * 8;
+        let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
         world.entities.push(bullet);
     },
 

@@ -93,6 +93,17 @@ function pset(x,y, color='#FF00FF'){
     canvasContext.fillStyle = color;
     canvasContext.fillRect(x,y, 1, 1);
 }
+/**
+ * 
+ * @param  {} {width
+ * @param  {} height
+ * @param  {} characterWidth
+ * @param  {} characterHeight
+ * @param  {} characterOrderString=`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.0123456789'!@#$%^&*(
+ * @param  {} +-=
+ * @param  {;><`} "
+ * @param  {} image}={}
+ */
 function spriteFont({
     width, 
     height,  

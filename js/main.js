@@ -43,6 +43,7 @@ var audio = new AudioGlobal();
 var sounds = loader.sounds;
 var play = audio.playSound;
 var img, gameFont, tinyFont;
+
 var view = {
     x: 0,
     y: 0,
@@ -53,6 +54,12 @@ var view = {
     targetX: 0,
     targetY: 0,
 }
+
+var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+gp = gamepads[0];
+
+mouse = {};
+
 var palette = [];
 
 function init(){
@@ -111,6 +118,8 @@ function loadingComplete(){
 
 function gameLoop() {
     ticker++;
+    gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    gp = gamepads[0];
     switch (gameState) {
         case GAMESTATE_TITLE:
             titleScreen.draw();
@@ -141,5 +150,6 @@ window.addEventListener('keyup',    function (event) { Key.onKeyup(event); event
 window.addEventListener('keydown',  function (event) { Key.onKeydown(event); event.preventDefault() }, false);
 window.addEventListener('blur',     function (event) { paused = true; }, false);
 window.addEventListener('focus',    function (event) { paused = false; }, false);
-
+canvas.addEventListener('mousemove',getMousePosition);
+canvas.addEventListener('mousedown',getMousePosition);
 init();

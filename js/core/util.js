@@ -57,16 +57,19 @@ const Key = {
     }
 };
 
-function calculateMousePos(evt) {
-    var rect = c.getBoundingClientRect();
-    var root = document.documentElement;
-    var mouseX = evt.clientX - rect.left - root.scrollLeft;
-    var mouseY = evt.clientY - rect.top - root.scrollTop;
-    return {
-        x:mouseX,
-        y:mouseY
-    };
-}
+getMousePosition = (event) =>  {
+    var rect = canvas.getBoundingClientRect(), // abs. size of element
+        scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for X
+        scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for Y
+
+    mouse = {
+      x: ( (event.clientX - rect.left) * scaleX),   // scale mouse coordinates after they have
+      y: ( (event.clientY - rect.top) * scaleY),     // been adjusted to be relative to element
+      pressed: event.buttons
+    }
+    //console.log(mouse);   
+  }
+
 function lerp(v0, v1, t) {
     return v0*(1-t)+v1*t
 }
