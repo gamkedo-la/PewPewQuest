@@ -18,9 +18,12 @@ class Bullet {
         this.y += this.yVelocity;
         this.life--
         if(world.data[ world.pixelToTileIndex(this.x, this.y) ] > 0){
+           
             this.hit();
         }
         if(!inView(this.x, this.y)){
+            this.x = this.prevX;
+            this.y = this.prevY;
             this.die();
         }
         if(this.life <= 0){

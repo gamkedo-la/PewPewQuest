@@ -17,7 +17,7 @@ class DoorKey {
     }
     
     draw() {
-        strokePolygon(this.x-view.x, this.y-view.y, 8, 3, ticker/20, 'magenta');
+        strokePolygon(this.x-view.x, this.y-view.y, 8, 3, ticker/20, COLORS.white);
     }
 
     collect() {

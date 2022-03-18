@@ -29,7 +29,7 @@ var player = {
     },
 
     draw: function () {
-        fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, "yellow");
+        fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, COLORS.goldenFizz);
     },
 
     update: function () {
@@ -126,7 +126,7 @@ var player = {
         this.previousY = this.y;
     },
 
-    placeAtTile: function (x, y) {
+    placeAtTile(x, y) {
         this.x = x * world.tileSize;
         this.y = y * world.tileSize;
         this.previousX = this.x;

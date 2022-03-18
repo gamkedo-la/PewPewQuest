@@ -3,11 +3,8 @@ const World = function World(widthInTiles=100, heightInTiles=100, tileSize=8){
     this.widthInTiles = widthInTiles;
     this.tileSize = tileSize;
     this.data = new Uint32Array(widthInTiles * heightInTiles);
-    this.portals = [];
-    this.spawnPoints = [];
-    this.spawnPoints = [];
-    this.lightningSpawners = [];
     this.entities = [];
+    this.bullets = [];
 
     return this;
 }
@@ -81,6 +78,7 @@ World.prototype.populateWithImage = function populateWithImage(image){
     this.data = data;
     palette = this.data.slice(0, 256);
     this.populateMapPalette(palette);
+    this.populateCSSColorsArray();
     this.populateMapObjects();
 }
 
@@ -167,6 +165,9 @@ World.prototype.populateMapPalette = function(palette){
     //the order they appear in in the image becomes their indice in palette[].
     
     //yeah yeah, making globals from within a function is bad, but I'm lazy
+
+    //these color constants are meant to be used for logic in the game, not for drawing.
+    //for drawing functions use COLORS[]. 
     COLOR_BLACK__TRANSPARENT = palette[0];
     COLOR_VALHALLA = palette[1];
     COLOR_LOULOU = palette[2];
@@ -194,7 +195,7 @@ World.prototype.populateMapPalette = function(palette){
     COLOR_DIM_GRAY = palette[24];
     COLOR_SMOKEY_ASH = palette[25];
     COLOR_CLAIRVOYANT = palette[26];
-    COLOR_BROWN = palette[27];
+    COLOR_DIRTY_RED = palette[27];
     COLOR_MANDY = palette[28];
     COLOR_PLUM = palette[29];
     COLOR_RAIN_FOREST = palette[30];
@@ -203,14 +204,62 @@ World.prototype.populateMapPalette = function(palette){
     //item and gameobject specific 
     DOORKEY = palette[32];
     BARRIER = palette[33];
-    ONE_KEY = palette[34];
-    TWO_KEY = palette[35];
-    THREE_KEY = palette[36];
-    FOUR_KEY = palette[37];
-    FIVE_KEY = palette[38];
+    ONE = palette[34];
+    TWO = palette[35];
+    THREE = palette[36];
+    FOUR = palette[37];
+    FIVE = palette[38];
 
     world.data.fill(0, 0, 256);
 
+}
+
+World.prototype.populateCSSColorsArray = function(){
+    COLORS = {
+        transparent: convertUint32ToRGBA(COLOR_BLACK__TRANSPARENT),
+        valhalla: convertUint32ToRGBA(COLOR_VALHALLA),
+        loulou: convertUint32ToRGBA(COLOR_LOULOU),
+        oiledCedar: convertUint32ToRGBA(COLOR_OILED_CEDAR),
+        rope: convertUint32ToRGBA(COLOR_ROPE),
+        tahitiGold: convertUint32ToRGBA(COLOR_TAHITI_GOLD),
+        twine: convertUint32ToRGBA(COLOR_TWINE),
+        panther: convertUint32ToRGBA(COLOR_PANCHO),
+        goldenFizz: convertUint32ToRGBA(COLOR_GOLDEN_FIZZ),
+        atlantis: convertUint32ToRGBA(COLOR_ATLANTIS),
+        christi: convertUint32ToRGBA(COLOR_CHRISTI),
+        elfGreen: convertUint32ToRGBA(COLOR_ELF_GREEN),
+        dell: convertUint32ToRGBA(COLOR_DELL),
+        verdigris: convertUint32ToRGBA(COLOR_VERDIGRIS),
+        opal: convertUint32ToRGBA(COLOR_OPAL),
+        deepKoamaru: convertUint32ToRGBA(COLOR_DEEP_KOAMARU),
+        veniceBlue: convertUint32ToRGBA(COLOR_VENICE_BLUE),
+        royalBlue: convertUint32ToRGBA(COLOR_ROYAL_BLUE),
+        cornflower: convertUint32ToRGBA(COLOR_CORNFLOWER),
+        viking: convertUint32ToRGBA(COLOR_VIKING),
+        lightSteelBlue: convertUint32ToRGBA(COLOR_LIGHT_STEEL_BLUE),
+        white: convertUint32ToRGBA(COLOR_WHITE),
+        heather: convertUint32ToRGBA(COLOR_HEATHER),
+        topaz: convertUint32ToRGBA(COLOR_TOPAZ),
+        dimGray: convertUint32ToRGBA(COLOR_DIM_GRAY),
+        smokeyAsh: convertUint32ToRGBA(COLOR_SMOKEY_ASH),
+        clairvoyant: convertUint32ToRGBA(COLOR_CLAIRVOYANT),
+        dirtyRed: convertUint32ToRGBA(COLOR_DIRTY_RED),
+        mandy: convertUint32ToRGBA(COLOR_MANDY),
+        plum: convertUint32ToRGBA(COLOR_PLUM),
+        rainForest: convertUint32ToRGBA(COLOR_RAIN_FOREST),
+        stinger: convertUint32ToRGBA(COLOR_STINGER),
+        doorkey: convertUint32ToRGBA(DOORKEY),
+
+        //I'm not sure where you'd use these in game code, but for completeness
+        barrier: convertUint32ToRGBA(BARRIER),
+        one: convertUint32ToRGBA(ONE),
+        two: convertUint32ToRGBA(TWO),
+        three: convertUint32ToRGBA(THREE),
+        four: convertUint32ToRGBA(FOUR),
+        five: convertUint32ToRGBA(FIVE)
+
+
+    }
 }
 
 World.prototype.getNeighbors = function(i, j){

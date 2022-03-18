@@ -8,13 +8,16 @@ class Barrier {
         this.southTile = southTile;
         this.eastTile = eastTile;
         this.westTile = westTile;
-        this.keyQuantities = [ ONE_KEY, TWO_KEY, THREE_KEY, FOUR_KEY, FIVE_KEY ];
+        this.keyQuantities = [ONE, TWO, THREE, FOUR, FIVE];
         this.neighbors = [ northTile, southTile, eastTile, westTile ];
+        //
         this.keysNeeded = this.keyQuantities.filter(element => this.neighbors.includes(element) );
         this.direction = this.neighbors.indexOf(this.keysNeeded[0]);
         this.keysRequiredToUnlock = 1 + this.keyQuantities.indexOf(this.keysNeeded[0]);
         this.height = 0;
         this.width = 0;
+        this.keysDrawTarget = this.keysRequiredToUnlock;
+
         this.collider = {
             x: this.x,
             y: this.y,
@@ -82,21 +85,22 @@ class Barrier {
     }
 
     draw() {
-        fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, `hsl(${Math.random()*360}, 100%, 40%)`);
+        fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, COLORS.dirtyRed);
         //strokeRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, "yellow");
 
-        for(let i = 0; i < this.keysRequiredToUnlock; i++) {
+        for(let i = 1; i < this.keysRequiredToUnlock; i++) {
             if(this.collider.width > this.collider.height) {
-                let spacing = Math.floor(this.collider.width/this.keysRequiredToUnlock);
+                let spacing = Math.floor(this.collider.width/(this.keysDrawTarget));
                 fillRect(this.x - view.x + i*spacing, this.y-1 - view.y, 2, 10, `white`);
             } else {
-                let spacing = Math.floor(this.collider.height/this.keysRequiredToUnlock);
+                let spacing = Math.floor(this.collider.height/this.keysDrawTarget);
                 fillRect(this.x-1 - view.x, this.y - view.y + i*spacing, 10, 2, `white`);
             }
         }
     }
 
     update() {
+        this.keysDrawTarget = lerp(this.keysDrawTarget, this.keysRequiredToUnlock, 0.15);
         if(rectCollision(this.collider, player.collider)) {
             if(inventory.items.keys >= this.keysRequiredToUnlock) {
                 inventory.items.keys -= this.keysRequiredToUnlock;

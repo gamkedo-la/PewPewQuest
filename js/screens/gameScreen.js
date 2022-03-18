@@ -18,7 +18,7 @@ var gameScreen = {
         });
         player.draw();
         inventory.draw();
-        strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  'yellow');
+        strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  COLORS.tahitiGold);
        },
     update: function () {
         view.x = intLerp(view.x, view.targetX, 0.2);
