@@ -180,7 +180,7 @@ var player = {
 
     fireBullet: function(){
         let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
-        world.entities.push(bullet);
+        world.bullets.push(bullet);
     },
 
     mouseFireBullet: function(){
@@ -192,7 +192,7 @@ var player = {
         let bulletXVelocity = Math.cos(bulletAngle) * 8;
         let bulletYVelocity = Math.sin(bulletAngle) * 8;
         let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
-        world.entities.push(bullet);
+        world.bullets.push(bullet);
     },
 
     collisionResponse: function(entity){

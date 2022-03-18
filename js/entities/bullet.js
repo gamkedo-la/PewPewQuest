@@ -17,6 +17,8 @@ class Bullet {
         this.x += this.xVelocity;
         this.y += this.yVelocity;
         this.life--
+      
+
         if(world.data[ world.pixelToTileIndex(this.x, this.y) ] > 0){
            
             this.hit();
@@ -46,6 +48,6 @@ class Bullet {
     }
 
     die() {
-        world.entities.splice(world.entities.indexOf(this), 1);
+        world.bullets.splice(world.bullets.indexOf(this), 1);
     }
 }

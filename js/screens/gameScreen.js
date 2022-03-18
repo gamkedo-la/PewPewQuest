@@ -16,6 +16,12 @@ var gameScreen = {
                 entity.draw()
             } 
         });
+        world.bullets.forEach(function (bullet) {
+            if(inView(bullet.x, bullet.y)){
+                bullet.draw()
+            }
+        });
+
         player.draw();
         inventory.draw();
         strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  COLORS.tahitiGold);
@@ -29,6 +35,12 @@ var gameScreen = {
                 entity.update()
             } 
         });
+        world.bullets.forEach(function (bullet) {
+            if(inView(bullet.x, bullet.y)){
+                bullet.update()
+            }
+        });
+        
         player.update();
         inventory.update();
     }

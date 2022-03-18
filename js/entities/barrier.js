@@ -17,6 +17,7 @@ class Barrier {
         this.height = 0;
         this.width = 0;
         this.keysDrawTarget = this.keysRequiredToUnlock;
+        this.bump = 0;
 
         this.collider = {
             x: this.x,
@@ -88,19 +89,20 @@ class Barrier {
         fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, COLORS.dirtyRed);
         //strokeRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, "yellow");
 
-        for(let i = 1; i < this.keysRequiredToUnlock; i++) {
+        for(let i = 1; i < this.keysRequiredToUnlock + this.bump; i++) {
             if(this.collider.width > this.collider.height) {
-                let spacing = Math.floor(this.collider.width/(this.keysDrawTarget));
-                fillRect(this.x - view.x + i*spacing, this.y-1 - view.y, 2, 10, `white`);
+                let spacing = Math.floor(this.collider.width/(this.keysDrawTarget + this.bump));
+                fillRect(this.x - view.x + i*spacing, this.y-1 - view.y, 2, 10, `black`);
             } else {
-                let spacing = Math.floor(this.collider.height/this.keysDrawTarget);
-                fillRect(this.x-1 - view.x, this.y - view.y + i*spacing, 10, 2, `white`);
+                let spacing = Math.floor(this.collider.height/(this.keysDrawTarget + this.bump));
+                fillRect(this.x-1 - view.x, this.y - view.y + i*spacing, 10, 2, `black`);
             }
         }
     }
 
     update() {
         this.keysDrawTarget = lerp(this.keysDrawTarget, this.keysRequiredToUnlock, 0.15);
+        this.bump = lerp(this.bump, 0, 0.15);
         if(rectCollision(this.collider, player.collider)) {
             if(inventory.items.keys >= this.keysRequiredToUnlock) {
                 inventory.items.keys -= this.keysRequiredToUnlock;
@@ -110,9 +112,15 @@ class Barrier {
                 this.keysRequiredToUnlock -= inventory.items.keys;
                 inventory.items.keys = 0;
                 player.collisionResponse(this);
+                this.bump = 10;
+                
             }
 
         }
+
+        //todo, need a line vs. rect method for bullets vs evertything
+
+        
         
     }
 
