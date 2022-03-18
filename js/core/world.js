@@ -161,6 +161,46 @@ World.prototype.populateMapObjects = function(){
 
 
 World.prototype.populateMapPalette = function(palette){
+    //palette is a slice of the 256 entries of the world data array.
+    //you can see the colors in the top left corner of map.png. 
+    //256 is arbitrary; we're not really using an indexed color image to make this work
+    //the order they appear in in the image becomes their indice in palette[].
+    
+    //yeah yeah, making globals from within a function is bad, but I'm lazy
+    COLOR_BLACK__TRANSPARENT = palette[0];
+    COLOR_VALHALLA = palette[1];
+    COLOR_LOULOU = palette[2];
+    COLOR_OILED_CEDAR = palette[3];
+    COLOR_ROPE = palette[4];
+    COLOR_TAHITI_GOLD = palette[5];
+    COLOR_TWINE = palette[6];
+    COLOR_PANCHO = palette[7];
+    COLOR_GOLDEN_FIZZ = palette[8];
+    COLOR_ATLANTIS = palette[9];
+    COLOR_CHRISTI = palette[10];
+    COLOR_ELF_GREEN = palette[11];
+    COLOR_DELL = palette[12];
+    COLOR_VERDIGRIS = palette[13];
+    COLOR_OPAL = palette[14];
+    COLOR_DEEP_KOAMARU = palette[15];
+    COLOR_VENICE_BLUE = palette[16];
+    COLOR_ROYAL_BLUE = palette[17];
+    COLOR_CORNFLOWER = palette[18];
+    COLOR_VIKING = palette[19];
+    COLOR_LIGHT_STEEL_BLUE = palette[20];
+    COLOR_WHITE = palette[21];
+    COLOR_HEATHER = palette[22];
+    COLOR_TOPAZ = palette[23];
+    COLOR_DIM_GRAY = palette[24];
+    COLOR_SMOKEY_ASH = palette[25];
+    COLOR_CLAIRVOYANT = palette[26];
+    COLOR_BROWN = palette[27];
+    COLOR_MANDY = palette[28];
+    COLOR_PLUM = palette[29];
+    COLOR_RAIN_FOREST = palette[30];
+    COLOR_STINGER = palette[31];
+
+    //item and gameobject specific 
     DOORKEY = palette[32];
     BARRIER = palette[33];
     ONE_KEY = palette[34];
