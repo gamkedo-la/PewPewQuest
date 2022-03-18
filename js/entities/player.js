@@ -91,7 +91,6 @@ var player = {
        
 
         if (Key.justReleased(Key.z)) { this.fireBullet(); }
-        console.log(mouse.pressed);
         if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
 
         if(this.collider.right - view.x < 0) {
@@ -167,7 +166,6 @@ var player = {
                    return tileCheck(tile);
                 }
                 else if(tile > tileCheck){
-                    //console.log(tile);
                     return true;
                 }
             }
