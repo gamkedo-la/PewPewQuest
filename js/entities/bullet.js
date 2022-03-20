@@ -2,16 +2,25 @@ class Bullet {
     constructor(x,y, xVelocity, yVelocity) {
         this.x = x;
         this.y = y;
+        this.height = 3;
+        this.width = 3;
         this.xVelocity = xVelocity;
         this.yVelocity = yVelocity;
         this.speed = 0;
         this.prevX = this.x;
         this.prevY = this.y;
         this.life = 100;
+        this.collider = {
+            top: this.y - this.height / 2,
+            bottom: this.y + this.height / 2,
+            left: this.x - this.width / 2,
+            right: this.x + this.width / 2,
+        }
 
     }
 
     update() {
+        this.updateCollider();
         this.prevX = this.x;
         this.prevY = this.y;
         this.x += this.xVelocity;
@@ -22,6 +31,10 @@ class Bullet {
         if(world.data[ world.pixelToTileIndex(this.x, this.y) ] > 0){
            
             this.hit();
+            if(world.data[ world.pixelToTileIndex(this.x, this.y) ] == COLOR_VALHALLA) {
+                world.data[ world.pixelToTileIndex(this.x, this.y) ] = 0;
+                this.hit();
+            }
         }
         if(!inView(this.x, this.y)){
             this.x = this.prevX;
@@ -49,5 +62,12 @@ class Bullet {
 
     die() {
         world.bullets.splice(world.bullets.indexOf(this), 1);
+    }
+
+    updateCollider() {
+        this.collider.top = this.y - this.height / 2;
+        this.collider.bottom = this.y + this.height / 2;
+        this.collider.left = this.x - this.width / 2;
+        this.collider.right = this.x + this.width / 2;
     }
 }

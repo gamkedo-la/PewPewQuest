@@ -2,6 +2,8 @@ signal.addEventListener('startGame', startGame);
 signal.addEventListener('gameOver', gameOver);
 signal.addEventListener('titleScreen', gotoTitleScreen);
 signal.addEventListener('creditScreen', gotoCreditScreen);
+signal.addEventListener('gameScreen', resumeGame);
+signal.addEventListener('miniMap', gotoMapScreen);
 
 
 signal.addEventListener('getKey', getKey);
@@ -13,6 +15,16 @@ function startGame(event){
     console.log('startGame triggered');
     gameScreen.reset();
     gameState = GAMESTATE_PLAY;
+}
+
+function resumeGame(event)
+{
+    gameState = GAMESTATE_PLAY;
+}
+
+function gotoMapScreen(event){
+    scale = 1;
+    gameState = GAMESTATE_MINIMAP;
 }
 
 function gameOver(event){

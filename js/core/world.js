@@ -2,7 +2,8 @@ const World = function World(widthInTiles=100, heightInTiles=100, tileSize=8){
     this.heightInTiles = heightInTiles;
     this.widthInTiles = widthInTiles;
     this.tileSize = tileSize;
-    this.data = new Uint32Array(widthInTiles * heightInTiles);
+    this.data = [];
+    this.decorData = [];
     this.entities = [];
     this.bullets = [];
 
@@ -75,6 +76,10 @@ World.prototype.populateWithImage = function populateWithImage(image){
     let ctx = c.getContext('2d');
     ctx.drawImage(image, 0, 0);
     let data = new Uint32Array(ctx.getImageData(0, 0, image.width, image.height).data.buffer);
+    this.decorData = new Uint32Array(image.width * image.height);
+    for(let i = 0; i < this.decorData.length; i++){
+        this.decorData[i] = tileRandomGenerator.nextIntRange(0, 31);
+    }
     this.data = data;
     palette = this.data.slice(0, 256);
     this.populateMapPalette(palette);
@@ -82,12 +87,13 @@ World.prototype.populateWithImage = function populateWithImage(image){
     this.populateMapObjects();
 }
 
+
 World.prototype.drawMap = function(){
     let left = Math.floor(view.x/8);
     let right = Math.ceil((view.x+view.width)/8);
     let top = Math.floor(view.y/8);
-    let screenWidth = Math.ceil(view.width/8);
     let bottom = Math.ceil((view.y+view.height)/8);
+
 
     //--------------
     for(let i = left; i < right; i++){
@@ -97,10 +103,11 @@ World.prototype.drawMap = function(){
                 switch(tile){
                     case 0:
                         //this.drawLightGridRadius(i,j,player,90, "#202030");
+                        //this.drawImageTile(i,j,tile);
                         break;
                     default:
                         this.drawFilledTile(i,j,tile);
-                        //this.drawCheckeredOverlay(i,j);
+                        //this.drawImageTile(i,j,tile);
                         break;
 
                 }
@@ -134,6 +141,21 @@ World.prototype.drawFilledTile = function(i,j,tile){
     fillRect(i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize, convertUint32ToRGBA(tile));
 }
 
+World.prototype.drawImageTile = function(i,j,basicTileColor){
+    let tilesheet = img['tiles']
+    let row = palette.indexOf(basicTileColor) * 8
+    let column = this.decorData[this.widthInTiles * j + i] * 8
+    //console.log(`${row}, ${column}`)
+    
+    canvasContext.drawImage(
+        tilesheet,
+        column, row, 8, 8,
+        i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize
+    );
+
+}
+
+
 World.prototype.populateMapObjects = function(){
     for(let i = 0; i < this.widthInTiles; i++){
         for(let j = 0; j < this.heightInTiles; j++){
@@ -148,7 +170,6 @@ World.prototype.populateMapObjects = function(){
                     let neighbors = this.getNeighbors(i, j);
                     let barrier = new Barrier(i, j, ...neighbors);
                     world.entities.push(barrier);
-                    console.log(barrier);
                 break;
 
 
@@ -268,4 +289,36 @@ World.prototype.getNeighbors = function(i, j){
     let east = this.getTileAtPosition(i+1, j);
     let west = this.getTileAtPosition(i-1, j);
     return [north, south, east, west];
+}
+World.prototype.drawMiniMap = function(){
+   scale = 8;
+    //--------------
+    for(let i = 0; i < canvas.width; i++){
+        for(let j = 0; j < canvas.height; j++){
+            
+            
+            let tileX = Math.floor( view.x/scale - (canvas.width/2));
+            let tileY = Math.floor( view.y/scale - (canvas.height/2));
+
+            tileX += i;
+            tileY += j;
+
+            let tile = this.getTileAtPosition(tileX, tileY);
+            fillRect(i, j, 1,1, convertUint32ToRGBA(tile));
+
+        }
+    }
+    fillRect(
+        player.x/scale - view.x/scale + canvas.width/2,
+        player.y/scale - view.y/scale + canvas.height/2,
+        1*(8/scale), 1*(8/scale), COLORS.goldenFizz);
+
+    world.entities.forEach(function(entity){
+        fillRect(
+            (entity.x/scale) - (view.x/scale) + canvas.width/2,
+            (entity.y/scale) - (view.y/scale) + canvas.height/2,
+            1*(8/scale),1*(8/scale),
+            ticker%2 == 0 ? COLORS.goldenFizz : COLORS.dell);
+
+    })
 }

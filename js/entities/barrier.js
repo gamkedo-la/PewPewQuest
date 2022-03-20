@@ -105,6 +105,7 @@ class Barrier {
         this.keysDrawTarget = lerp(this.keysDrawTarget, this.keysRequiredToUnlock, 0.5);
         this.bump = lerp(this.bump, 0, 0.15);
         if(this.bump < 0.01) { this.bump = 0;}
+        
         if(rectCollision(this.collider, player.collider)) {
             if(inventory.items.keys >= this.keysRequiredToUnlock) {
                 inventory.items.keys -= this.keysRequiredToUnlock;
@@ -121,6 +122,14 @@ class Barrier {
         }
 
         //todo, need a line vs. rect method for bullets vs evertything
+
+        world.bullets.forEach(bullet => {
+            if(rectCollision(this.collider, bullet.collider)) {
+                bullet.die();
+                //bullet.collisionResponse(this);
+                this.bump = 20;
+            }
+        })
 
         
         

@@ -11,11 +11,13 @@ var gameScreen = {
     draw: function () {
         clearScreen('black');
         world.drawMap();
+
         world.entities.forEach(function (entity) {
             if(inView(entity.x, entity.y)){
                 entity.draw()
             } 
         });
+
         world.bullets.forEach(function (bullet) {
             if(inView(bullet.x, bullet.y)){
                 bullet.draw()
@@ -26,7 +28,11 @@ var gameScreen = {
         inventory.draw();
         strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  COLORS.tahitiGold);
        },
+
     update: function () {
+        if(Key.justReleased(Key.m)) {
+            signal.dispatch('miniMap');
+        }
         view.x = intLerp(view.x, view.targetX, 0.2);
         view.y = intLerp(view.y, view.targetY, 0.2);
 
@@ -40,7 +46,7 @@ var gameScreen = {
                 bullet.update()
             }
         });
-        
+
         player.update();
         inventory.update();
     }

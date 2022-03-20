@@ -1,6 +1,10 @@
 //custom even Listener setup
 var signal = new Signal();
 
+//Pseudo random number generators
+worldRandomGenerator = new PRNG(42);
+tileRandomGenerator = new PRNG(1019);
+
 //canvas setup
 
 canvas = document.getElementById("canvas");
@@ -16,6 +20,8 @@ const GAMESTATE_TITLE = 0
 const GAMESTATE_PLAY = 1;
 const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
+const GAMESTATE_MINIMAP = 4;
+
 const FRAMES_PER_SECOND = 60;
 
 // [ northTile, southTile, eastTile, westTile ];
@@ -29,6 +35,7 @@ const imageList = [
     'smallFont',
     '3x5font',
     'map',
+    'tiles'
 ]
 
 const soundList = [
@@ -36,7 +43,7 @@ const soundList = [
     { name: "test2", url:"snd/test2.mp3" }
 ]
 
-var gameState = GAMESTATE_TITLE;
+var gameState = GAMESTATE_PLAY;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();
@@ -136,6 +143,10 @@ function gameLoop() {
         case GAMESTATE_CREDITS:
             creditsScreen.draw();
             creditsScreen.update();
+            break;
+        case GAMESTATE_MINIMAP:
+            miniMapScreen.draw();
+            miniMapScreen.update();
             break;
     }
     Key.update();
