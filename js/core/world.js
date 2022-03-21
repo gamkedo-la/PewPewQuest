@@ -165,13 +165,18 @@ World.prototype.populateMapObjects = function(){
                 this.entities.push(obj);
                 this.setTileAtPosition(i, j, 0);
                 break;
-                case BARRIER:
+                case BARRIER:{
                     let neighbors = this.getNeighbors(i, j);
                     let barrier = new Barrier(i, j, ...neighbors);
                     world.entities.push(barrier);
+                }
                 break;
-
-
+                case ENEMY_MINION:{
+                    let neighbors = this.getNeighbors(i, j);
+                    let enemy = new Enemy(i, j, ...neighbors);
+                    world.entities.push(enemy);
+                    this.setTileAtPosition(i, j, 0);
+                }
             }
         }
     }
@@ -179,7 +184,7 @@ World.prototype.populateMapObjects = function(){
 
 
 World.prototype.populateMapPalette = function(palette){
-    //palette is a slice of the 256 entries of the world data array.
+    //palette is a slice of the first 256 entries of the world data array.
     //you can see the colors in the top left corner of map.png. 
     //256 is arbitrary; we're not really using an indexed color image to make this work
     //the order they appear in in the image becomes their indice in palette[].
@@ -229,6 +234,7 @@ World.prototype.populateMapPalette = function(palette){
     THREE = palette[36];
     FOUR = palette[37];
     FIVE = palette[38];
+    ENEMY_MINION = palette[39];
 
     world.data.fill(0, 0, 256);
 
