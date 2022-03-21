@@ -77,11 +77,10 @@ function intLerp(v0, v1, t) {
     return Math.round(v0*(1-t)+v1*t);
 }
 
-function inView(x,y){
-    //this isn't working for some reason, entities offscreen are updating
+function inView(x,y,){
     let screenX = x - view.x,
         screenY = y - view.y,
-        padding = 200;
+        padding = 10;
         return (screenX > -padding &&
                screenX < (view.width + padding) &&
                screenY > -padding &&
