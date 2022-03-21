@@ -78,6 +78,7 @@ function intLerp(v0, v1, t) {
 }
 
 function inView(x,y){
+    //this isn't working for some reason, entities offscreen are updating
     let screenX = x - view.x,
         screenY = y - view.y,
         padding = 200;

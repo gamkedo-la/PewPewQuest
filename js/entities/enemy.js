@@ -18,7 +18,7 @@ class Enemy {
         this.width = 10;
         this.bump = 0;
         this.health = 100;
-        this.moveInterval = Math.floor(Math.random() * 50) + 50;
+        this.moveInterval = Math.floor(Math.random() * 50);
 
         this.collider = {
             x: this.x,
@@ -39,6 +39,7 @@ class Enemy {
     }
 
     draw() {
+    
         fillRect(this.x - view.x + (ticker%3==0? -this.bump : this.bump), this.y - view.y, this.width, this.height, COLORS.dirtyRed);
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
@@ -58,13 +59,16 @@ class Enemy {
         if(this.health < 0) {
             this.die();
         }
-        this.bump = lerp(this.bump, 0, 0.3);
+        this.bump = lerp(this.bump, 0, 0.1);
         this.x = intLerp(this.x, this.target.x, 0.1);
         this.y = intLerp(this.y, this.target.y, 0.1);
 
         if(this.bump < 0.01) { this.bump = 0;}
         
         if(rectCollision(this.collider, player.collider)) {
+            signal.dispatch('keysChanged', {amount: 1})
+            inventory.items.keys -= 1;
+            player.collisionResponse();
            
         }
 
