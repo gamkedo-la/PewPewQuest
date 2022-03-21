@@ -82,7 +82,7 @@ class Barrier {
         if(this.height == 0) {
             this.height = 1;
         }
-       this.updateCcollider();
+       this.updateCollider();
     }
 
     draw() {
@@ -109,9 +109,11 @@ class Barrier {
         if(rectCollision(this.collider, player.collider)) {
             if(inventory.items.keys >= this.keysRequiredToUnlock) {
                 inventory.items.keys -= this.keysRequiredToUnlock;
+                signal.dispatch("keysChanged", {amount: this.keysRequiredToUnlock});
                 this.removeBarrier();
             }
             else {
+                signal.dispatch("keysChanged", {amount: inventory.items.keys});
                 this.keysRequiredToUnlock -= inventory.items.keys;
                 inventory.items.keys = 0;
                 player.collisionResponse(this);
@@ -139,7 +141,9 @@ class Barrier {
         signal.dispatch("removeBarrier", {item: this});
     }
 
-    updateCcollider() {
+    
+
+    updateCollider() {
         this.collider.x = this.x;
         this.collider.y = this.y;
         this.collider.width = 8*this.width;

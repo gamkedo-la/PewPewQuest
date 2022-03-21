@@ -103,11 +103,10 @@ World.prototype.drawMap = function(){
                 switch(tile){
                     case 0:
                         //this.drawLightGridRadius(i,j,player,90, "#202030");
-                        //this.drawImageTile(i,j,tile);
-                        break;
+                        this.drawImageTile(i,j,tile);
                     default:
-                        this.drawFilledTile(i,j,tile);
-                        //this.drawImageTile(i,j,tile);
+                        //this.drawFilledTile(i,j,tile);
+                        this.drawImageTile(i,j,tile);
                         break;
 
                 }

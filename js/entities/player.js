@@ -10,9 +10,9 @@ var player = {
     yVelocity: 0,
     xAcceleration: 0,
     yAcceleration: 0,
-    maxSpeed: 130,
-    maxAcceleration: 70,
-    friction: 0.7,
+    maxSpeed: 160,
+    maxAcceleration: 80,
+    friction: 0.5,
     xFacing: 0,
     yFacing: 0,
     //items: inventory.items,
@@ -30,6 +30,15 @@ var player = {
 
     draw: function () {
         fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, COLORS.goldenFizz);
+        for(let i = 1; i <= inventory.items.keys; i++){
+            let radius = 20;
+            let angle = Math.PI*2/inventory.items.keys*i;
+            let x = Math.sin(angle+ticker/10)*radius;
+            let y = Math.cos(angle+ticker/10)*radius;
+
+            strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
+            
+        }
     },
 
     update: function () {

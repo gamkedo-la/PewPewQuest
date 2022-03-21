@@ -8,6 +8,7 @@ signal.addEventListener('miniMap', gotoMapScreen);
 
 signal.addEventListener('getKey', getKey);
 signal.addEventListener ('removeBarrier', removeBarrier);
+signal.addEventListener ('keysChanged', splodeKeys);
 
 
 
@@ -50,6 +51,8 @@ function getKey(event){
     if(inventory.items.keys < 5){
         inventory.items.keys++;
         audio.playSound(loader.sounds.test1);
+        let splode = new Splode(keyItem.x, keyItem.y, 10, COLORS.tahitiGold);
+        world.entities.push(splode);
         world.entities.splice(world.entities.indexOf(keyItem), 1);
 
     }
@@ -64,5 +67,31 @@ function getKey(event){
 function removeBarrier(event){
     console.log('removeBarrier triggered');
     barrierItem = event.detail.item;
+    if(barrierItem.width > barrierItem.height){
+        for(var i = 0; i < barrierItem.width; i++){
+            let splode = new Splode(barrierItem.x + i*8, barrierItem.y, 10, COLORS.tahitiGold);
+            world.entities.push(splode);
+        }
+    }
+    else {
+        for(var i = 0; i < barrierItem.height; i++){
+            let splode = new Splode(barrierItem.x, barrierItem.y + i*8, 10, COLORS.tahitiGold);
+            world.entities.push(splode);
+        }
+    }
     world.entities.splice(world.entities.indexOf(barrierItem), 1);
+}
+
+function splodeKeys(event) {
+    let amount = event.detail.amount;
+    for(let i = 1; i <= amount; i++){
+        let radius = 20;
+        let angle = Math.PI*2/inventory.items.keys*i;
+        let x = Math.sin(angle+ticker/10)*radius;
+        let y = Math.cos(angle+ticker/10)*radius;
+
+        let splode = new Splode(player.x + x, player.y + y, 10, COLORS.dirtyRed);
+        world.entities.push(splode);
+        
+    }
 }
