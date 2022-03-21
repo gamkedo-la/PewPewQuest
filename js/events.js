@@ -16,6 +16,7 @@ function startGame(event){
     console.log('startGame triggered');
     gameScreen.reset();
     gameState = GAMESTATE_PLAY;
+    audio.playSound(loader.sounds.boop);
 }
 
 function resumeGame(event)
@@ -43,6 +44,7 @@ function gotoCreditScreen(event){
     console.log('gotoCreditScreen triggered');
     creditsScreen.reset();
     gameState = GAMESTATE_CREDITS;
+    audio.playSound(loader.sounds.boop);
 }
 
 function getKey(event){

@@ -40,7 +40,8 @@ const imageList = [
 
 const soundList = [
     { name: "test1", url:"snd/test1.mp3" },
-    { name: "test2", url:"snd/test2.mp3" }
+    { name: "test2", url:"snd/test2.mp3" },
+    { name: "boop", url:"snd/boop.mp3" }
 ]
 
 var gameState = GAMESTATE_PLAY;
