@@ -7,6 +7,7 @@ signal.addEventListener('miniMap', gotoMapScreen);
 
 
 signal.addEventListener('getKey', getKey);
+signal.addEventListener('getLight', getLight);
 signal.addEventListener ('removeBarrier', removeBarrier);
 signal.addEventListener ('keysChanged', splodeKeys);
 
@@ -64,6 +65,18 @@ function getKey(event){
             'You have too many keys! You can only carry 5 keys at a time.'
         )
     }
+}
+
+function getLight(event){
+    console.log('getLight triggered');
+    lightItem = event.detail.item;
+    
+        inventory.items.light=1;
+        audio.playSound(loader.sounds.test1);
+        let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
+        world.entities.push(splode);
+        world.entities.splice(world.entities.indexOf(lightItem), 1);
+
 }
 
 function removeBarrier(event){

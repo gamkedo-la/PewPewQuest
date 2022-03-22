@@ -19,6 +19,11 @@ var inventory = {
             canvasContext.drawImage(img['key'], drawPosition, this.rect.y+2);
             drawPosition += 14;
         }
+        if(inventory.items.light) {
+            canvasContext.drawImage(img['flashlight-inventory'], drawPosition, this.rect.y+2);
+            drawPosition += 14;
+        }
+        
     },
     update: function () {
 

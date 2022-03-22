@@ -102,8 +102,12 @@ World.prototype.drawMap = function(){
             
                 switch(tile){
                     case 0:
-                        //this.drawLightGridRadius(i,j,player,90, "#202030");
-                        this.drawImageTile(i,j,tile);
+                        if(inventory.items.light){
+                            this.drawLightGridRadius(i,j,player,50, "#202030");
+                        }
+                        this.drawFilledTile(i,j,tile);
+                        //this.drawImageTile(i,j,tile);
+                        break;
                     default:
                         //this.drawFilledTile(i,j,tile);
                         this.drawImageTile(i,j,tile);
@@ -176,6 +180,14 @@ World.prototype.populateMapObjects = function(){
                     let enemy = new Enemy(i, j, ...neighbors);
                     world.entities.push(enemy);
                     this.setTileAtPosition(i, j, 0);
+                    break;
+                }
+                case FLASHLIGHT:{
+                    console.log('flashlight placed')
+                    let light = new Flashlight(i,j);
+                    world.entities.push(light);
+                    this.setTileAtPosition(i, j, 0);
+                    break;
                 }
             }
         }
@@ -235,6 +247,7 @@ World.prototype.populateMapPalette = function(palette){
     FOUR = palette[37];
     FIVE = palette[38];
     ENEMY_MINION = palette[39];
+    FLASHLIGHT = palette[40];
 
     world.data.fill(0, 0, 256);
 
@@ -274,17 +287,7 @@ World.prototype.populateCSSColorsArray = function(){
         plum: convertUint32ToRGBA(COLOR_PLUM),
         rainForest: convertUint32ToRGBA(COLOR_RAIN_FOREST),
         stinger: convertUint32ToRGBA(COLOR_STINGER),
-        doorkey: convertUint32ToRGBA(DOORKEY),
-
-        //I'm not sure where you'd use these in game code, but for completeness
-        barrier: convertUint32ToRGBA(BARRIER),
-        one: convertUint32ToRGBA(ONE),
-        two: convertUint32ToRGBA(TWO),
-        three: convertUint32ToRGBA(THREE),
-        four: convertUint32ToRGBA(FOUR),
-        five: convertUint32ToRGBA(FIVE)
-
-
+   
     }
 }
 
