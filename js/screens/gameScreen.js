@@ -1,4 +1,6 @@
 var gameScreen = {
+
+    cameraTypeToggle: false,
    
     reset: function () {
         let playerStart = {x: 1217, y: 591}
@@ -33,9 +35,20 @@ var gameScreen = {
         if(Key.justReleased(Key.m)) {
             signal.dispatch('miniMap');
         }
-        view.x = intLerp(view.x, view.targetX, 0.2);
-        view.y = intLerp(view.y, view.targetY, 0.2);
 
+        if(Key.justReleased(Key.ONE)) {
+            gameScreen.cameraTypeToggle = !gameScreen.cameraTypeToggle;
+        }
+
+        if(this.cameraTypeToggle){
+            view.x = intLerp(view.x, view.targetX, 0.2);
+            view.y = intLerp(view.y, view.targetY, 0.2);
+        }
+        else{
+            view.x = intLerp(view.x, player.x - canvas.width/2, 0.2);
+            view.y = intLerp(view.y, player.y - canvas.height/2, 0.2);
+        }
+       
         world.entities.forEach(function (entity) {
             if(inView(entity.x, entity.y)){
                 entity.update()
