@@ -35,7 +35,12 @@ const imageList = [
     'smallFont',
     '3x5font',
     'map',
-    'tiles'
+    'tiles',
+    'key',
+    'orbit-key',
+    'flashlight',
+    'flashlight-inventory'
+
 ]
 
 const soundList = [

@@ -17,7 +17,7 @@ class DoorKey {
     }
     
     draw() {
-        strokePolygon(this.x-view.x, this.y-view.y, 8, 3, ticker/20, COLORS.white);
+        canvasContext.drawImage(img["key"], this.x-view.x, this.y-view.y);
     }
 
     collect() {
