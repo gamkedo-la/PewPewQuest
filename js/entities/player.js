@@ -33,10 +33,11 @@ var player = {
         for(let i = 1; i <= inventory.items.keys; i++){
             let radius = 20;
             let angle = Math.PI*2/inventory.items.keys*i;
-            let x = Math.sin(angle+ticker/10)*radius;
-            let y = Math.cos(angle+ticker/10)*radius;
+            let x = -3 + Math.sin(angle+ticker/30)*radius;
+            let y = -1 + Math.cos(angle+ticker/30)*radius;
 
-            strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
+           // strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
+           canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
             
         }
     },
