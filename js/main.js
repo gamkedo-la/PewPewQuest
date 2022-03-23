@@ -69,7 +69,7 @@ var view = {
 }
 
 var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-gp = gamepads[0];
+var gp = gamepads[0];
 
 mouse = {};
 

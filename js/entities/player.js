@@ -10,8 +10,8 @@ var player = {
     yVelocity: 0,
     xAcceleration: 0,
     yAcceleration: 0,
-    maxSpeed: 160,
-    maxAcceleration: 80,
+    maxSpeed: 100,
+    maxAcceleration: 60,
     friction: 0.5,
     xFacing: 0,
     yFacing: 0,
@@ -55,7 +55,7 @@ var player = {
 
         //update rect:
         this.updateCollider(this.x, this.y);
-        
+        //handle keyboard ARROWS input------------------------------
         if (Key.isDown(Key.LEFT)) {
             this.xVelocity -= this.maxAcceleration;
             this.yFacing = 0;
@@ -77,7 +77,7 @@ var player = {
             this.yFacing = 1;
         }
 
-        //-------------------------------------
+        //handle keyboard WASD input------------------------------
         if (Key.isDown(Key.a)) {
             this.xVelocity -= this.maxAcceleration;
             this.yFacing = 0;
@@ -98,11 +98,19 @@ var player = {
             this.xFacing = 0;
             this.yFacing = 1;
         }
-       
 
+        //handle gamepad input---------------------------------
+        if(gp){
+            this.yVelocity += gp.axes[1] * this.maxAcceleration;
+            this.xVelocity += gp.axes[0] * this.maxAcceleration;
+            if(gp.axes[2] || gp.axes[3]){ this.gamepadFireBullet(); }
+        }
+       
+        //handle firing and action input----------------------------
         if (Key.justReleased(Key.z)) { this.fireBullet(); }
         if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
 
+        //are we out of bounds? Scroll one screen in that direction
         if(this.collider.right - view.x < 0) {
             view.targetX -= view.width;
         }
@@ -189,6 +197,15 @@ var player = {
     fireBullet: function(){
         let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
         world.bullets.push(bullet);
+    },
+
+    gamepadFireBullet: function(){
+        let bulletXVelocity = gp.axes[2] * 8,
+            bulletYVelocity = gp.axes[3] * 8;
+        if(Math.abs(bulletXVelocity) > 0.1 || Math.abs(bulletYVelocity) > 0.1){
+            let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+        }
     },
 
     mouseFireBullet: function(){

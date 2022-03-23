@@ -107,6 +107,60 @@ function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
 
+function checkLine(pointA, pointB, checkfunction){
+
+    let x0 = pointA.x,
+        y0 = pointA.y,
+        x1 = pointB.x,
+        y1 = pointB.y,
+        tmp = 0;
+    swapXY = Math.abs(y1 - y0) < Math.abs(x1 - x0);
+    if (swapXY) {
+        tmp = x0; x0 = y0; y0 = tmp;
+        tmp = x1; x1 = y1; y1 = tmp;
+    }
+    if (x0 > x1) {
+        tmp = x0; x0 = x1; x1 = tmp;
+        tmp = y0; y0 = y1; y1 = tmp;
+    }
+    let deltaX = x1 - x0,
+        deltaY = Math.floor(Math.abs(y1 - y0)),
+        error = Math.floor(-deltaX / 2),
+        y = y0,
+        yStep = y0 < y1 ? 1 : -1;
+
+    if(swapXY){
+        for (let x = x0; x <= x1; x++) {
+            if (!checkfunction(y, x)) {
+                return false;
+            }
+            error = error + deltaY;
+            if (error > 0) {
+                y = y + yStep;
+                error += deltaX;
+            }
+        }
+    }
+    else{
+        for (let x = x0; x <= x1; x++) {
+            if (!checkfunction(x, y)) {
+                return false;
+            }
+            error = error + deltaY;
+            if (error > 0) {
+                y = y + yStep;
+                error += deltaX;
+            }
+        }
+    }
+    return true;
+}
+
+function wallCheck(x,y){
+    return world.getTileAtPosition(x,y) === 0;          
+}
+
+
 
 
 

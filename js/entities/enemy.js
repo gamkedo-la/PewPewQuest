@@ -8,17 +8,16 @@ class Enemy {
         this.southTile = southTile;
         this.eastTile = eastTile;
         this.westTile = westTile;
-        this.keyQuantities = [ONE, TWO, THREE, FOUR, FIVE];
         this.neighbors = [ northTile, southTile, eastTile, westTile ];
         //
-        this.keysNeeded = this.keyQuantities.filter(element => this.neighbors.includes(element) );
-        this.direction = this.neighbors.indexOf(this.keysNeeded[0]);
-        this.keysRequiredToUnlock = 1 + this.keyQuantities.indexOf(this.keysNeeded[0]);
+        //this.keysNeeded = this.keyQuantities.filter(element => this.neighbors.includes(element) );
+        //this.direction = this.neighbors.indexOf(this.keysNeeded[0]);
+        //this.keysRequiredToUnlock = 1 + this.keyQuantities.indexOf(this.keysNeeded[0]);
         this.height = 10;
         this.width = 10;
         this.bump = 0;
         this.health = 100;
-        this.moveInterval = Math.floor(Math.random() * 50);
+        this.moveInterval = 5;
 
         this.collider = {
             x: this.x,
@@ -35,6 +34,10 @@ class Enemy {
             x: this.x,
             y: this.y
         }
+        this.previous = {
+            x: this.x,
+            y: this.y
+        }
 
     }
 
@@ -47,14 +50,16 @@ class Enemy {
     }
 
     update() {
+        
         if(ticker%this.moveInterval == 0){
             this.target.x += (Math.random() * 2 - 1) * 15;
             this.target.y += (Math.random() * 2 - 1) * 15;
-            if( world.getTileAtPosition(this.target.x, this.target.y) != 0)  {
-               this.targetX = this.x;
-                this.targetY = this.y;
+            if(this.checkWorldCollision(this.target.x, this.target.y) ) {
+                this.targetX = this.previous.x;
+                this.targetY = this.previous.y;
             }
         }
+        
         this.updateCollider();
         if(this.health < 0) {
             this.die();
@@ -63,10 +68,15 @@ class Enemy {
         this.x = intLerp(this.x, this.target.x, 0.1);
         this.y = intLerp(this.y, this.target.y, 0.1);
 
+        if(this.checkWorldCollision(this.x, this.y) ) {
+            this.x = this.previous.x;
+            this.y = this.previous.y;
+        }
+
         if(this.bump < 0.01) { this.bump = 0;}
         
         if(rectCollision(this.collider, player.collider)) {
-            signal.dispatch('keysChanged', {amount: 1})
+            //signal.dispatch('keysChanged', {amount: 1})
             inventory.items.keys -= 1;
             player.collisionResponse();
            
@@ -82,7 +92,8 @@ class Enemy {
             }
         })
 
-        
+        this.previous.x = this.x;
+        this.previous.y = this.y;
         
     }
 
@@ -102,5 +113,14 @@ class Enemy {
         this.collider.bottom = this.y + this.height;
     }
 
-
+    checkWorldCollision(X, Y) {
+        X = Math.floor(X);
+        Y = Math.floor(Y);
+        return (
+            world.getTileAtPixel(X, Y) != 0 ||
+            world.getTileAtPixel(X, Y+this.height) != 0 ||
+            world.getTileAtPixel(X+this.width, Y) != 0 ||
+            world.getTileAtPixel(X+this.width, Y+this.height) != 0
+        )
+    }
 }

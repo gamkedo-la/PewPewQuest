@@ -14,6 +14,10 @@ World.prototype.getTileAtPosition = function getTileAtPosition(tx, ty){
     return this.data[this.widthInTiles*ty + tx];
 }
 
+World.prototype.getTileAtPixel = function(x, y){
+    return this.getTileAtPosition(Math.floor(x/this.tileSize), Math.floor(y/this.tileSize));
+}
+
 World.prototype.setTileAtPosition = function setTileAtPosition(tx, ty, value=1){
     return this.data[this.widthInTiles*ty + tx] = value;
 }
@@ -183,7 +187,6 @@ World.prototype.populateMapObjects = function(){
                     break;
                 }
                 case FLASHLIGHT:{
-                    console.log('flashlight placed')
                     let light = new Flashlight(i,j);
                     world.entities.push(light);
                     this.setTileAtPosition(i, j, 0);
