@@ -84,12 +84,12 @@ var player = {
         // console.log("gamepad: "+gamepadx+","+gamepady);
         
         if (gamepadx<-0.1) { // L
-            this.xVelocity = this.maxAcceleration * gamepadx;
+            this.xVelocity = this.maxSpeed * gamepadx;
             this.yFacing = 0;
             this.xFacing = -1;
         }
         else if (gamepadx>0.1) { // R
-            this.xVelocity = this.maxAcceleration * gamepadx;
+            this.xVelocity = this.maxSpeed * gamepadx;
             this.yFacing = 0;
             this.xFacing = 1;
         }
