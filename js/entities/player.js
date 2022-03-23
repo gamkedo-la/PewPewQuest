@@ -76,8 +76,34 @@ var player = {
             this.xFacing = 0;
             this.yFacing = 1;
         }
-
-        //-------------------------------------
+        
+        //------------------------------------- 
+        // analog values are in the range -1..0..1
+        let gamepadx = gamepad.xAxis();
+        let gamepady = gamepad.yAxis();
+        // console.log("gamepad: "+gamepadx+","+gamepady);
+        
+        if (gamepadx<-0.1) { // L
+            this.xVelocity = this.maxAcceleration * gamepadx;
+            this.yFacing = 0;
+            this.xFacing = -1;
+        }
+        else if (gamepadx>0.1) { // R
+            this.xVelocity = this.maxAcceleration * gamepadx;
+            this.yFacing = 0;
+            this.xFacing = 1;
+        }
+        if (gamepady<-0.1) { // U
+            this.yVelocity = this.maxAcceleration * gamepady;
+            this.xFacing = 0;
+            this.yFacing = -1;
+        }
+        else if (gamepady>0.1) { // D
+            this.yVelocity = this.maxAcceleration * gamepady;
+            this.xFacing = 0;
+            this.yFacing = 1;
+        }
+        //------------------------------------- // same as above but for wasd
         if (Key.isDown(Key.a)) {
             this.xVelocity -= this.maxAcceleration;
             this.yFacing = 0;
@@ -99,9 +125,16 @@ var player = {
             this.yFacing = 1;
         }
        
-
+        
         if (Key.justReleased(Key.z)) { this.fireBullet(); }
         if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
+        
+        if (gamepad.buttonA()) { 
+            if (!this.buttonAWasDown) this.fireBullet();
+            this.buttonAWasDown = true;
+         } else {
+            this.buttonAWasDown = false;
+         }
 
         if(this.collider.right - view.x < 0) {
             view.targetX -= view.width;
