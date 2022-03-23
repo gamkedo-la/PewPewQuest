@@ -136,6 +136,8 @@ var player = {
             this.buttonAWasDown = false;
          }
 
+        this.gamepadFireBullet();
+
         //are we out of bounds? Scroll one screen in that direction
         if(this.collider.right - view.x < 0) {
             view.targetX -= view.width;
