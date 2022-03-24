@@ -48,19 +48,9 @@ var player = {
 
     update: function () {
         this.updateCollider(this.x, this.y);
-        if(gp){
-            this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.1);
-            this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.1);
-        }
-
-        //apply x movement
-        this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
-        this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
-        this.xVelocity *= this.friction;
-        //apply y movement
-        this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
-        this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
-        this.yVelocity *= this.friction * 1/FRAMES_PER_SECOND;
+        if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.1)};
+        if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.1)}
+        
 
         //update rect:
         this.updateCollider(this.x, this.y);
@@ -162,14 +152,27 @@ var player = {
             //this.y += 2;
         }
 
-        //check for x collisions
-        if(this.tileCollisionCheck(world, 0)){
+        //apply x movement
+        this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
+        this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
+        this.xVelocity *= this.friction;
+
+         //check for x collisions
+         this.updateCollider(this.x, this.y);
+         if(this.tileCollisionCheck(world, 0)){
             this.x = this.previousX;
             this.xVelocity = 0;
             this.updateCollider(this.x, this.y);
         }
 
+        //apply y movement
+        this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
+        this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
+        this.yVelocity *= this.friction * 1/FRAMES_PER_SECOND;
+
+       
         //check for y collisions
+        this.updateCollider(this.x, this.y);
         if(this.tileCollisionCheck(world, 0)){
             this.y = this.previousY;
             this.yVelocity = 0;
