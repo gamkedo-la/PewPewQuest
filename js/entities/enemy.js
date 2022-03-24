@@ -77,7 +77,7 @@ class Enemy {
         
         if(rectCollision(this.collider, player.collider)) {
             //signal.dispatch('keysChanged', {amount: 1})
-            inventory.items.keys -= 1;
+            //inventory.items.keys -= 1;
             player.collisionResponse();
            
         }
@@ -86,7 +86,7 @@ class Enemy {
 
         world.bullets.forEach(bullet => {
             if(rectCollision(this.collider, bullet.collider)) {
-                this.health -= 10;
+                this.health -= 30;
                 bullet.die();
                 this.bump = 5;
             }

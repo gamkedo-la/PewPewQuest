@@ -10,11 +10,15 @@ var player = {
     yVelocity: 0,
     xAcceleration: 0,
     yAcceleration: 0,
-    maxSpeed: 100,
-    maxAcceleration: 60,
+    maxSpeed: 600,
+    maxAcceleration: 200,
     friction: 0.5,
     xFacing: 0,
     yFacing: 0,
+    shootTarget: {
+        x: 0,
+        y: 0
+    },
     //items: inventory.items,
 
     collider: {
@@ -44,6 +48,8 @@ var player = {
 
     update: function () {
         this.updateCollider(this.x, this.y);
+        this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.1);
+        this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.1);
         //apply x movement
         this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
         this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
@@ -51,7 +57,7 @@ var player = {
         //apply y movement
         this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
         this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
-        this.yVelocity *= this.friction;
+        this.yVelocity *= this.friction * 1/FRAMES_PER_SECOND;
 
         //update rect:
         this.updateCollider(this.x, this.y);
@@ -84,12 +90,12 @@ var player = {
         // console.log("gamepad: "+gamepadx+","+gamepady);
         
         if (gamepadx<-0.1) { // L
-            this.xVelocity = this.maxSpeed * gamepadx;
+            this.xVelocity = this.maxAcceleration * gamepadx;
             this.yFacing = 0;
             this.xFacing = -1;
         }
         else if (gamepadx>0.1) { // R
-            this.xVelocity = this.maxSpeed * gamepadx;
+            this.xVelocity = this.maxAcceleration * gamepadx;
             this.yFacing = 0;
             this.xFacing = 1;
         }
@@ -228,10 +234,14 @@ var player = {
     },
 
     gamepadFireBullet: function(){
-        let bulletXVelocity = gp.axes[2] * 8,
-            bulletYVelocity = gp.axes[3] * 8;
+        let bulletXVelocity = this.shootTarget.x * 8,
+            bulletYVelocity = this.shootTarget.y * 8;
         if(Math.abs(bulletXVelocity) > 0.1 || Math.abs(bulletYVelocity) > 0.1){
             let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+             bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+             bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
         }
     },

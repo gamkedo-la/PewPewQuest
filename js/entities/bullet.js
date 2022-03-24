@@ -9,6 +9,7 @@ class Bullet {
         this.speed = 0;
         this.prevX = this.x;
         this.prevY = this.y;
+        this.gravity =  0.5;
         this.life = 100;
         this.collider = {
             top: this.y - this.height / 2,
@@ -24,7 +25,8 @@ class Bullet {
         this.prevX = this.x;
         this.prevY = this.y;
         this.x += this.xVelocity;
-        this.y += this.yVelocity;
+        this.y += this.yVelocity + (Math.random()*2-1);
+        //this.yVelocity += this.gravity;
         this.life--
       
 
