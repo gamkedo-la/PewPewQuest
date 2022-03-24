@@ -1,5 +1,6 @@
 class Bullet {
     constructor(x,y, xVelocity, yVelocity) {
+        this.type = BULLET
         this.x = x;
         this.y = y;
         this.height = 3;
@@ -57,8 +58,10 @@ class Bullet {
 
     hit() {
        //splode?
+       if(inView(this.x, this.y)){
         let splode = new Splode(this.x, this.y, 10, 'yellow');
         world.entities.push(splode);
+       }
         this.die();
     }
 

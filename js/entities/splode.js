@@ -1,5 +1,6 @@
 class Splode{
     constructor(x,y,life, color){
+        this.type = 
         this.x = x;
         this.y = y;
         this.lifeMax = life;
@@ -12,6 +13,7 @@ class Splode{
             strokePolygon(this.x-view.x, this.y-view.y, this.lifeMax-this.life, 4, this.angle+ticker/5,  this.color);
     }
     update(){
+        if(!inView(this.x, this.y)){this.die();}
         if(this.life > 0){
             this.life-=1;
         }

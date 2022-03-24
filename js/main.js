@@ -22,13 +22,18 @@ const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
 const GAMESTATE_MINIMAP = 4;
 
+
 const FRAMES_PER_SECOND = 60;
+const SPLODE = 10;
+const BULLET = 11;
 
 // [ northTile, southTile, eastTile, westTile ];
 const NORTH = 0;
 const SOUTH = 1;
 const EAST = 2;
 const WEST = 3;
+
+
 
 const imageList = [
     //image loader assumes .png and appends it. all images should be in img/.

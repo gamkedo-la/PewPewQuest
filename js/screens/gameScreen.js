@@ -52,11 +52,16 @@ var gameScreen = {
         world.entities.forEach(function (entity) {
             if(inView(entity.x, entity.y)){
                 entity.update()
-            } 
+            }else if (entity.type == SPLODE){
+                entity.die();
+            }
+            
         });
         world.bullets.forEach(function (bullet) {
             if(inView(bullet.x, bullet.y)){
                 bullet.update()
+            }else{
+                bullet.die()
             }
         });
 

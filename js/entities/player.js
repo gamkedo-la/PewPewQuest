@@ -48,8 +48,11 @@ var player = {
 
     update: function () {
         this.updateCollider(this.x, this.y);
-        this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.1);
-        this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.1);
+        if(gp){
+            this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.1);
+            this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.1);
+        }
+
         //apply x movement
         this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
         this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
@@ -142,7 +145,7 @@ var player = {
             this.buttonAWasDown = false;
          }
 
-        this.gamepadFireBullet();
+        if(gp){this.gamepadFireBullet()}
 
         //are we out of bounds? Scroll one screen in that direction
         if(this.collider.right - view.x < 0) {
