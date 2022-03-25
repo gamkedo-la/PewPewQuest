@@ -1,7 +1,6 @@
 
 class Bat {
     constructor(tileX, tileY, northTile, southTile, eastTile, westTile) {
-        this.stealsKeys = true;
         this.carryingKey = false;
         this.tileX = tileX;
         this.tileY = tileY;
@@ -125,8 +124,18 @@ class Bat {
     }
 
     die() {
+
+        if (this.carryingKey) {
+            console.log("bat is dropping a key!");
+            signal.dispatch('getKey', {item: this});
+            let tile = world.getTileAtPixel(this.x,this.y);
+            let obj = new DoorKey(this.x,this.y,tile);
+            world.entities.push(obj);
+        }
+
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
         world.entities.splice(world.entities.indexOf(this), 1);
+
     }
 
     updateCollider() {
