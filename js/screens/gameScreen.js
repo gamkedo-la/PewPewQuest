@@ -1,6 +1,6 @@
 var gameScreen = {
 
-    cameraTypeToggle: false,
+    cameraTypeToggle: true,
    
     reset: function () {
         let playerStart = {x: 1217, y: 591}
