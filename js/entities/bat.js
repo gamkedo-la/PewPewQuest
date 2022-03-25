@@ -101,9 +101,9 @@ class Bat {
             player.collisionResponse(this);
  
             if (!this.carryingKey && inventory.items.keys > 0) {            
-                console.log("a bat just stole a key!");
                 this.carryingKey = true;
                 inventory.items.keys--;
+                console.log("a bat just stole a key! you now have "+inventory.items.keys);
             }
 
         }
@@ -127,7 +127,6 @@ class Bat {
 
         if (this.carryingKey) {
             console.log("bat is dropping a key!");
-            signal.dispatch('getKey', {item: this});
             let tile = world.getTileAtPixel(this.x,this.y);
             let obj = new DoorKey(this.x,this.y,tile);
             world.entities.push(obj);
