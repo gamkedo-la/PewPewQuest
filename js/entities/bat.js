@@ -127,9 +127,17 @@ class Bat {
 
         if (this.carryingKey) {
             console.log("bat is dropping a key!");
-            let tile = world.getTileAtPixel(this.x,this.y);
-            let obj = new DoorKey(this.x,this.y,tile);
-            world.entities.push(obj);
+
+            // this spawns the key right where the bat died,
+            // however this can make the level impossible to complele
+            // if the bat is above a non destroyable wall
+            // works great, though! 
+            // let tile = world.getTileAtPixel(this.x,this.y);
+            // let obj = new DoorKey(this.x,this.y,tile);
+            // world.entities.push(obj);
+
+            // so instead killing a key-holding bat counts as a pickup =(
+            signal.dispatch('getKey', {item: null}); // note: no item entity
         }
 
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));

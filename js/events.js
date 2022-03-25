@@ -54,9 +54,14 @@ function getKey(event){
     if(inventory.items.keys < 5){
         inventory.items.keys++;
         audio.playSound(loader.sounds.test1);
-        let splode = new Splode(keyItem.x, keyItem.y, 10, COLORS.tahitiGold);
-        world.entities.push(splode);
-        world.entities.splice(world.entities.indexOf(keyItem), 1);
+        
+        // keyitem can be null when a bat that had stolen a key is destroyed
+        // because there is no key entity to speak of
+        if (keyItem) {
+            let splode = new Splode(keyItem.x, keyItem.y, 10, COLORS.tahitiGold);
+            world.entities.push(splode);
+            world.entities.splice(world.entities.indexOf(keyItem), 1);
+        }
 
     }
     else {
