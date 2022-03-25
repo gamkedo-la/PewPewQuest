@@ -268,6 +268,7 @@ var player = {
 
         this.xVelocity = -this.xVelocity * 2;
         this.yVelocity = -this.yVelocity * 2;
+
     }
                 
 

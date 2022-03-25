@@ -1,8 +1,10 @@
 
 class Bat {
     constructor(tileX, tileY, northTile, southTile, eastTile, westTile) {
-        this.tileX = tileX
-        this.tileY = tileY
+        this.stealsKeys = true;
+        this.carryingKey = false;
+        this.tileX = tileX;
+        this.tileY = tileY;
         this.x = tileX * 8;
         this.y = tileY * 8;
         this.northTile = northTile;
@@ -68,6 +70,10 @@ class Bat {
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
         }
+
+        if (this.carryingKey) {
+            canvasContext.drawImage(img["key"], this.x-view.x+6, this.y+6-view.y);
+        }
     }
 
     update() {
@@ -80,20 +86,27 @@ class Bat {
         }
         
         this.updateCollider();
+
         if(this.health < 0) {
             this.die();
         }
+
         this.bump = lerp(this.bump, 0, 0.1);
         this.x = intLerp(this.x, this.target.x, 0.1);
         this.y = intLerp(this.y, this.target.y, 0.1);
-
         if(this.bump < 0.01) { this.bump = 0;}
         
         if(rectCollision(this.collider, player.collider)) {
             //signal.dispatch('keysChanged', {amount: 1})
             //inventory.items.keys -= 1;
-            player.collisionResponse();
-           
+            player.collisionResponse(this);
+ 
+            if (!this.carryingKey && inventory.items.keys > 0) {            
+                console.log("a bat just stole a key!");
+                this.carryingKey = true;
+                inventory.items.keys--;
+            }
+
         }
 
         //todo, need a line vs. rect method for bullets vs evertything
@@ -139,12 +152,9 @@ class Bat {
     }
 
     play(animationName){
-   
         this.currentAnimation = this.spritesheet.animations[animationName];
-  
-   
-    if (!this.currentAnimation.loop){
-        this.currentAnimation.reset();
-    }
+        if (!this.currentAnimation.loop){
+            this.currentAnimation.reset();
+        }
     }
 }
