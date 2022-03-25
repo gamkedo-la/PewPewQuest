@@ -83,12 +83,28 @@ class Bat {
     }
 
     update() {
-        //this.play('flying');
         this.currentAnimation.update();
         
         if(ticker%this.moveInterval == 0){
             this.target.x += (Math.random() * 2 - 1) * 15;
             this.target.y += (Math.random() * 2 - 1) * 15;
+        }
+
+        if(inventory.items.keys > 0 && !this.carryingKey){
+            let pX = player.x - this.x;
+            let pY = player.y - this.y;
+            let pDir = Math.atan2(pY, pX);
+            this.target.x += Math.cos(pDir);
+            this.target.y += Math.sin(pDir);
+        }
+
+        if(this.carryingKey){
+            let pX = player.x - this.x;
+            let pY = player.y - this.y;
+            let pDir = Math.atan2(pY, pX);
+            pDir += Math.PI; //reverse direction
+            this.target.x += Math.cos(pDir) * 1.7;
+            this.target.y += Math.sin(pDir) * 1.7;
         }
         
         this.updateCollider();
