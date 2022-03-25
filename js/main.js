@@ -1,6 +1,9 @@
 //custom even Listener setup
 var signal = new Signal();
 
+var spritesheet = spriteSheetFactory
+var animation = animationFactory
+
 //Pseudo random number generators
 worldRandomGenerator = new PRNG(42);
 tileRandomGenerator = new PRNG(1019);
@@ -44,7 +47,8 @@ const imageList = [
     'key',
     'orbit-key',
     'flashlight',
-    'flashlight-inventory'
+    'flashlight-inventory',
+    'bat2'
 
 ]
 

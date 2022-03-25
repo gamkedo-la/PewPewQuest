@@ -192,6 +192,12 @@ World.prototype.populateMapObjects = function(){
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
+                case ENEMY_BAT:{
+                    let bat = new Bat(i,j);
+                    world.entities.push(bat);
+                    this.setTileAtPosition(i, j, 0);
+                    break;
+                }
             }
         }
     }
@@ -251,6 +257,7 @@ World.prototype.populateMapPalette = function(palette){
     FIVE = palette[38];
     ENEMY_MINION = palette[39];
     FLASHLIGHT = palette[40];
+    ENEMY_BAT = palette[41];
 
     world.data.fill(0, 0, 256);
 

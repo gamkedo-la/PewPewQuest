@@ -65,7 +65,7 @@ class SpriteSheet {
         sequence = sequence.concat(parseFrames(frame));
       });
 
-      this.animations[name] = Animation({
+      this.animations[name] = animation({
         spriteSheet: this,
         frames: sequence,
         frameRate,
