@@ -40,6 +40,13 @@ class Bat {
                     frameRate: 30,
                     loop: true,
                     noInterrupt: true
+                },
+
+                hasKey: {
+                    frames: '8..15',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
                 }
             }
         })
@@ -71,7 +78,7 @@ class Bat {
         }
 
         if (this.carryingKey) {
-            canvasContext.drawImage(img["key"], this.x-view.x+6, this.y+6-view.y);
+            this.play('hasKey');
         }
     }
 
