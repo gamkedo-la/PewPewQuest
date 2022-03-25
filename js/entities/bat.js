@@ -30,7 +30,7 @@ class Bat {
         this.spritesheet = spritesheet({
             image: img['bat2'],
             frameWidth: 27,
-            frameHeight: 13,
+            frameHeight: 16,
             frameMargin: 0,
             animations: {
 
