@@ -48,7 +48,8 @@ const imageList = [
     'orbit-key',
     'flashlight',
     'flashlight-inventory',
-    'bat2'
+    'bat2',
+    'bug'
 
 ]
 
