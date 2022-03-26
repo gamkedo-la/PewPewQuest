@@ -49,7 +49,7 @@ const imageList = [
     'flashlight',
     'flashlight-inventory',
     'bat2',
-    'bug's
+    'bug'
 
 ]
 

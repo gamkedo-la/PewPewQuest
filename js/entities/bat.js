@@ -67,7 +67,7 @@ class Bat {
 
     draw() {
         this.currentAnimation.render({
-            x: Math.floor(this.x-view.x),
+            x: Math.floor(this.x-view.x+this.bump),
             y: Math.floor(this.y-view.y),
             width: 27,
             height: 13
@@ -135,7 +135,7 @@ class Bat {
 
         world.bullets.forEach(bullet => {
             if(rectCollision(this.collider, bullet.collider)) {
-                this.health -= 30;
+                this.health -= 10;
                 bullet.die();
                 this.bump = 5;
             }

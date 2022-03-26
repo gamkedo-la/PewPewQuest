@@ -39,18 +39,48 @@ class Enemy {
             y: this.y
         }
 
+        this.spritesheet = spritesheet({
+            image: img['bug'],
+            frameWidth: 16,
+            frameHeight: 16,
+            frameMargin: 0,
+            animations: {
+
+                east: {
+                    frames: '0..3',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                west: {
+                    frames: '4..7',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                }
+            }
+        })
+
+        this.currentAnimation = this.spritesheet.animations['east'];
+
     }
 
     draw() {
+        this.currentAnimation.render({
+            x: Math.floor(this.x-view.x+this.bump),
+            y: Math.floor(this.y-view.y),
+            width: 16,
+            height: 16
+        })
     
-        fillRect(this.x - view.x + (ticker%3==0? -this.bump : this.bump), this.y - view.y, this.width, this.height, COLORS.dirtyRed);
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
         }
     }
 
     update() {
-        
+        this.currentAnimation.update();
         if(ticker%this.moveInterval == 0){
             this.target.x += (Math.random() * 2 - 1) * 15;
             this.target.y += (Math.random() * 2 - 1) * 15;
