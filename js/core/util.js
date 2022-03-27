@@ -107,6 +107,10 @@ function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
 
+function map(value, istart, istop, ostart, ostop) {
+    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+}
+
 function checkLine(pointA, pointB, checkfunction){
 
     let x0 = pointA.x,

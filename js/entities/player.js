@@ -254,10 +254,6 @@ var player = {
         if(Math.abs(bulletXVelocity) > 0.1 || Math.abs(bulletYVelocity) > 0.1){
             let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
-             bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
-            world.bullets.push(bullet);
-             bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
-            world.bullets.push(bullet);
         }
     },
 
@@ -267,8 +263,9 @@ var player = {
         let bulletXDistance = worldMouseX - this.x;
         let bulletYDistance = worldMouseY - this.y;
         let bulletAngle = Math.atan2(bulletYDistance, bulletXDistance);
-        let bulletXVelocity = Math.cos(bulletAngle) * 8;
-        let bulletYVelocity = Math.sin(bulletAngle) * 8;
+        let bulletDistance = Math.sqrt(bulletXDistance * bulletXDistance + bulletYDistance * bulletYDistance);
+        let bulletXVelocity = Math.cos(bulletAngle) * 8 * map(bulletDistance, 0, view.width/2, 0.1, 1);
+        let bulletYVelocity = Math.sin(bulletAngle) * 8 * map(bulletDistance, 0, view.height/2, 0.1, 1);
         let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
         world.bullets.push(bullet);
     },
