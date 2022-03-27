@@ -58,11 +58,55 @@ class Enemy {
                     frameRate: 30,
                     loop: true,
                     noInterrupt: true
-                }
+                },
+
+                south: {
+                    frames: '8..11',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                north: {
+                    frames: '12..15',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                southeast: {
+                    frames: '16..19',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                southwest: {
+                    frames: '20..23',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                northwest: {
+                    frames: '24..27',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                northeast: {
+                    frames: '28..31',
+                    frameRate: 30,
+                    loop: true,
+                    noInterrupt: true
+                },
             }
         })
 
         this.currentAnimation = this.spritesheet.animations['east'];
+
+        this.directions = ['east', 'southeast', 'south', 'southwest', 'west', 'northwest', 'north', 'northeast', 'east'];
 
     }
 
@@ -80,6 +124,8 @@ class Enemy {
     }
 
     update() {
+        
+        this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
         this.currentAnimation.update();
         if(ticker%this.moveInterval == 0){
             this.target.x += (Math.random() * 2 - 1) * 15;
@@ -152,5 +198,15 @@ class Enemy {
             world.getTileAtPixel(X+this.width, Y) != 0 ||
             world.getTileAtPixel(X+this.width, Y+this.height) != 0
         )
+    }
+
+    findDirection() {
+        let xDir = this.target.x - this.x;
+        let yDir = this.target.y - this.y;
+        let angle = Math.atan2(yDir, xDir);
+        let cardinalUnit = Math.PI/4;
+        let cardinalAngle = Math.round(angle/cardinalUnit) * cardinalUnit;
+       // console.log(Math.round(cardinalAngle/cardinalUnit))
+        return clamp( Math.round(cardinalAngle/cardinalUnit), 0, 7);
     }
 }

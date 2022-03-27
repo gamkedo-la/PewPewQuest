@@ -15,6 +15,7 @@ var player = {
     friction: 0.5,
     xFacing: 0,
     yFacing: 0,
+    keyVelocityCap: 0.5,
     shootTarget: {
         x: 0,
         y: 0
@@ -23,7 +24,7 @@ var player = {
 
     collider: {
         left: 0,
-        right: 0,
+        right: 0, 
         top: 0,
         bottom: 0,
         leftFeeler: { x: 0, y: 0 },
@@ -59,21 +60,25 @@ var player = {
             this.xVelocity -= this.maxAcceleration;
             this.yFacing = 0;
             this.xFacing = -1;
+            this.xVelocity *= this.keyVelocityCap;
         }
         else if (Key.isDown(Key.RIGHT)) {
             this.xVelocity += this.maxAcceleration;
             this.yFacing = 0;
             this.xFacing = 1;
+            this.xVelocity *= this.keyVelocityCap;
         }
         if (Key.isDown(Key.UP)) {
             this.yVelocity -= this.maxAcceleration;
             this.xFacing = 0;
             this.yFacing = -1;
+            this.yVelocity *= this.keyVelocityCap;
         }
         else if (Key.isDown(Key.DOWN)) {
             this.yVelocity += this.maxAcceleration;
             this.xFacing = 0;
             this.yFacing = 1;
+            this.yVelocity *= this.keyVelocityCap;
         }
         
         //------------------------------------- 
@@ -107,21 +112,25 @@ var player = {
             this.xVelocity -= this.maxAcceleration;
             this.yFacing = 0;
             this.xFacing = -1;
+            this.xVelocity *= this.keyVelocityCap;
         }
         else if (Key.isDown(Key.d)) {
             this.xVelocity += this.maxAcceleration;
             this.yFacing = 0;
             this.xFacing = 1;
+            this.xVelocity *= this.keyVelocityCap;
         }
         if (Key.isDown(Key.w)) {
             this.yVelocity -= this.maxAcceleration;
             this.xFacing = 0;
             this.yFacing = -1;
+            this.yVelocity *= this.keyVelocityCap;
         }
         else if (Key.isDown(Key.s)) {
             this.yVelocity += this.maxAcceleration;
             this.xFacing = 0;
             this.yFacing = 1;
+            this.yVelocity *= this.keyVelocityCap;
         }
        
         
@@ -266,8 +275,8 @@ var player = {
 
     collisionResponse: function(entity){
 
-        this.xVelocity = -this.xVelocity * 2;
-        this.yVelocity = -this.yVelocity * 2;
+        this.xVelocity = -this.xVelocity * 5;
+        this.yVelocity = -this.yVelocity * 5;
 
     }
                 
