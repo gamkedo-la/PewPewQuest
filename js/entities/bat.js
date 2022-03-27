@@ -2,6 +2,7 @@
 class Bat {
     constructor(tileX, tileY, northTile, southTile, eastTile, westTile) {
         this.carryingKey = false;
+        this.idealKeepawayDist = 64;
         this.tileX = tileX;
         this.tileY = tileY;
         this.x = tileX * 8;
@@ -91,6 +92,7 @@ class Bat {
         }
 
         if(inventory.items.keys > 0 && !this.carryingKey){
+            // move toward the player if they have a key we want
             let pX = player.x - this.x;
             let pY = player.y - this.y;
             let pDir = Math.atan2(pY, pX);
@@ -101,8 +103,13 @@ class Bat {
         if(this.carryingKey){
             let pX = player.x - this.x;
             let pY = player.y - this.y;
-            let pDir = Math.atan2(pY, pX);
-            pDir += Math.PI; //reverse direction
+            let pDir = Math.atan2(pY, pX); // toward player
+
+            let distance = Math.sqrt(pX * pX + pY * pY);
+            if (distance < this.idealKeepawayDist) {
+                pDir += Math.PI; // run away from player
+            }
+
             this.target.x += Math.cos(pDir) * 1.7;
             this.target.y += Math.sin(pDir) * 1.7;
         }
