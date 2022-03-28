@@ -128,11 +128,11 @@ class Enemy {
         this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
         this.currentAnimation.update();
         if(ticker%this.moveInterval == 0){
-            this.target.x += (Math.random() * 2 - 1) * 15;
-            this.target.y += (Math.random() * 2 - 1) * 15;
-            if(this.checkWorldCollision(this.target.x, this.target.y) ) {
-                this.targetX = this.previous.x;
-                this.targetY = this.previous.y;
+            this.target.x = this.x + (Math.random() * 2 - 1) * 15;
+            this.target.y = this.y + (Math.random() * 2 - 1) * 15;
+            while(this.checkWorldCollision(this.target.x, this.target.y) ) {
+                this.target.x = this.x + (Math.random() * 2 - 1) * 15;
+                this.target.y = this.y + (Math.random() * 2 - 1) * 15;
             }
         }
         
