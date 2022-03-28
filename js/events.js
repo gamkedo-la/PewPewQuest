@@ -8,6 +8,7 @@ signal.addEventListener('miniMap', gotoMapScreen);
 
 signal.addEventListener('getKey', getKey);
 signal.addEventListener('getLight', getLight);
+signal.addEventListener('getBridge', getBridge);
 signal.addEventListener ('removeBarrier', removeBarrier);
 signal.addEventListener ('keysChanged', splodeKeys);
 
@@ -76,11 +77,23 @@ function getLight(event){
     console.log('getLight triggered');
     lightItem = event.detail.item;
     
-        inventory.items.light=1;
+        inventory.items.torch=1;
         audio.playSound(loader.sounds.test1);
         let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
         world.entities.splice(world.entities.indexOf(lightItem), 1);
+
+}
+
+function getBridge(event){
+    console.log('getLight triggered');
+    bridgeItem = event.detail.item;
+    
+        inventory.items.bridge=1;
+        audio.playSound(loader.sounds.test1);
+        let splode = new Splode(bridgeItem.x, bridgeItem.y, 10, COLORS.tahitiGold);
+        world.entities.push(splode);
+        world.entities.splice(world.entities.indexOf(bridgeItem), 1);
 
 }
 

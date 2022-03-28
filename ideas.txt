@@ -17,9 +17,6 @@ fun feature ideas:
     dynamic tilemap effects
     pre-rendered sprite rotations ? 
 
-
-
-
 top-down shooter roguelike where you can pilot multiple machines in the world
     abandon them when damaged or need a smaller one to proceed
     some roll, some walk, will have to swap to traverse some terrains / fit in tight spaces

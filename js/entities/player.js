@@ -133,18 +133,19 @@ var player = {
             this.yVelocity *= this.keyVelocityCap;
         }
        
-        
+        //bullet firing-----------------------------------------------------
         if (Key.justReleased(Key.z)) { this.fireBullet(); }
         if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
-        
-        if (gamepad.buttonA()) { 
-            if (!this.buttonAWasDown) this.fireBullet();
-            this.buttonAWasDown = true;
-         } else {
-            this.buttonAWasDown = false;
-         }
-
+       
         if(gp){this.gamepadFireBullet()}
+
+        //other actions-----------------------------------------------------
+
+        if (Key.justReleased(Key.x)){
+            inventory.selection++;
+            inventory.selection = inventory.selection % inventory.itemList.length;
+        }
+
 
         //are we out of bounds? Scroll one screen in that direction
         if(this.collider.right - view.x < 0) {
@@ -158,7 +159,6 @@ var player = {
         }
         if(this.collider.top - view.y > view.height - this.height) {
             view.targetY += view.height;
-            //this.y += 2;
         }
 
         //apply x movement

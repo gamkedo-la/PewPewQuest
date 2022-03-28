@@ -106,7 +106,7 @@ World.prototype.drawMap = function(){
             
                 switch(tile){
                     case 0:
-                        if(inventory.items.light){
+                        if(inventory.items.torch && inventory.selectedItem == 'torch'){
                             this.drawLightGridRadius(i,j,player,50, "#202030");
                         }
                         this.drawFilledTile(i,j,tile);
@@ -198,6 +198,13 @@ World.prototype.populateMapObjects = function(){
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
+                case BRIDGE:{
+                    console.log("bridge placed")
+                    let bridge = new Bridge(i,j);
+                    world.entities.push(bridge);
+                    this.setTileAtPosition(i, j, 0);
+                    break;
+                }
             }
         }
     }
@@ -258,6 +265,7 @@ World.prototype.populateMapPalette = function(palette){
     ENEMY_MINION = palette[39];
     FLASHLIGHT = palette[40];
     ENEMY_BAT = palette[41];
+    BRIDGE = palette[42];
 
     world.data.fill(0, 0, 256);
 

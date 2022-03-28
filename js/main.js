@@ -49,7 +49,9 @@ const imageList = [
     'flashlight',
     'flashlight-inventory',
     'bat2',
-    'bug'
+    'bug',
+    'bridge',
+    'bridge-inventory'
 
 ]
 
@@ -61,7 +63,7 @@ const soundList = [
 
 ]
 
-var gameState = GAMESTATE_TITLE;
+var gameState = GAMESTATE_PLAY;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();

@@ -1,6 +1,6 @@
 class Splode{
     constructor(x,y,life, color){
-        this.type = 
+        this.type = SPLODE
         this.x = x;
         this.y = y;
         this.lifeMax = life;
