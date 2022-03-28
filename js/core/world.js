@@ -205,6 +205,13 @@ World.prototype.populateMapObjects = function(){
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
+                case SPAWNER:{
+                    let neighbors = this.getNeighbors(i, j);
+                    let spawner = new Spawner(i,j, ...neighbors);
+                    world.entities.push(spawner);
+                    this.setTileAtPosition(i, j, 0);
+
+                }
             }
         }
     }
@@ -266,6 +273,7 @@ World.prototype.populateMapPalette = function(palette){
     FLASHLIGHT = palette[40];
     ENEMY_BAT = palette[41];
     BRIDGE = palette[42];
+    SPAWNER = palette[43];
 
     world.data.fill(0, 0, 256);
 
