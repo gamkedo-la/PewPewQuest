@@ -115,8 +115,8 @@ World.prototype.drawMap = function(){
                         if(inventory.items.torch && inventory.selectedItem == 'torch'){
                             this.drawLightGridRadius(i,j,player,50, "#202030");
                         }
-                        this.drawFilledTile(i,j,tile);
-                        //this.drawImageTile(i,j,tile);
+                        //this.drawFilledTile(i,j,tile);
+                        this.drawImageTile(i,j,tile);
                         break;
                     case COLOR_DIRTY_RED:{
                         this.drawGlitchTile(i,j,tile);
