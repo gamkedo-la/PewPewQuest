@@ -55,10 +55,13 @@ var gameScreen = {
             
 
         if(this.cameraTypeToggle){
+            
             view.x = intLerp(view.x, view.targetX, 0.2);
             view.y = intLerp(view.y, view.targetY, 0.2);
         }
         else{
+            view.targetX = Math.floor(player.x / view.width) * view.width
+            view.targetY = Math.floor(player.y / view.height) * view.height
             view.x = intLerp(view.x, player.x - canvas.width/2, 0.2);
             view.y = intLerp(view.y, player.y - canvas.height/2, 0.2);
         }
