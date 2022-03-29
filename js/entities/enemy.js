@@ -130,11 +130,16 @@ class Enemy {
         if(ticker%this.moveInterval == 0){
             this.target.x = this.x + (Math.random() * 2 - 1) * 15;
             this.target.y = this.y + (Math.random() * 2 - 1) * 15;
+
             while(this.checkWorldCollision(this.target.x, this.target.y) ) {
                 this.target.x = this.x + (Math.random() * 2 - 1) * 15;
                 this.target.y = this.y + (Math.random() * 2 - 1) * 15;
+
             }
         }
+
+        this.targetX += Math.cos(this.findDirectionTowardsPlayer()) * 4;
+        this.targetY += Math.sin(this.findDirectionTowardsPlayer()) * 4;
         
         this.updateCollider();
         if(this.health < 0) {
@@ -208,5 +213,14 @@ class Enemy {
         let cardinalAngle = Math.round(angle/cardinalUnit) * cardinalUnit;
        // console.log(Math.round(cardinalAngle/cardinalUnit))
         return clamp( Math.round(cardinalAngle/cardinalUnit), 0, 7);
+    }
+
+    findDirectionTowardsPlayer() {
+        let px  = player.x;
+        let py = player.y;
+        let xDir = px - this.x;
+        let yDir = py - this.y;
+        let angle = Math.atan2(yDir, xDir);
+        return angle;
     }
 }
