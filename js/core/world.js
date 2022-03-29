@@ -118,6 +118,11 @@ World.prototype.drawMap = function(){
                         this.drawFilledTile(i,j,tile);
                         //this.drawImageTile(i,j,tile);
                         break;
+                    case COLOR_DIRTY_RED:{
+                        this.drawGlitchTile(i,j,tile);
+                        break;
+
+                    }
                     default:
                         //this.drawFilledTile(i,j,tile);
                         this.drawImageTile(i,j,tile);
@@ -163,6 +168,21 @@ World.prototype.drawImageTile = function(i,j,basicTileColor){
     canvasContext.drawImage(
         tilesheet,
         column, row, 8, 8,
+        i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize
+    );
+
+}
+
+World.prototype.drawGlitchTile = function(i,j,basicTileColor){
+    let tilesheet = img['tiles']
+    let row = palette.indexOf(basicTileColor) * 8
+    let column = this.decorData[this.widthInTiles * j + i] * 8
+    let randomDecor = Math.floor(Math.random() * 32);
+    //console.log(`${row}, ${column}`)
+    
+    canvasContext.drawImage(
+        tilesheet,
+        randomDecor, row, 8, 8,
         i*this.tileSize-view.x, j*this.tileSize-view.y, this.tileSize, this.tileSize
     );
 
