@@ -40,6 +40,20 @@ var gameScreen = {
             gameScreen.cameraTypeToggle = !gameScreen.cameraTypeToggle;
         }
 
+        if(world.environmentData[
+            world.getIndexAtPosition(
+                Math.floor(player.x/8), Math.floor(player.y/8))
+            ] == COMBAT_MODE) {
+            if(!player.combat){
+                player.combat = true;
+                gameScreen.cameraTypeToggle = false;
+            }
+        }else{
+            player.combat = false;
+            gameScreen.cameraTypeToggle = true;
+        }
+            
+
         if(this.cameraTypeToggle){
             view.x = intLerp(view.x, view.targetX, 0.2);
             view.y = intLerp(view.y, view.targetY, 0.2);

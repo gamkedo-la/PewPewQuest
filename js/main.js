@@ -51,7 +51,8 @@ const imageList = [
     'bat2',
     'bug',
     'bridge',
-    'bridge-inventory'
+    'bridge-inventory',
+    'environment'
 
 ]
 

@@ -85,6 +85,12 @@ World.prototype.populateWithImage = function populateWithImage(image){
         this.decorData[i] = tileRandomGenerator.nextIntRange(0, 31);
     }
     this.data = data;
+
+    image = img['environment'];
+    ctx.drawImage(image, 0, 0);
+    data = new Uint32Array(ctx.getImageData(0, 0, image.width, image.height).data.buffer); 
+    this.environmentData = data;
+    
     palette = this.data.slice(0, 256);
     this.populateMapPalette(palette);
     this.populateCSSColorsArray();
@@ -274,6 +280,8 @@ World.prototype.populateMapPalette = function(palette){
     ENEMY_BAT = palette[41];
     BRIDGE = palette[42];
     SPAWNER = palette[43];
+
+    COMBAT_MODE=palette[8];
 
     world.data.fill(0, 0, 256);
 
