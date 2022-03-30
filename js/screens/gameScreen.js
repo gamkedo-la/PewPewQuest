@@ -9,6 +9,8 @@ var gameScreen = {
         view.targetY = Math.floor((playerStart.y * world.tileSize) / view.height) * view.height
         view.x = view.targetX
         view.y = view.targetY
+        audio.assignReverb(loader.sounds.reverbE)
+        currentAreaMode = EXPLORATION_MODE
     },
     draw: function () {
         clearScreen('black');
@@ -40,6 +42,27 @@ var gameScreen = {
             gameScreen.cameraTypeToggle = !gameScreen.cameraTypeToggle;
         }
 
+        let updateAreaMode = world.environmentData[
+            world.getIndexAtPosition(
+                Math.floor(player.x/8), Math.floor(player.y/8))
+            ]
+
+        if(currentAreaMode != updateAreaMode){
+
+            switch(updateAreaMode){
+                case EXPLORATION_MODE:
+                    audio.assignReverb(loader.sounds.reverbE)
+                    break;
+                case COMBAT_MODE:
+                    audio.assignReverb(loader.sounds.reverbC)
+                    break;
+                default:
+                    audio.assignReverb(loader.sounds.reverbE)
+            }
+
+            currentAreaMode = updateAreaMode;
+        }
+
         if(world.environmentData[
             world.getIndexAtPosition(
                 Math.floor(player.x/8), Math.floor(player.y/8))
@@ -47,10 +70,13 @@ var gameScreen = {
             if(!player.combat){
                 player.combat = true;
                 gameScreen.cameraTypeToggle = false;
+
+                //audio.assignReverb(loader.sounds.reverbE);// for combat reverb
             }
         }else{
             player.combat = false;
             gameScreen.cameraTypeToggle = true;
+           // audio.assignReverb(loader.sounds.reverbE);// for exploration reverb
         }
             
 

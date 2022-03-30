@@ -160,6 +160,7 @@ function loadSounds(){
 }
 
 function loadingComplete(){
+    
     audio.assignReverb(loader.sounds.reverbE);
 
     console.log('loading complete, initializing game');

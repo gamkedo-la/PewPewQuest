@@ -302,6 +302,7 @@ World.prototype.populateMapPalette = function(palette){
     SPAWNER = palette[43];
 
     COMBAT_MODE=palette[8];
+    EXPLORATION_MODE=palette[0];
 
     world.data.fill(0, 0, 256);
 
