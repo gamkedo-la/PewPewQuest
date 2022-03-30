@@ -60,6 +60,23 @@ const soundList = [
     { name: "test1", url:"snd/test1.mp3" },
     { name: "test2", url:"snd/test2.mp3" },
     { name: "boop", url:"snd/boop.mp3" },
+    { name: "splode01", url:"snd/small-explosion-001.mp3" },
+    { name: "splode02", url:"snd/small-explosion-002.mp3" },
+    { name: "splode03", url:"snd/small-explosion-003.mp3" },
+    { name: "splode04", url:"snd/small-explosion-004.mp3" },
+    { name: "splode05", url:"snd/small-explosion-005.mp3" },
+    { name: "splode06", url:"snd/small-explosion-006.mp3" },
+    { name: "splode07", url:"snd/small-explosion-007.mp3" },
+    { name: "splode08", url:"snd/small-explosion-008.mp3" },
+
+    { name: "bigSplode01", url:"snd/big-explosion-001.mp3" },
+    { name: "bigSplode02", url:"snd/big-explosion-002.mp3" },
+    { name: "bigSplode03", url:"snd/big-explosion-003.mp3" },
+    { name: "bigSplode04", url:"snd/big-explosion-004.mp3" },
+    { name: "bigSplode05", url:"snd/big-explosion-005.mp3" },
+    { name: "bigSplode06", url:"snd/big-explosion-006.mp3" },
+    { name: "bigSplode07", url:"snd/big-explosion-007.mp3" },
+    { name: "bigSplode08", url:"snd/big-explosion-008.mp3" },
     // { name: "bullethit", url:"snd/Shoot 245"}
 
 ]
