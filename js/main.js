@@ -57,7 +57,8 @@ const imageList = [
 ]
 
 const soundList = [
-    { name: "reverb", url:"snd/verb/reverb1.wav" },
+    { name: "reverbE", url:"snd/verb/reverb1.wav" },
+    { name: "reverbC", url:"snd/enemy-hurt-003.mp3" },
 
     { name: "test1", url:"snd/test1.mp3" },
     { name: "test2", url:"snd/test2.mp3" },
@@ -159,7 +160,7 @@ function loadSounds(){
 }
 
 function loadingComplete(){
-    audio.lateInit();
+    audio.assignReverb(loader.sounds.reverbE);
 
     console.log('loading complete, initializing game');
     console.log(img['map'].width)

@@ -49,10 +49,6 @@ const AudioGlobal = function AudioGlobal() {
 		callback()
 	}
 
-	this.lateInit = function() {
-		reverbBus.buffer = loader.sounds.reverb;
-	}
-
 //--//volume handling functions-----------------------------------------------
 	this.toggleMute = function() {
 		if (!this.initialized) return;
@@ -192,6 +188,10 @@ const AudioGlobal = function AudioGlobal() {
 	}
 
 //--//Gameplay functions------------------------------------------------------
+	this.assignReverb = function(buffer) {
+		reverbBus.buffer = buffer;
+	}
+
 	this.duckMusic = function (duration, volume = 0) {
 		currentMusicTrack.volume.gain.setTargetAtTime(volume, audioCtx.currentTime, CROSSFADE_TIME);
 		currentMusicTrack.volume.gain.setTargetAtTime(1, audioCtx.currentTime + duration, CROSSFADE_TIME);
