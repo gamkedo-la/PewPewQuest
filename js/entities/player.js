@@ -45,6 +45,9 @@ var player = {
            canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
             
         }
+       if(inventory.selectedItem=="bridge"){
+            canvasContext.drawImage(img['bridge'], Math.floor(this.x-view.x-this.width/2), Math.floor(this.y-view.y-this.height/2));
+       }
     },
 
     update: function () {

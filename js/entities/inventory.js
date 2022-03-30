@@ -20,7 +20,7 @@ var inventory = {
 
     draw: function () {
         let drawPosition = 10;
-        fillRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height, COLORS.dirtyRed);
+        fillRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height, COLORS.veniceBlue);
 
         //draw items
         let start = drawPosition;
