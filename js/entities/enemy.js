@@ -171,7 +171,7 @@ class Enemy {
         world.bullets.forEach(bullet => {
             if(rectCollision(this.collider, bullet.collider)) {
                 audio.playSound(loader.sounds[`enemyHurt0${Math.floor(Math.random()*8)}`],
-                map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
+                map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.4, 1+Math.random()*0.2, false);
                 this.health -= 10;
                 bullet.die();
                 this.bump = 5;

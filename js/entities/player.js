@@ -247,6 +247,7 @@ var player = {
     },
 
     fireBullet: function(){
+        audio.playSound(loader.sounds.pewpew2, 0, 0.2)
         let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
         world.bullets.push(bullet);
     },
@@ -256,6 +257,7 @@ var player = {
             bulletYVelocity = this.shootTarget.y * 8;
         if(Math.abs(bulletXVelocity) > 0.1 || Math.abs(bulletYVelocity) > 0.1){
             let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+            if(ticker%3==0)audio.playSound(loader.sounds.pewpew2, 0, 0.2)
             world.bullets.push(bullet);
         }
     },
@@ -270,6 +272,7 @@ var player = {
         let bulletXVelocity = Math.cos(bulletAngle) * 8 * map(bulletDistance, 0, view.width/2, 0.1, 1);
         let bulletYVelocity = Math.sin(bulletAngle) * 8 * map(bulletDistance, 0, view.height/2, 0.1, 1);
         let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+        if(ticker%3==0)audio.playSound(loader.sounds.pewpew2, 0, 0.2)
         world.bullets.push(bullet);
     },
 

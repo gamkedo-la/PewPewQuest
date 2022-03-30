@@ -101,6 +101,9 @@ const soundList = [
     { name: "enemyHurt06", url:"snd/enemy-hurt-006.mp3" },
     { name: "enemyHurt07", url:"snd/enemy-hurt-007.mp3" },
     { name: "enemyHurt08", url:"snd/enemy-hurt-008.mp3" },
+
+    { name: "pewpew" , url:"snd/shoot-276.mp3" },
+    { name: "pewpew2" , url:"snd/shoot-302.mp3" },
     // { name: "bullethit", url:"snd/Shoot 245"}
 
 ]

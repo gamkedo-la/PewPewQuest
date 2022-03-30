@@ -118,7 +118,7 @@ class Bat {
 
         if(this.health < 0) {
             audio.playSound(loader.sounds[`bigSplode0${Math.floor(Math.random()*8)}`],
-            map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
+            map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.4, 1+Math.random()*0.2, false);
 
 
             this.die();
