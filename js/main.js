@@ -77,6 +77,30 @@ const soundList = [
     { name: "bigSplode06", url:"snd/big-explosion-006.mp3" },
     { name: "bigSplode07", url:"snd/big-explosion-007.mp3" },
     { name: "bigSplode08", url:"snd/big-explosion-008.mp3" },
+
+    { name: "bulletHitWall01", url:"snd/bullet-hit-wall-001.mp3" },
+    { name: "bulletHitWall02", url:"snd/bullet-hit-wall-002.mp3" },
+    { name: "bulletHitWall03", url:"snd/bullet-hit-wall-003.mp3" },
+    { name: "bulletHitWall04", url:"snd/bullet-hit-wall-004.mp3" },
+    { name: "bulletHitWall05", url:"snd/bullet-hit-wall-005.mp3" },
+    { name: "bulletHitWall06", url:"snd/bullet-hit-wall-006.mp3" },
+    { name: "bulletHitWall07", url:"snd/bullet-hit-wall-007.mp3" },
+    { name: "bulletHitWall08", url:"snd/bullet-hit-wall-008.mp3" },
+
+    { name: "bulletHitEnemy01", url:"snd/bullet-hits-enemy-001.mp3" },
+    { name: "bulletHitEnemy02", url:"snd/bullet-hits-enemy-002.mp3" },
+    { name: "bulletHitEnemy03", url:"snd/bullet-hits-enemy-003.mp3" },
+    { name: "bulletHitEnemy04", url:"snd/bullet-hits-enemy-004.mp3" },
+    { name: "bulletHitEnemy05", url:"snd/bullet-hits-enemy-005.mp3" },
+
+    { name: "enemyHurt01", url:"snd/enemy-hurt-001.mp3" },
+    { name: "enemyHurt02", url:"snd/enemy-hurt-002.mp3" },
+    { name: "enemyHurt03", url:"snd/enemy-hurt-003.mp3" },
+    { name: "enemyHurt04", url:"snd/enemy-hurt-004.mp3" },
+    { name: "enemyHurt05", url:"snd/enemy-hurt-005.mp3" },
+    { name: "enemyHurt06", url:"snd/enemy-hurt-006.mp3" },
+    { name: "enemyHurt07", url:"snd/enemy-hurt-007.mp3" },
+    { name: "enemyHurt08", url:"snd/enemy-hurt-008.mp3" },
     // { name: "bullethit", url:"snd/Shoot 245"}
 
 ]

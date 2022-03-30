@@ -59,7 +59,7 @@ class Bullet {
     hit() {
        //splode?
        if(inView(this.x, this.y)){
-        let splode = new Splode(this.x, this.y, 10, 'yellow');
+        let splode = new Splode(this.x, this.y, 5, COLORS.veniceBlue);
         world.entities.push(splode);
       
 
@@ -69,6 +69,8 @@ class Bullet {
 
     die() {
         //	this.playSound = function(buffer, pan = 0, vol = 1, rate = 1, loop = false) {
+        //let splode = new Splode(this.x, this.y, 10, 'yellow');
+        //world.entities.push(splode);
 
         audio.playSound(loader.sounds[`splode0${Math.floor(Math.random()*8)}`], map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
         world.bullets.splice(world.bullets.indexOf(this), 1);
