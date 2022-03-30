@@ -57,6 +57,8 @@ const imageList = [
 ]
 
 const soundList = [
+    { name: "reverb", url:"snd/verb/reverb1.wav" },
+
     { name: "test1", url:"snd/test1.mp3" },
     { name: "test2", url:"snd/test2.mp3" },
     { name: "boop", url:"snd/boop.mp3" },
@@ -157,6 +159,8 @@ function loadSounds(){
 }
 
 function loadingComplete(){
+    audio.lateInit();
+
     console.log('loading complete, initializing game');
     console.log(img['map'].width)
     world = new World(img['map'].width, img['map'].height, 8);

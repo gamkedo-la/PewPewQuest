@@ -5,7 +5,7 @@ const FILTER_TRANSITION_TIME = 1;
 const FILTER_Q_CURVE = [0, 1, 0, 1, 0];
 const VOLUME_INCREMENT = 0.1;
 const CROSSFADE_TIME = 0.25;
-const HARDPAN_THRESH = 300;
+const HARDPAN_THRESH = 400;
 const DROPOFF_MIN = 100;
 const DROPOFF_MAX = 500;
 
@@ -29,24 +29,28 @@ const AudioGlobal = function AudioGlobal() {
 		this.context = audioCtx;
 		musicBus = audioCtx.createGain();
 		soundEffectsBus = audioCtx.createGain();
-		filterBus = audioCtx.createBiquadFilter();
+		reverbBus = audioCtx.createConvolver();
 		masterBus = audioCtx.createGain();
 
 		musicVolume = 0.7;
 		soundEffectsVolume = 0.7;
 
-		filterBus.frequency.value = FILTER_MAX;
-
 		musicBus.gain.value = musicVolume;
 		soundEffectsBus.gain.value = soundEffectsVolume;
-		filterBus.type = "lowpass";
-		musicBus.connect(filterBus);
-		soundEffectsBus.connect(filterBus);
-		filterBus.connect(masterBus);
+		reverbBus.buffer = loader.sounds.reverb;
+
+		musicBus.connect(masterBus);
+		soundEffectsBus.connect(reverbBus);
+		soundEffectsBus.connect(masterBus);
+		reverbBus.connect(masterBus);
 		masterBus.connect(audioCtx.destination);
 		console.log("Audio initialized.");
 		this.initialized = true;
 		callback()
+	}
+
+	this.lateInit = function() {
+		reverbBus.buffer = loader.sounds.reverb;
 	}
 
 //--//volume handling functions-----------------------------------------------
