@@ -256,9 +256,11 @@ var player = {
         let bulletXVelocity = this.shootTarget.x * 8,
             bulletYVelocity = this.shootTarget.y * 8;
         if(Math.abs(bulletXVelocity) > 0.1 || Math.abs(bulletYVelocity) > 0.1){
-            let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
-            if(ticker%3==0)audio.playSound(loader.sounds.pewpew2, 0, 0.2)
-            world.bullets.push(bullet);
+            if(ticker%2==0){
+                audio.playSound(loader.sounds.pewpew2, 0, 0.2)
+                let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+                world.bullets.push(bullet);
+            }
         }
     },
 
@@ -271,9 +273,12 @@ var player = {
         let bulletDistance = Math.sqrt(bulletXDistance * bulletXDistance + bulletYDistance * bulletYDistance);
         let bulletXVelocity = Math.cos(bulletAngle) * 8 * map(bulletDistance, 0, view.width/2, 0.1, 1);
         let bulletYVelocity = Math.sin(bulletAngle) * 8 * map(bulletDistance, 0, view.height/2, 0.1, 1);
-        let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
-        if(ticker%3==0)audio.playSound(loader.sounds.pewpew2, 0, 0.2)
-        world.bullets.push(bullet);
+        if(ticker%3==0){
+            audio.playSound(loader.sounds.pewpew2, 0, 0.2)
+            let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+
+            world.bullets.push(bullet);
+        }
     },
 
     collisionResponse: function(entity){
