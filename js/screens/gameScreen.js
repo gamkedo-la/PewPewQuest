@@ -28,6 +28,13 @@ var gameScreen = {
             }
         });
 
+        world.worldEntities.forEach(function (entity) {
+            if(inView(entity.x, entity.y)){
+                entity.draw();
+            }
+        });
+
+
         player.draw();
         inventory.draw();
         strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  COLORS.tahitiGold);
@@ -71,12 +78,10 @@ var gameScreen = {
                 player.combat = true;
                 gameScreen.cameraTypeToggle = false;
 
-                //audio.assignReverb(loader.sounds.reverbE);// for combat reverb
             }
         }else{
             player.combat = false;
             gameScreen.cameraTypeToggle = true;
-           // audio.assignReverb(loader.sounds.reverbE);// for exploration reverb
         }
             
 
@@ -95,8 +100,12 @@ var gameScreen = {
         world.entities.forEach(function (entity) {
             if(inView(entity.x, entity.y)){
                 entity.update()
-            }else if (entity.type == SPLODE){
-                entity.die();
+            }else{
+
+                if (entity.type == SPLODE){
+                    entity.die();
+                }
+
             }
             
         });
@@ -108,6 +117,12 @@ var gameScreen = {
             }
         });
 
+        world.worldEntities.forEach(function (entity) {
+                entity.update();
+            
+        });
+
+        
         player.update();
         inventory.update();
     }

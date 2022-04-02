@@ -15,7 +15,7 @@ var player = {
     friction: 0.5,
     xFacing: 0,
     yFacing: 0,
-    keyVelocityCap: 0.5,
+    keyVelocityCap: 0.7,
     shootTarget: {
         x: 0,
         y: 0
@@ -45,9 +45,7 @@ var player = {
            canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
             
         }
-       if(inventory.selectedItem=="bridge"){
-            canvasContext.drawImage(img['bridge'], Math.floor(this.x-view.x-this.width/2), Math.floor(this.y-view.y-this.height/2));
-       }
+      
     },
 
     update: function () {
@@ -171,7 +169,7 @@ var player = {
 
          //check for x collisions
          this.updateCollider(this.x, this.y);
-         if(this.tileCollisionCheck(world, 0)){
+         if(this.tileCollisionCheck(world, 0) && !world.noCollide){
             this.x = this.previousX;
             this.xVelocity = 0;
             this.updateCollider(this.x, this.y);
@@ -185,7 +183,7 @@ var player = {
        
         //check for y collisions
         this.updateCollider(this.x, this.y);
-        if(this.tileCollisionCheck(world, 0)){
+        if(this.tileCollisionCheck(world, 0) && !world.noCollide){
             this.y = this.previousY;
             this.yVelocity = 0;
             this.updateCollider(this.x, this.y);

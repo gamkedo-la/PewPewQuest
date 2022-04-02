@@ -6,6 +6,9 @@ const World = function World(widthInTiles=100, heightInTiles=100, tileSize=8){
     this.decorData = [];
     this.entities = [];
     this.bullets = [];
+    this.noCollide = false;
+    //world entities need updated every frame regardless of whether they are in the viewport
+    this.worldEntities = [];
 
     return this;
 }
@@ -227,7 +230,7 @@ World.prototype.populateMapObjects = function(){
                 case BRIDGE:{
                     console.log("bridge placed")
                     let bridge = new Bridge(i,j);
-                    world.entities.push(bridge);
+                    world.worldEntities.push(bridge);
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }

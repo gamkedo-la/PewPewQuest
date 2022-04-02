@@ -88,12 +88,13 @@ function getLight(event){
 function getBridge(event){
     console.log('getLight triggered');
     bridgeItem = event.detail.item;
+    inventory.bridge = bridgeItem;
     
         inventory.items.bridge=1;
         audio.playSound(loader.sounds.test1);
         let splode = new Splode(bridgeItem.x, bridgeItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
-        world.entities.splice(world.entities.indexOf(bridgeItem), 1);
+        //world.entities.splice(world.entities.indexOf(bridgeItem), 1);
 
 }
 

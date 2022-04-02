@@ -15,17 +15,38 @@ class Bridge {
             top: this.y,
             bottom: this.y + 31,
         }
-        this.handle = {
-            left: this.x, 
-            right: this.x + 10,
-            top: this.y,
-            bottom: this.y + 8
-        }
+        // this.handle = {
+        //     left: this.x, 
+        //     right: this.x + 10,
+        //     top: this.y,
+        //     bottom: this.y + 8
+        // }
     }
 
     update() {
+        this.updateCollider();
         if(rectCollision(this, player.collider)) {
-            this.collect();
+            if(!inventory.items.bridge){
+                this.collect();
+                this.x = -100;
+                this.y = -100;
+            }
+            // else bridge has been dropped by player in the map
+                // is player in the active area?
+                if(rectCollision(player.collider, this.activeArea)) {
+                   world.noCollide = true;
+                }
+                    //set no world collision flag
+                //not in the active area, but pressing the pickup button
+                    //this.pickup();s
+        }
+        else{
+            world.noCollide = false;
+        }
+        if(inventory.selectedItem == "bridge") {
+            console.log('bridge selected');
+            this.x = player.x;
+            this.y = player.y;
         }
     }
     
@@ -38,9 +59,13 @@ class Bridge {
     }
 
     collect() {
-        
         console.log('collected bridge');
         signal.dispatch('getBridge', {item: this});
+    }
+
+    pickup() {
+        this.x = -100;
+        this.y = -100;
     }
 
     updateCollider() {
