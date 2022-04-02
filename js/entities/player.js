@@ -10,12 +10,12 @@ var player = {
     yVelocity: 0,
     xAcceleration: 0,
     yAcceleration: 0,
-    maxSpeed: 600,
-    maxAcceleration: 200,
+    maxSpeed: 400,
+    maxAcceleration: 150,
     friction: 0.5,
     xFacing: 0,
     yFacing: 0,
-    keyVelocityCap: 0.7,
+    keyVelocityCap: .9,
     shootTarget: {
         x: 0,
         y: 0

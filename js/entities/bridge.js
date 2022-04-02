@@ -17,13 +17,14 @@ class Bridge {
             top: this.y,
             bottom: this.y + 31,
         }
+        this.held = false;
        
     }
 
     update() {
         this.updateCollider();
         if(rectCollision(this, player.collider)) {
-            if(!Key.isDown(Key.SPACE)){
+            if(!this.held){
                 this.offsetX = player.x - this.x;
                 this.offsetY = player.y - this.y;
             }
@@ -31,12 +32,15 @@ class Bridge {
               
                     //set no world collision flag
                 //not in the active area, but pressing the pickup button
-                    if(Key.isDown(Key.SPACE)){
+                    if(Key.isDown(Key.SPACE) || gp?.buttons[0].pressed) {
+                        this.held = true;
                         if(!rectCollision(player.collider, this.activeArea)) {
                             this.x = player.x-this.offsetX;
                             this.y = player.y-this.offsetY;
                          }
                         
+                    }else {
+                        this.held = false;
                     }
         }
         if(rectCollision(player.collider, this.activeArea)) {
