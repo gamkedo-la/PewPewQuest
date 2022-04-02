@@ -46,7 +46,7 @@ class Spawner {
                 },
 
                 spawn: {
-                    frames: '2..5',
+                    frames: '2..7',
                     frameRate: 10,
                     loop: false,
                     noInterrupt: true
