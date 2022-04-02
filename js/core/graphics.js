@@ -78,7 +78,7 @@ function fillRect(x,y,width,height, color='white'){
  */
  function strokeRect(x,y,width,height, color='white'){
     canvasContext.strokeStyle =`1px solid ${color}`;
-    canvasContext.strokeRect(x, y,width, height );
+    canvasContext.strokeRect(x, y ,width, height );
 }
 
 

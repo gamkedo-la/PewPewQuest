@@ -12,45 +12,36 @@ class Bridge {
         this.top = this.y;
         this.bottom = this.y + 31;
         this.activeArea = {
-            left: this.x+11,
-            right: this.x + 25,
+            left: this.x+13,
+            right: this.x + 23,
             top: this.y,
             bottom: this.y + 31,
         }
-        // this.handle = {
-        //     left: this.x, 
-        //     right: this.x + 10,
-        //     top: this.y,
-        //     bottom: this.y + 8
-        // }
+       
     }
 
     update() {
         this.updateCollider();
         if(rectCollision(this, player.collider)) {
-            if(!Key.isDown(Key.c)){
+            if(!Key.isDown(Key.SPACE)){
                 this.offsetX = player.x - this.x;
                 this.offsetY = player.y - this.y;
             }
-
-            // if(!inventory.items.bridge){
-            //     this.collect();
-            //     this.x = -100;
-            //     this.y = -100;
-            // }
-            // else bridge has been dropped by player in the map
                 // is player in the active area?
-                if(rectCollision(player.collider, this.activeArea)) {
-                   world.noCollide = true;
-                }
+              
                     //set no world collision flag
                 //not in the active area, but pressing the pickup button
-                    if(Key.isDown(Key.c)){
-                        console.log('holding bridge');
-                        this.x = player.x-this.offsetX;
-                        this.y = player.y-this.offsetY;
+                    if(Key.isDown(Key.SPACE)){
+                        if(!rectCollision(player.collider, this.activeArea)) {
+                            this.x = player.x-this.offsetX;
+                            this.y = player.y-this.offsetY;
+                         }
+                        
                     }
         }
+        if(rectCollision(player.collider, this.activeArea)) {
+            world.noCollide = true;
+         }
         else{
             world.noCollide = false;
         }
@@ -63,10 +54,15 @@ class Bridge {
     
     draw() {
         canvasContext.drawImage(img["bridge"], Math.floor(this.x-view.x), Math.floor(this.y-view.y) );
-    //     fillRect(this.activeArea.left-view.x,
-    //         this.activeArea.top-view.y,
-    //         this.activeArea.right-this.activeArea.left,
-    //         this.activeArea.bottom-this.activeArea.top, '#8888FF');
+        if(rectCollision(this, player.collider)) {
+            if(ticker%2 == 0) {
+                fillRect(this.activeArea.left-view.x,
+                    this.activeArea.top-view.y,
+                    this.activeArea.right-this.activeArea.left,
+                    this.activeArea.bottom-this.activeArea.top, '#8888FF');
+                }
+        }
+        //fillRect(this.left-view.x, this.top-view.y, this.right-this.left, this.bottom-this.top, `rgba(255,0,0,0.5)`);
      }
 
     collect() {
@@ -80,13 +76,13 @@ class Bridge {
     }
 
     updateCollider() {
-        this.left = this.x;
-        this.right = this.x + 35;
-        this.top = this.y;
-        this.bottom = this.y + 31;
+        this.left = this.x-4;
+        this.right = this.x + this.width+4;
+        this.top = this.y-4;
+        this.bottom = this.y + this.height+4;
         this.activeArea = {
-            left: this.x+11,
-            right: this.x + 25,
+            left: this.x+13,
+            right: this.x + 23,
             top: this.y,
             bottom: this.y + 31,
         }
