@@ -52,7 +52,8 @@ const imageList = [
     'bug',
     'bridge',
     'bridge-inventory',
-    'environment'
+    'environment',
+    'spawner',
 
 ]
 

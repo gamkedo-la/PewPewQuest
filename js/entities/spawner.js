@@ -13,8 +13,8 @@ class Spawner {
         //this.keysNeeded = this.keyQuantities.filter(element => this.neighbors.includes(element) );
         //this.direction = this.neighbors.indexOf(this.keysNeeded[0]);
         //this.keysRequiredToUnlock = 1 + this.keyQuantities.indexOf(this.keysNeeded[0]);
-        this.height = 10;
-        this.width = 10;
+        this.height = 16;
+        this.width = 16;
         this.bump = 0;
         this.health = 100;
         this.moveInterval = 5;
@@ -31,6 +31,29 @@ class Spawner {
             bottom: this.y + this.width,
         }
 
+        this.spritesheet = spritesheet({
+            image: img['spawner'],
+            frameWidth: 16,
+            frameHeight: 16,
+            frameMargin: 0,
+            animations: {
+
+                idle: {
+                    frames: '0..1',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                spawn: {
+                    frames: '2..5',
+                    frameRate: 10,
+                    loop: false,
+                    noInterrupt: true
+                }
+            }
+        })
+
         this.target = {
             x: this.x,
             y: this.y
@@ -43,6 +66,9 @@ class Spawner {
             x: this.x,
             y: this.y
         }
+
+        this.currentAnimation = this.spritesheet.animations['idle'];
+        this.spawning = false;
 
         // this.spritesheet = spritesheet({
         //     image: img['bug'],
@@ -124,6 +150,13 @@ class Spawner {
         // })
         fillRect(Math.floor(this.x-view.x+this.bump),
         Math.floor(this.y-view.y), this.width, this.height, COLORS.tahitiGold);
+
+        this.currentAnimation.render({
+            x: Math.floor(this.x-view.x+this.bump),
+            y: Math.floor(this.y-view.y),
+            width: 16,
+            height: 16
+        })
     
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
@@ -133,12 +166,21 @@ class Spawner {
     update() {
         
         // this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
-        // this.currentAnimation.update();
+        this.currentAnimation.update();
+        if (this.spawning) {
+            if (this.currentAnimation.done) {
+                this.spawning = false;
+                this.spawnTarget.x = this.x +  (Math.random() * 2 - 1) * 15;
+                this.spawnTarget.y = this.y + (Math.random() * 2 - 1) * 15;
+                let bug = new Enemy(this.spawnTarget.x/8, this.spawnTarget.y/8);
+                world.entities.push(bug);
+                this.currentAnimation = this.spritesheet.animations['idle'];
+            }
+        }
         if(ticker%this.spawnInterval == 0){
-            this.spawnTarget.x = this.x +  (Math.random() * 2 - 1) * 15;
-            this.spawnTarget.y = this.y + (Math.random() * 2 - 1) * 15;
-           let bug = new Enemy(this.spawnTarget.x/8, this.spawnTarget.y/8);
-              world.entities.push(bug);
+            this.spawning = true;
+            this.currentAnimation = this.spritesheet.animations['spawn'];
+            this.currentAnimation.reset();
         }
         
         this.updateCollider();

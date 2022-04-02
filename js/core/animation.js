@@ -27,6 +27,7 @@ class Animation {
     
     this.currentFrame = 0;
     this.accumulator = 0;
+    this.done = false;
   }
 
   
@@ -37,12 +38,14 @@ class Animation {
   reset() {
     this.currentFrame = 0;
     this.accumulator = 0;
+    this.done = false;
   }
 
   update(dt = 1/60) {
 
     // if the animation doesn't loop we stop at the last frame
     if (!this.loop && this.currentFrame == this.frames.length-1){
+      this.done = true;
       return;
     } 
 
