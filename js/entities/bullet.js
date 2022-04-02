@@ -1,6 +1,7 @@
 class Bullet {
-    constructor(x,y, xVelocity, yVelocity) {
+    constructor(x,y, xVelocity, yVelocity, color= '#8888FF') {
         this.type = BULLET
+        this.color = color;
         this.x = x;
         this.y = y;
         this.height = 3;
@@ -53,7 +54,7 @@ class Bullet {
     }
     
     draw() {
-        pixelLine(this.x-view.x, this.y-view.y, this.prevX-view.x, this.prevY-view.y,  '#8888FF');
+        pixelLine(this.x-view.x, this.y-view.y, this.prevX-view.x, this.prevY-view.y, this.color);
     }
 
     hit() {

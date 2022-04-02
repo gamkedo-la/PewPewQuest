@@ -147,6 +147,7 @@ class Bat {
         world.bullets.forEach(bullet => {
             if(rectCollision(this.collider, bullet.collider)) {
                 this.health -= 10;
+                bullet.die();
                 audio.playSound(loader.sounds[`enemyHurt0${Math.floor(Math.random()*8)}`],
                 map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
                 this.bump = 5;
@@ -163,19 +164,24 @@ class Bat {
         if (this.carryingKey) {
             console.log("bat is dropping a key!");
 
-            // this spawns the key right where the bat died,
-            // however this can make the level impossible to complele
-            // if the bat is above a non destroyable wall
-            // works great, though! 
-            // let tile = world.getTileAtPixel(this.x,this.y);
-            // let obj = new DoorKey(this.x,this.y,tile);
-            // world.entities.push(obj);
-
-            // so instead killing a key-holding bat counts as a pickup =(
-            signal.dispatch('getKey', {item: null}); // note: no item entity
+            let tile = world.getTileAtPixel(this.x,this.y);
+            if(tile == 0){
+                let obj = new DoorKey(this.x,this.y,tile);
+                world.entities.push(obj);
+            }
+            else{
+                signal.dispatch('getKey', {item: null}); // note: no item entity
+            } 
         }
 
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
+        world.entities.splice(world.entities.indexOf(this), 1);
+
+        for(let i = 0; i < 40; i++) {
+            let angle = (Math.PI*2/40) * i;
+            world.bullets.push(new Bullet(this.x, this.y, Math.cos(angle)*4*Math.random(), Math.sin(angle)*2*Math.random(), COLORS.dirtyRed));
+        }
+        world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.dirtyRed));
         world.entities.splice(world.entities.indexOf(this), 1);
 
     }

@@ -9,6 +9,8 @@ var inventory = {
     
     selection: 0,
 
+    score: 10,
+
     selectedItem: "none",
     
     rect: {
@@ -21,6 +23,8 @@ var inventory = {
     draw: function () {
         let drawPosition = 10;
         fillRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height, COLORS.veniceBlue);
+        //textString, pos={x: 0, y: 0}, hspacing=0, vspacing = 2, scale=1
+        gameFont.drawText(this.score.toString().padStart(12, '0'), {x: 240, y: this.rect.y + 6}, 0, 0, 1);
 
         //draw items
         let start = drawPosition;

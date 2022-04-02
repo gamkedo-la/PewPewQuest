@@ -50,8 +50,8 @@ var player = {
 
     update: function () {
         this.updateCollider(this.x, this.y);
-        if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.1)};
-        if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.1)}
+        if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.3)};
+        if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.3)}
         
 
         //update rect:
@@ -253,7 +253,7 @@ var player = {
     gamepadFireBullet: function(){
         let bulletXVelocity = this.shootTarget.x * 8,
             bulletYVelocity = this.shootTarget.y * 8;
-        if(Math.abs(bulletXVelocity) > 0.1 || Math.abs(bulletYVelocity) > 0.1){
+        if(Math.abs(bulletXVelocity) > 0.2 || Math.abs(bulletYVelocity) > 0.2){
             if(ticker%2==0){
                 audio.playSound(loader.sounds.pewpew2, 0, 0.2)
                 let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
