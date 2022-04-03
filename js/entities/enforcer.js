@@ -34,6 +34,30 @@ class Enforcer {
             bottom: this.y + this.width,
 
         }
+
+        this.spritesheet = spritesheet({
+            image: img['enforcer'],
+            frameWidth: 16,
+            frameHeight: 16,
+            frameMargin: 0,
+            animations: {
+
+                idle: {
+                    frames: '0..5',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                carry: {
+                    frames: '6..11',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                }
+            }
+        })
+
         this.armorPoints = [];
 
         this.target = {
@@ -46,6 +70,8 @@ class Enforcer {
             y: this.y
         }
 
+        this.currentAnimation = this.spritesheet.animations['idle'];
+
         this.states = {
             PLAYER_CAPTURED: 1,
             WANDER: 3,
@@ -55,7 +81,15 @@ class Enforcer {
     }
 
     draw() {
-        fillRect(this.x - view.x, this.y - view.y, this.width, this.height, COLORS.dirtyRed);
+        //fillRect(this.x - view.x, this.y - view.y, this.width, this.height, COLORS.dirtyRed);
+
+        this.currentAnimation.render({
+            x: Math.floor(this.x-view.x+this.bump),
+            y: Math.floor(this.y-view.y),
+            width: 16,
+            height: 16
+        })
+    
     
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
@@ -64,6 +98,7 @@ class Enforcer {
 
     update() {
         
+        this.currentAnimation.update();
         this.updateCollider();
 
         //if all armor points are gone, die

@@ -54,6 +54,7 @@ const imageList = [
     'bridge-inventory',
     'environment',
     'spawner',
+    'enforcer',
 
 ]
 
