@@ -24,36 +24,29 @@ class Bridge {
     update() {
         this.updateCollider();
         if(rectCollision(this, player.collider)) {
+            //get p
             if(!this.held){
                 this.offsetX = player.x - this.x;
                 this.offsetY = player.y - this.y;
             }
-                // is player in the active area?
-              
-                    //set no world collision flag
-                //not in the active area, but pressing the pickup button
-                    if(Key.isDown(Key.SPACE) || gp?.buttons[0].pressed) {
-                        this.held = true;
-                        if(!rectCollision(player.collider, this.activeArea)) {
-                            this.x = player.x-this.offsetX;
-                            this.y = player.y-this.offsetY;
-                         }
-                        
-                    }else {
-                        this.held = false;
+
+            if(Key.isDown(Key.SPACE) || gp?.buttons[0].pressed) {
+                this.held = true;
+                if(!rectCollision(player.collider, this.activeArea)) {
+                    this.x = player.x-this.offsetX;
+                    this.y = player.y-this.offsetY;
                     }
+            
+        }else {
+            this.held = false;
         }
+}
         if(rectCollision(player.collider, this.activeArea)) {
             world.noCollide = true;
          }
         else{
             world.noCollide = false;
         }
-        // if(inventory.selectedItem == "bridge") {
-        //     console.log('bridge selected');
-        //     this.x = player.x;
-        //     this.y = player.y;
-        // }
     }
     
     draw() {
