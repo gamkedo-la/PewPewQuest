@@ -142,7 +142,7 @@ var player = {
 
         //other actions-----------------------------------------------------
 
-        if (Key.justReleased(Key.x)){
+        if (Key.justReleased(Key.x) || gp?.buttons[1].pressed) {
             inventory.selection++;
             inventory.selection = inventory.selection % inventory.itemList.length;
         }
@@ -179,7 +179,6 @@ var player = {
         this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
         this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
         this.yVelocity *= this.friction * 1/FRAMES_PER_SECOND;
-
        
         //check for y collisions
         this.updateCollider(this.x, this.y);
