@@ -239,7 +239,14 @@ World.prototype.populateMapObjects = function(){
                     let spawner = new Spawner(i,j, ...neighbors);
                     world.entities.push(spawner);
                     this.setTileAtPosition(i, j, 0);
-
+                    break;
+                }
+                case ENFORCER:{
+                    let neighbors = this.getNeighbors(i, j);
+                    let enforcer = new Enforcer(i,j, ...neighbors);
+                    world.entities.push(enforcer);
+                    this.setTileAtPosition(i, j, 0);
+                    break;
                 }
             }
         }
@@ -303,6 +310,7 @@ World.prototype.populateMapPalette = function(palette){
     ENEMY_BAT = palette[41];
     BRIDGE = palette[42];
     SPAWNER = palette[43];
+    ENFORCER = palette[44];
 
     COMBAT_MODE=palette[8];
     EXPLORATION_MODE=palette[0];
