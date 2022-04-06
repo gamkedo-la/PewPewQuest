@@ -3,7 +3,7 @@ var gameScreen = {
     cameraTypeToggle: true,
    
     reset: function () {
-        let playerStart = {x: 1217, y: 591}
+       
         player.placeAtTile(playerStart.x, playerStart.y )
         view.targetX = Math.floor((playerStart.x * world.tileSize) / view.width) * view.width
         view.targetY = Math.floor((playerStart.y * world.tileSize) / view.height) * view.height

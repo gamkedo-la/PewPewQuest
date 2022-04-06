@@ -16,6 +16,9 @@ var player = {
     xFacing: 0,
     yFacing: 0,
     keyVelocityCap: .9,
+    captured: false,
+    capturer: {},
+
     shootTarget: {
         x: 0,
         y: 0
@@ -34,162 +37,185 @@ var player = {
     },
 
     draw: function () {
-        fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, COLORS.goldenFizz);
-        for(let i = 1; i <= inventory.items.keys; i++){
-            let radius = 20;
-            let angle = Math.PI*2/inventory.items.keys*i;
-            let x = -3 + Math.sin(angle+ticker/30)*radius;
-            let y = -1 + Math.cos(angle+ticker/30)*radius;
+        if(!this.captured) {
+            fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, COLORS.goldenFizz);
+            for(let i = 1; i <= inventory.items.keys; i++){
+                let radius = 20;
+                let angle = Math.PI*2/inventory.items.keys*i;
+                let x = -3 + Math.sin(angle+ticker/30)*radius;
+                let y = -1 + Math.cos(angle+ticker/30)*radius;
 
-           // strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
-           canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
-            
+            // strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
+            canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
+                
+            }
         }
       
     },
 
     update: function () {
-        this.updateCollider(this.x, this.y);
-        if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.3)};
-        if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.3)}
-        
+        if(this.captured){
+            this.x = this.capturer.x;
+            this.y = this.capturer.y;
 
-        //update rect:
-        this.updateCollider(this.x, this.y);
-        //handle keyboard ARROWS input------------------------------
-        if (Key.isDown(Key.LEFT)) {
-            this.xVelocity -= this.maxAcceleration;
-            this.yFacing = 0;
-            this.xFacing = -1;
-            this.xVelocity *= this.keyVelocityCap;
-        }
-        else if (Key.isDown(Key.RIGHT)) {
-            this.xVelocity += this.maxAcceleration;
-            this.yFacing = 0;
-            this.xFacing = 1;
-            this.xVelocity *= this.keyVelocityCap;
-        }
-        if (Key.isDown(Key.UP)) {
-            this.yVelocity -= this.maxAcceleration;
-            this.xFacing = 0;
-            this.yFacing = -1;
-            this.yVelocity *= this.keyVelocityCap;
-        }
-        else if (Key.isDown(Key.DOWN)) {
-            this.yVelocity += this.maxAcceleration;
-            this.xFacing = 0;
-            this.yFacing = 1;
-            this.yVelocity *= this.keyVelocityCap;
-        }
-        
-        //------------------------------------- 
-        // analog values are in the range -1..0..1
-        let gamepadx = gamepad.xAxis();
-        let gamepady = gamepad.yAxis();
-        // console.log("gamepad: "+gamepadx+","+gamepady);
-        
-        if (gamepadx<-0.1) { // L
-            this.xVelocity = this.maxAcceleration * gamepadx;
-            this.yFacing = 0;
-            this.xFacing = -1;
-        }
-        else if (gamepadx>0.1) { // R
-            this.xVelocity = this.maxAcceleration * gamepadx;
-            this.yFacing = 0;
-            this.xFacing = 1;
-        }
-        if (gamepady<-0.1) { // U
-            this.yVelocity = this.maxAcceleration * gamepady;
-            this.xFacing = 0;
-            this.yFacing = -1;
-        }
-        else if (gamepady>0.1) { // D
-            this.yVelocity = this.maxAcceleration * gamepady;
-            this.xFacing = 0;
-            this.yFacing = 1;
-        }
-        //------------------------------------- // same as above but for wasd
-        if (Key.isDown(Key.a)) {
-            this.xVelocity -= this.maxAcceleration;
-            this.yFacing = 0;
-            this.xFacing = -1;
-            this.xVelocity *= this.keyVelocityCap;
-        }
-        else if (Key.isDown(Key.d)) {
-            this.xVelocity += this.maxAcceleration;
-            this.yFacing = 0;
-            this.xFacing = 1;
-            this.xVelocity *= this.keyVelocityCap;
-        }
-        if (Key.isDown(Key.w)) {
-            this.yVelocity -= this.maxAcceleration;
-            this.xFacing = 0;
-            this.yFacing = -1;
-            this.yVelocity *= this.keyVelocityCap;
-        }
-        else if (Key.isDown(Key.s)) {
-            this.yVelocity += this.maxAcceleration;
-            this.xFacing = 0;
-            this.yFacing = 1;
-            this.yVelocity *= this.keyVelocityCap;
-        }
-       
-        //bullet firing-----------------------------------------------------
-        if (Key.justReleased(Key.z)) { this.fireBullet(); }
-        if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
-       
-        if(gp){this.gamepadFireBullet()}
-
-        //other actions-----------------------------------------------------
-
-        if (Key.justReleased(Key.x) || gp?.buttons[1].pressed) {
-            inventory.selection++;
-            inventory.selection = inventory.selection % inventory.itemList.length;
-        }
-
-
-        //are we out of bounds? Scroll one screen in that direction
-        if(this.collider.right - view.x < 0) {
-            view.targetX -= view.width;
-        }
-        if(this.collider.left - view.x > view.width - this.width) {
-            view.targetX += view.width;
-        }
-        if(this.collider.bottom - view.y < 0) {
-            view.targetY -= view.height;
-        }
-        if(this.collider.top - view.y > view.height - this.height) {
-            view.targetY += view.height;
-        }
-
-        //apply x movement
-        this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
-        this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
-        this.xVelocity *= this.friction;
-
-         //check for x collisions
-         this.updateCollider(this.x, this.y);
-         if(this.tileCollisionCheck(world, 0) && !world.noCollide){
-            this.x = this.previousX;
-            this.xVelocity = 0;
             this.updateCollider(this.x, this.y);
-        }
 
-        //apply y movement
-        this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
-        this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
-        this.yVelocity *= this.friction * 1/FRAMES_PER_SECOND;
-       
-        //check for y collisions
-        this.updateCollider(this.x, this.y);
-        if(this.tileCollisionCheck(world, 0) && !world.noCollide){
-            this.y = this.previousY;
-            this.yVelocity = 0;
+              //are we out of bounds? Scroll one screen in that direction
+            if(this.collider.right - view.x < 0) {
+                view.targetX -= view.width;
+            }
+            if(this.collider.left - view.x > view.width - this.width) {
+                view.targetX += view.width;
+            }
+            if(this.collider.bottom - view.y < 0) {
+                view.targetY -= view.height;
+            }
+            if(this.collider.top - view.y > view.height - this.height) {
+                view.targetY += view.height;
+            }
+        }else{
             this.updateCollider(this.x, this.y);
-        }
+            if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.3)};
+            if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.3)}
+        
 
-        this.previousX = this.x;
-        this.previousY = this.y;
+            //update rect:
+            this.updateCollider(this.x, this.y);
+            //handle keyboard ARROWS input------------------------------
+            if (Key.isDown(Key.LEFT)) {
+                this.xVelocity -= this.maxAcceleration;
+                this.yFacing = 0;
+                this.xFacing = -1;
+                this.xVelocity *= this.keyVelocityCap;
+            }
+            else if (Key.isDown(Key.RIGHT)) {
+                this.xVelocity += this.maxAcceleration;
+                this.yFacing = 0;
+                this.xFacing = 1;
+                this.xVelocity *= this.keyVelocityCap;
+            }
+            if (Key.isDown(Key.UP)) {
+                this.yVelocity -= this.maxAcceleration;
+                this.xFacing = 0;
+                this.yFacing = -1;
+                this.yVelocity *= this.keyVelocityCap;
+            }
+            else if (Key.isDown(Key.DOWN)) {
+                this.yVelocity += this.maxAcceleration;
+                this.xFacing = 0;
+                this.yFacing = 1;
+                this.yVelocity *= this.keyVelocityCap;
+            }
+        
+            //------------------------------------- 
+            // analog values are in the range -1..0..1
+            let gamepadx = gamepad.xAxis();
+            let gamepady = gamepad.yAxis();
+            // console.log("gamepad: "+gamepadx+","+gamepady);
+            
+            if (gamepadx<-0.1) { // L
+                this.xVelocity = this.maxAcceleration * gamepadx;
+                this.yFacing = 0;
+                this.xFacing = -1;
+            }
+            else if (gamepadx>0.1) { // R
+                this.xVelocity = this.maxAcceleration * gamepadx;
+                this.yFacing = 0;
+                this.xFacing = 1;
+            }
+            if (gamepady<-0.1) { // U
+                this.yVelocity = this.maxAcceleration * gamepady;
+                this.xFacing = 0;
+                this.yFacing = -1;
+            }
+            else if (gamepady>0.1) { // D
+                this.yVelocity = this.maxAcceleration * gamepady;
+                this.xFacing = 0;
+                this.yFacing = 1;
+            }
+            //------------------------------------- // same as above but for wasd
+            if (Key.isDown(Key.a)) {
+                this.xVelocity -= this.maxAcceleration;
+                this.yFacing = 0;
+                this.xFacing = -1;
+                this.xVelocity *= this.keyVelocityCap;
+            }
+            else if (Key.isDown(Key.d)) {
+                this.xVelocity += this.maxAcceleration;
+                this.yFacing = 0;
+                this.xFacing = 1;
+                this.xVelocity *= this.keyVelocityCap;
+            }
+            if (Key.isDown(Key.w)) {
+                this.yVelocity -= this.maxAcceleration;
+                this.xFacing = 0;
+                this.yFacing = -1;
+                this.yVelocity *= this.keyVelocityCap;
+            }
+            else if (Key.isDown(Key.s)) {
+                this.yVelocity += this.maxAcceleration;
+                this.xFacing = 0;
+                this.yFacing = 1;
+                this.yVelocity *= this.keyVelocityCap;
+            }
+       
+            //bullet firing-----------------------------------------------------
+            if (Key.justReleased(Key.z)) { this.fireBullet(); }
+            if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
+        
+            if(gp){this.gamepadFireBullet()}
+
+            //other actions-----------------------------------------------------
+
+            if (Key.justReleased(Key.x) || gp?.buttons[1].pressed) {
+                inventory.selection++;
+                inventory.selection = inventory.selection % inventory.itemList.length;
+            }
+
+
+            //are we out of bounds? Scroll one screen in that direction
+            if(this.collider.right - view.x < 0) {
+                view.targetX -= view.width;
+            }
+            if(this.collider.left - view.x > view.width - this.width) {
+                view.targetX += view.width;
+            }
+            if(this.collider.bottom - view.y < 0) {
+                view.targetY -= view.height;
+            }
+            if(this.collider.top - view.y > view.height - this.height) {
+                view.targetY += view.height;
+            }
+
+            //apply x movement
+            this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
+            this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
+            this.xVelocity *= this.friction;
+
+            //check for x collisions
+            this.updateCollider(this.x, this.y);
+            if(this.tileCollisionCheck(world, 0) && !world.noCollide){
+                this.x = this.previousX;
+                this.xVelocity = 0;
+                this.updateCollider(this.x, this.y);
+            }
+
+            //apply y movement
+            this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
+            this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
+            this.yVelocity *= this.friction * 1/FRAMES_PER_SECOND;
+        
+            //check for y collisions
+            this.updateCollider(this.x, this.y);
+            if(this.tileCollisionCheck(world, 0) && !world.noCollide){
+                this.y = this.previousY;
+                this.yVelocity = 0;
+                this.updateCollider(this.x, this.y);
+            }
+
+            this.previousX = this.x;
+            this.previousY = this.y;
+        }
     },
 
     placeAtTile(x, y) {

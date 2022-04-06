@@ -244,7 +244,9 @@ World.prototype.populateMapObjects = function(){
                 case ENFORCER:{
                     let neighbors = this.getNeighbors(i, j);
                     let enforcer = new Enforcer(i,j, ...neighbors);
-                    world.entities.push(enforcer);
+                    //we want Enforcers to follow player beyond screen bounds, so
+                    //it goes in worldEntties. 
+                    world.worldEntities.push(enforcer);
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }

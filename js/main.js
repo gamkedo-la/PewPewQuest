@@ -132,6 +132,9 @@ var view = {
     targetY: 0,
 }
 
+var playerStart= { x: 1217, y: 591}
+
+
 var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 var gp = gamepads[0];
 
