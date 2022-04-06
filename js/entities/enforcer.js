@@ -180,6 +180,8 @@ class Enforcer {
                 this.moveSpeed = 0.3;
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
+
+                //let lastArmo
                 break;
             }
 
