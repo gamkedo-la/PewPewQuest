@@ -16,6 +16,10 @@ canvas.imageSmoothingEnabled = false;
 canvas.width = 320;
 canvas.height = 180;
 
+var stats = Stats();
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
+
 
 //globals and constants
 
@@ -35,6 +39,7 @@ const NORTH = 0;
 const SOUTH = 1;
 const EAST = 2;
 const WEST = 3;
+const GRIDSIZE = 8;
 
 
 
@@ -120,6 +125,7 @@ var audio = new AudioGlobal();
 var sounds = loader.sounds;
 var play = audio.playSound;
 var img, gameFont, tinyFont;
+var fps, fpsInterval, startTime, now, then, elapsed;
 
 var view = {
     x: 0,
@@ -169,7 +175,6 @@ function loadingComplete(){
     audio.assignReverb(loader.sounds.reverbE);
 
     console.log('loading complete, initializing game');
-    console.log(img['map'].width)
     world = new World(img['map'].width, img['map'].height, 8);
     world.populateWithImage(img['map']);
    
@@ -196,11 +201,51 @@ function loadingComplete(){
     gameScreen.reset();
     //signal.dispatch('startGame');
 
-    setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
+    //setInterval no longer reliably (possibly never has) produced a steady framerate. 
+    //I get 40-50fps from stats on my gaming laptop when I'm setting FRAMES_PER_SECOND to 60.
+    //on the other hand, plain vanilla requestAnimationFrame is wildly different (way tooo fast) depending on browser
+    //and screen refresh rate, so we're combining a timer and requestAnimationFrame to get a fixed
+    //framerate and good performance. 
+
+    //setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
+
+    begin(60);
+}
+
+function begin(fps) {
+    fpsInterval = 1000/fps;
+    then = Date.now();
+    startTime = then;
+    mainLoop();
+}
+
+function mainLoop(){
+
+    requestAnimationFrame(mainLoop);
+
+    // calc elapsed time since last loop
+
+    now = Date.now();
+    elapsed = now - then;
+
+    // if enough time has elapsed, draw the next frame
+
+    if (elapsed > fpsInterval) {
+
+        // Get ready for next frame by setting then=now, but also adjust for your
+        // specified fpsInterval not being a multiple of RAF's interval (16.7ms) <--used to be pretty normal
+        //to expect 60fps.  nowadays, it could be 120fps or even 240fps.  So, we need to adjust for that.
+        then = now - (elapsed % fpsInterval);
+
+        // Put your drawing code here
+        gameLoop();
+
+    }
 }
 
 function gameLoop() {
     ticker++;
+    stats.begin();
     gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     gp = gamepads[0];
     switch (gameState) {
@@ -226,6 +271,7 @@ function gameLoop() {
             break;
     }
     Key.update();
+    stats.end();
 }
 
 function soundInit(){ 
@@ -238,5 +284,6 @@ window.addEventListener('keydown',  function (event) { Key.onKeydown(event); eve
 window.addEventListener('blur',     function (event) { paused = true; }, false);
 window.addEventListener('focus',    function (event) { paused = false; }, false);
 canvas.addEventListener('mousemove',getMousePosition);
-canvas.addEventListener('mousedown',getMousePosition);
+canvas.addEventListener('mouseDown',getMousePosition);
+canvas.addEventListener('mouseUp',getMousePosition);
 init();

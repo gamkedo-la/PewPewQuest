@@ -397,4 +397,12 @@ World.prototype.drawMiniMap = function(){
             ticker%2 == 0 ? COLORS.goldenFizz : COLORS.dell);
 
     })
+    world.worldEntities.forEach(function(entity){
+        fillRect(
+            (entity.x/scale) - (view.x/scale) + canvas.width/2,
+            (entity.y/scale) - (view.y/scale) + canvas.height/2,
+            1*(8/scale),1*(8/scale),
+            ticker%2 == 0 ? COLORS.dirtyRed : COLORS.dell);
+
+    })
 }

@@ -8,7 +8,6 @@ const Signal = function Signal(){
 }
 
 Signal.prototype.dispatch = function dispatch(eventName, params={}){
-    console.log('dispatching event: ' + eventName);
     var event = new CustomEvent(eventName, {detail: params});
     this.dispatchEvent(event);
 }

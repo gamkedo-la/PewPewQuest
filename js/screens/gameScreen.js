@@ -9,7 +9,6 @@ var gameScreen = {
         view.targetY = Math.floor((playerStart.y * world.tileSize) / view.height) * view.height
         view.x = view.targetX
         view.y = view.targetY
-        audio.assignReverb(loader.sounds.reverbE)
         currentAreaMode = EXPLORATION_MODE
     },
     draw: function () {

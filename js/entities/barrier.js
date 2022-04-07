@@ -19,6 +19,9 @@ class Barrier {
         this.keysDrawTarget = this.keysRequiredToUnlock;
         this.bump = 0;
 
+        this.xVelocity = 0;
+        this.yVelocity = 0;
+
         this.collider = {
             x: this.x,
             y: this.y,
@@ -116,6 +119,9 @@ class Barrier {
                 signal.dispatch("keysChanged", {amount: inventory.items.keys});
                 this.keysRequiredToUnlock -= inventory.items.keys;
                 inventory.items.keys = 0;
+                player.x = player.previousX;
+                player.y = player.previousY;
+                player.updateCollider();
                 player.collisionResponse(this);
                 this.bump = 20;
                 

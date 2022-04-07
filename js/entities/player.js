@@ -161,7 +161,7 @@ var player = {
        
             //bullet firing-----------------------------------------------------
             if (Key.justReleased(Key.z)) { this.fireBullet(); }
-            if(mouse.pressed){ this.mouseFireBullet(); mouse.pressed=0 } 
+            if(mouse.pressed){ this.mouseFireBullet(); } 
         
             if(gp){this.gamepadFireBullet()}
 
@@ -306,8 +306,29 @@ var player = {
 
     collisionResponse: function(entity){
 
-        this.xVelocity = -this.xVelocity * 5;
-        this.yVelocity = -this.yVelocity * 5;
+ 
+        let aabbDistance = getAABBDistanceBetween(this.collider, entity.collider);
+        console.log(aabbDistance.dx, aabbDistance.dy);
+        //let aabbOverlap = getAABBOverlap(this.collider, entity.collider);
+
+        xTimeToCollide = this.xVelocity != 0 ? Math.abs(aabbDistance.dx / this.xVelocity) : 0;
+        yTimeToCollide = this.yVelocity != 0 ? Math.abs(aabbDistance.dy / this.yVelocity) : 0;
+
+        let shortestTime = 0;
+
+        if(this.xVelocity != 0 && this.yVelocity == 0){
+            shortestTime = xTimeToCollide;
+            this.x += this.xVelocity * shortestTime;
+        }
+        else if(this.yVelocity != 0 && this.xVelocity == 0){
+            shortestTime = yTimeToCollide;
+            this.y += this.yVelocity * shortestTime;
+        }
+        else{
+            shortestTime = Math.min( Math.abs(xTimeToCollide), Math.abs(yTimeToCollide));
+            this.x += this.xVelocity * shortestTime;
+            this.y += this.yVelocity * shortestTime;
+        }
 
     }
                 

@@ -160,6 +160,57 @@ function checkLine(pointA, pointB, checkfunction){
     return true;
 }
 
+function getAABBDistanceBetween(e1, e2){
+    let dx = 0, dy = 0
+    if (e1.x < e2.x)
+    {
+        dx = e2.x - (e1.x + e1.width);
+    }
+    else if (e1.x > e2.x)
+    {
+        dx = e1.x - (e2.x + e2.width);
+    }
+
+    if (e1.y < e2.y)
+    {
+        dy = e2.y - (e1.y + e1.height);
+    }
+    else if (e1.y > e2.y)
+    {
+        dy = e1.y - (e2.y + e2.height);
+    }
+
+    return ({dx:dx, dy:dy});
+}
+
+function collisionResponse(entity){
+ 
+    let aabbDistance = getAABBDistanceBetween(this.collider, entity.collider);
+    console.log(aabbDistance.dx, aabbDistance.dy);
+    //let aabbOverlap = getAABBOverlap(this.collider, entity.collider);
+
+    xTimeToCollide = this.xVelocity != 0 ? Math.abs(aabbDistance.dx / this.xVelocity) : 0;
+    yTimeToCollide = this.yVelocity != 0 ? Math.abs(aabbDistance.dy / this.yVelocity) : 0;
+
+    let shortestTime = 0;
+
+    if(this.xVelocity != 0 && this.yVelocity == 0){
+        shortestTime = xTimeToCollide;
+        this.x += this.xVelocity * shortestTime;
+    }
+    else if(this.yVelocity != 0 && this.xVelocity == 0){
+        shortestTime = yTimeToCollide;
+        this.y += this.yVelocity * shortestTime;
+    }
+    else{
+        shortestTime = Math.min( Math.abs(xTimeToCollide), Math.abs(yTimeToCollide));
+        this.x += this.xVelocity * shortestTime;
+        this.y += this.yVelocity * shortestTime;
+    }
+
+}
+
+
 function wallCheck(x,y){
     return world.getTileAtPosition(x,y) === 0;          
 }
