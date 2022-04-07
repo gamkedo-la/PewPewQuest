@@ -44,22 +44,25 @@ const GRIDSIZE = 8;
 
 
 const imageList = [
-    //image loader assumes .png and appends it. all images should be in img/.
-    'smallFont',
-    '3x5font',
-    'map',
-    'tiles',
-    'key',
-    'orbit-key',
-    'flashlight',
-    'flashlight-inventory',
-    'bat2',
-    'bug',
-    'bridge',
-    'bridge-inventory',
-    'environment',
-    'spawner',
-    'enforcer',
+//image loader assumes .png and appends it. all images should be in img/.
+'3x5font',
+'bat',
+'bat2',
+'bridge-inventory',
+'bridge',
+'bug',
+'enforcer',
+'environment',
+'flashlight-inventory',
+'flashlight',
+'key',
+'map.',
+'map',
+'maptest',
+'orbit-key',
+'smallFont',
+'spawner',
+'tiles',
 
 ]
 
