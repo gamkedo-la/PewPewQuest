@@ -255,7 +255,7 @@ World.prototype.populateMapObjects = function(){
                     let scrapper = new Scrapper(i,j, ...neighbors);
                     //we want Enforcers to follow player beyond screen bounds, so
                     //it goes in worldEntties. 
-                    world.worldEntities.push(scrapper);
+                    world.entities.push(scrapper);
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
