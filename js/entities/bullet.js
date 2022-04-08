@@ -62,6 +62,12 @@ class Bullet {
        if(inView(this.x, this.y)){
         let splode = new Splode(this.x, this.y, 5, COLORS.veniceBlue);
         world.entities.push(splode);
+        for(let i = 0; i < 10; i++) {
+            let particle = new Particle(this.x, this.y, 
+               ( -this.xVelocity * Math.random()*2-1) * .1, 
+               ( -this.yVelocity * Math.random()*2-1) * .1, {color:COLORS.goldenFizz, life: 30});
+            world.entities.push(particle);
+        }
       
 
        }

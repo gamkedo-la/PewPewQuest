@@ -313,6 +313,7 @@ World.prototype.populateMapPalette = function(palette){
     BRIDGE = palette[42];
     SPAWNER = palette[43];
     ENFORCER = palette[44];
+    PARTICLE = 1000;
 
     COMBAT_MODE=palette[8];
     EXPLORATION_MODE=palette[0];

@@ -4,6 +4,8 @@ class Enforcer {
         this.tileY = tileY
         this.x = tileX * 8;
         this.y = tileY * 8;
+        this.startX = tileX * 8;
+        this.startY = tileY * 8;
         this.northTile = northTile;
         this.southTile = southTile;
         this.eastTile = eastTile;

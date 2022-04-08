@@ -1,10 +1,11 @@
-class particle {
+class Particle {
     constructor(x,y, xVelocity, yVelocity, options={}) {
 
-        this.type = PARTICLE
+        this.type = PARTICLE;
         this.xVelocity = xVelocity;
         this.yVelocity = yVelocity;
-        this.color = color;
+        this.color = options.color || '#8888FF';
+        this.life = options.life || 10;
         this.x = x;
         this.y = y;
         this.prevX = this.x;
