@@ -250,6 +250,15 @@ World.prototype.populateMapObjects = function(){
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
+                case SCRAPPER:{
+                    let neighbors = this.getNeighbors(i, j);
+                    let scrapper = new Scrapper(i,j, ...neighbors);
+                    //we want Enforcers to follow player beyond screen bounds, so
+                    //it goes in worldEntties. 
+                    world.worldEntities.push(scrapper);
+                    this.setTileAtPosition(i, j, 0);
+                    break;
+                }
             }
         }
     }
@@ -313,6 +322,7 @@ World.prototype.populateMapPalette = function(palette){
     BRIDGE = palette[42];
     SPAWNER = palette[43];
     ENFORCER = palette[44];
+    SCRAPPER = palette[45];
     PARTICLE = 1000;
 
     COMBAT_MODE=palette[8];
