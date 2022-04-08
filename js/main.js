@@ -230,7 +230,7 @@ function mainLoop(){
     // calc elapsed time since last loop
 
     now = Date.now();
-    elapsed = now - then;
+    elapsed = (now - then) * slowmoTimeScale;
 
     // if enough time has elapsed, draw the next frame
 

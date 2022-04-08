@@ -169,6 +169,12 @@ var player = {
 
             //other actions-----------------------------------------------------
 
+            // slow motion effect test
+            // FIXME: remove and trigger during a cinematic moment
+            if (Key.justReleased(Key.o)) {
+                startSlowMotion(5000); // five second of slowmo
+            }
+
             if (Key.justReleased(Key.x) || gp?.buttons[1].pressed) {
                 inventory.selection++;
                 inventory.selection = inventory.selection % inventory.itemList.length;
