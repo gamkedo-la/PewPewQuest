@@ -164,49 +164,77 @@ function getAABBDistanceBetween(e1, e2){
     let dx = 0, dy = 0
     if (e1.x < e2.x)
     {
-        dx = e2.x - (e1.x + e1.width);
+        dx = e2.left - (e1.right);
     }
-    else if (e1.x > e2.x)
+    else if (e1.left > e2.left)
     {
-        dx = e1.x - (e2.x + e2.width);
+        dx = e1.left - (e2.right);
     }
 
-    if (e1.y < e2.y)
+    if (e1.top < e2.top)
     {
-        dy = e2.y - (e1.y + e1.height);
+        dy = e2.top - (e1.bototm);
     }
-    else if (e1.y > e2.y)
+    else if (e1.top > e2.top)
     {
-        dy = e1.y - (e2.y + e2.height);
+        dy = e1.top - (e2.bottom);
     }
 
     return ({dx:dx, dy:dy});
 }
 
-function collisionResponse(entity){
- 
-    let aabbDistance = getAABBDistanceBetween(this.collider, entity.collider);
+function getAABBOverlap(e1, e2){
+    //console.log(e1, e2);
+    let dx = 0, dy = 0
+    if (e1.x < e2.x)
+    {
+        dx = (e1.right) - e2.xleft;
+    }
+    else if (e1.left > e2.left)
+    {
+        dx =(e2.right) - e1.left;;
+    }
+
+    if (e1.top < e2.top)
+    {
+        dy = (e1.bottom) - e2.top;
+    }
+    else if (e1.top > e2.top)
+    {
+        dy = (e2.bottom) - e1.top;
+    }
+
+    
+
+    return ({dx:dx, dy:dy});
+}
+function collisionResponse(entity1, entity){
+    //entity1 is moving, entity is static
+    let aabbDistance = getAABBDistanceBetween(entity1.collider, entity.collider);
     console.log(aabbDistance.dx, aabbDistance.dy);
+    //let overlap = getAABBOverlap(entity1.collider, entity.collider);
+    //console.log(overlap.dx, overlap.dy);
     //let aabbOverlap = getAABBOverlap(this.collider, entity.collider);
 
-    xTimeToCollide = this.xVelocity != 0 ? Math.abs(aabbDistance.dx / this.xVelocity) : 0;
-    yTimeToCollide = this.yVelocity != 0 ? Math.abs(aabbDistance.dy / this.yVelocity) : 0;
+    xTimeToCollide = entity1.xVelocity != 0 ? Math.abs(aabbDistance.dx / entity1.xVelocity) : 0;
+    yTimeToCollide = entity1.yVelocity != 0 ? Math.abs(aabbDistance.dy / entity1.yVelocity) : 0;
 
     let shortestTime = 0;
 
-    if(this.xVelocity != 0 && this.yVelocity == 0){
+    if(entity1.xVelocity != 0 && entity1.yVelocity == 0){
         shortestTime = xTimeToCollide;
-        this.x += this.xVelocity * shortestTime;
+        entity1.x -= entity1.xVelocity * shortestTime;
     }
-    else if(this.yVelocity != 0 && this.xVelocity == 0){
+    else if(entity1.yVelocity != 0 && entity1.xVelocity == 0){
         shortestTime = yTimeToCollide;
-        this.y += this.yVelocity * shortestTime;
+        entity1.y -= entity1.yVelocity * shortestTime;
     }
     else{
         shortestTime = Math.min( Math.abs(xTimeToCollide), Math.abs(yTimeToCollide));
-        this.x += this.xVelocity * shortestTime;
-        this.y += this.yVelocity * shortestTime;
+        entity1.x -= entity1.xVelocity * shortestTime;
+        entity1.y -= entity1.yVelocity * shortestTime;
     }
+    return entity1;
 
 }
 

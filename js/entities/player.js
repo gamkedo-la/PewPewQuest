@@ -273,6 +273,8 @@ var player = {
         audio.playSound(loader.sounds.pewpew2, 0, 0.2)
         let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
         world.bullets.push(bullet);
+        bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
+        world.bullets.push(bullet);
     },
 
     gamepadFireBullet: function(){
@@ -282,6 +284,8 @@ var player = {
             if(ticker%2==0){
                 audio.playSound(loader.sounds.pewpew2, 0, 0.2)
                 let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+                world.bullets.push(bullet);
+                bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
                 world.bullets.push(bullet);
             }
         }
@@ -299,40 +303,10 @@ var player = {
         if(ticker%3==0){
             audio.playSound(loader.sounds.pewpew2, 0, 0.2)
             let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
-
+            world.bullets.push(bullet);
+            bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
         }
     },
-
-    collisionResponse: function(entity){
-
- 
-        let aabbDistance = getAABBDistanceBetween(this.collider, entity.collider);
-        console.log(aabbDistance.dx, aabbDistance.dy);
-        //let aabbOverlap = getAABBOverlap(this.collider, entity.collider);
-
-        xTimeToCollide = this.xVelocity != 0 ? Math.abs(aabbDistance.dx / this.xVelocity) : 0;
-        yTimeToCollide = this.yVelocity != 0 ? Math.abs(aabbDistance.dy / this.yVelocity) : 0;
-
-        let shortestTime = 0;
-
-        if(this.xVelocity != 0 && this.yVelocity == 0){
-            shortestTime = xTimeToCollide;
-            this.x += this.xVelocity * shortestTime;
-        }
-        else if(this.yVelocity != 0 && this.xVelocity == 0){
-            shortestTime = yTimeToCollide;
-            this.y += this.yVelocity * shortestTime;
-        }
-        else{
-            shortestTime = Math.min( Math.abs(xTimeToCollide), Math.abs(yTimeToCollide));
-            this.x += this.xVelocity * shortestTime;
-            this.y += this.yVelocity * shortestTime;
-        }
-
-    }
-                
-
-    
 
 }

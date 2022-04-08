@@ -26,8 +26,8 @@ class Bullet {
         this.updateCollider();
         this.prevX = this.x;
         this.prevY = this.y;
-        this.x += this.xVelocity;
-        this.y += this.yVelocity + (Math.random()*2-1);
+        this.x += this.xVelocity + (Math.random()*1-0.5);;
+        this.y += this.yVelocity + (Math.random()*1-0.5);
         //this.yVelocity += this.gravity;
         this.life--
       

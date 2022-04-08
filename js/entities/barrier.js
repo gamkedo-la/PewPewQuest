@@ -90,7 +90,7 @@ class Barrier {
 
     draw() {
         fillRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height,
-            ticker%2 == 0 ? COLORS.dirtyRed : ( this.bump < 1 ? COLORS.tahitiGold : COLORS.white ) );
+            ticker%5 == 0 ? COLORS.dirtyRed : ( this.bump < 1 ? COLORS.tahitiGold : COLORS.white ) );
         //strokeRect(this.x - view.x, this.y - view.y, 8*this.width, 8*this.height, "yellow");
 
         for(let i = 1; i < this.keysRequiredToUnlock + this.bump; i++) {
@@ -119,10 +119,7 @@ class Barrier {
                 signal.dispatch("keysChanged", {amount: inventory.items.keys});
                 this.keysRequiredToUnlock -= inventory.items.keys;
                 inventory.items.keys = 0;
-                player.x = player.previousX;
-                player.y = player.previousY;
-                player.updateCollider();
-                player.collisionResponse(this);
+                collisionResponse(player, this);
                 this.bump = 20;
                 
             }
