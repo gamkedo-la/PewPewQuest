@@ -78,8 +78,8 @@ class Scrapper {
         this.currentAnimation.render({
             x: Math.floor(this.x-view.x+this.bump),
             y: Math.floor(this.y-view.y),
-            width: 16,
-            height: 16
+            width: 24,
+            height: 23
         })
     
         if(this.health < 100) {
