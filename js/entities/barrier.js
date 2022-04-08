@@ -119,7 +119,9 @@ class Barrier {
                 signal.dispatch("keysChanged", {amount: inventory.items.keys});
                 this.keysRequiredToUnlock -= inventory.items.keys;
                 inventory.items.keys = 0;
-                collisionResponse(player, this);
+                
+                    collisionResponse(player, this);
+                
                 this.bump = 20;
                 
             }

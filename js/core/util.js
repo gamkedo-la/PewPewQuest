@@ -186,13 +186,13 @@ function getAABBDistanceBetween(e1, e2){
 function getAABBOverlap(e1, e2){
     //console.log(e1, e2);
     let dx = 0, dy = 0
-    if (e1.x < e2.x)
+    if (e1.left < e2.left)
     {
-        dx = (e1.right) - e2.xleft;
+        dx = (e1.right) - e2.left;
     }
     else if (e1.left > e2.left)
     {
-        dx =(e2.right) - e1.left;;
+        dx =(e2.right) - e1.left;
     }
 
     if (e1.top < e2.top)
@@ -210,11 +210,14 @@ function getAABBOverlap(e1, e2){
 }
 function collisionResponse(entity1, entity){
     //entity1 is moving, entity is static
-    let aabbDistance = getAABBDistanceBetween(entity1.collider, entity.collider);
-    console.log(aabbDistance.dx, aabbDistance.dy);
+    //let aabbDistance = getAABBDistanceBetween(entity1.collider, entity.collider);
+    //console.log(aabbDistance.dx, aabbDistance.dy);
     //let overlap = getAABBOverlap(entity1.collider, entity.collider);
     //console.log(overlap.dx, overlap.dy);
-    //let aabbOverlap = getAABBOverlap(this.collider, entity.collider);
+    let aabbDistance = getAABBOverlap(entity1.collider, entity.collider);
+    console.log(aabbDistance.dx, aabbDistance.dy);
+
+   
 
     xTimeToCollide = entity1.xVelocity != 0 ? Math.abs(aabbDistance.dx / entity1.xVelocity) : 0;
     yTimeToCollide = entity1.yVelocity != 0 ? Math.abs(aabbDistance.dy / entity1.yVelocity) : 0;
@@ -234,7 +237,7 @@ function collisionResponse(entity1, entity){
         entity1.x -= entity1.xVelocity * shortestTime;
         entity1.y -= entity1.yVelocity * shortestTime;
     }
-    return entity1;
+    // return entity1;
 
 }
 

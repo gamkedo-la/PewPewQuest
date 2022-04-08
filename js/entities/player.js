@@ -38,7 +38,7 @@ var player = {
 
     draw: function () {
         if(!this.captured) {
-            fillRect(Math.round(this.x-view.x-this.width/2), Math.round(this.y-view.y-this.height/2), this.width, this.height, COLORS.goldenFizz);
+            fillRect(Math.round(this.x-view.x), Math.round(this.y-view.y), this.width, this.height, COLORS.goldenFizz);
             for(let i = 1; i <= inventory.items.keys; i++){
                 let radius = 20;
                 let angle = Math.PI*2/inventory.items.keys*i;
@@ -54,6 +54,8 @@ var player = {
     },
 
     update: function () {
+        //console.log(player.x, player.y, player.xVelocity, player.yVelocity);
+
         if(this.captured){
             this.x = this.capturer.x;
             this.y = this.capturer.y;
@@ -190,7 +192,7 @@ var player = {
             //apply x movement
             this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
             this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
-            this.xVelocity *= this.friction;
+            this.xVelocity *= this.friction * 1/FRAMES_PER_SECOND;
 
             //check for x collisions
             this.updateCollider(this.x, this.y);
@@ -228,10 +230,10 @@ var player = {
 
     updateCollider(x, y) {
 
-        this.collider.top = this.y - this.height / 2;
-        this.collider.bottom = this.y + this.height / 2;
-        this.collider.left = this.x - this.width / 2;
-        this.collider.right = this.x + this.width / 2;
+        this.collider.top = this.y
+        this.collider.bottom = this.y + this.height
+        this.collider.left = this.x
+        this.collider.right = this.x + this.width
 
         this.collider.leftFeeler.x = this.collider.left;
         this.collider.leftFeeler.y = this.y;
