@@ -210,7 +210,7 @@ World.prototype.populateMapObjects = function(){
                 break;
                 case ENEMY_MINION:{
                     let neighbors = this.getNeighbors(i, j);
-                    let enemy = new Enemy(i, j, ...neighbors);
+                    let enemy = new Bug(i, j, ...neighbors);
                     world.entities.push(enemy);
                     this.setTileAtPosition(i, j, 0);
                     break;

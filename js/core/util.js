@@ -210,12 +210,9 @@ function getAABBOverlap(e1, e2){
 }
 function collisionResponse(entity1, entity){
     //entity1 is moving, entity is static
-    //let aabbDistance = getAABBDistanceBetween(entity1.collider, entity.collider);
-    //console.log(aabbDistance.dx, aabbDistance.dy);
-    //let overlap = getAABBOverlap(entity1.collider, entity.collider);
-    //console.log(overlap.dx, overlap.dy);
+
     let aabbDistance = getAABBOverlap(entity1.collider, entity.collider);
-    console.log(aabbDistance.dx, aabbDistance.dy);
+
 
    
 

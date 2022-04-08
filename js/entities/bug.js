@@ -1,4 +1,4 @@
-class Enemy {
+class Bug {
     constructor(tileX, tileY, northTile, southTile, eastTile, westTile) {
         this.tileX = tileX
         this.tileY = tileY
@@ -162,7 +162,7 @@ class Enemy {
         if(rectCollision(this.collider, player.collider)) {
             //signal.dispatch('keysChanged', {amount: 1})
             //inventory.items.keys -= 1;
-            player.collisionResponse();
+           collisionResponse(player, this);
            
         }
 

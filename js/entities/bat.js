@@ -13,20 +13,20 @@ class Bat {
         this.westTile = westTile;
         this.neighbors = [ northTile, southTile, eastTile, westTile ];
         this.height = 10;
-        this.width = 10;
+        this.width = 25;
         this.bump = 0;
         this.health = 100;
         this.moveInterval = 10;
 
         this.collider = {
-            x: this.x,
-            y: this.y,
-            width: this.width,
-            height: this.height,
-            left: this.x,
-            right: this.x + this.width,
-            top: this.y,
-            bottom: this.y + this.width,
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
         }
 
         this.spritesheet = spritesheet({
@@ -73,6 +73,9 @@ class Bat {
             width: 27,
             height: 13
         })
+
+       // fillRect(this.collider.left-view.x, this.collider.top-view.y, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
+
         
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
@@ -132,7 +135,7 @@ class Bat {
         if(rectCollision(this.collider, player.collider)) {
             //signal.dispatch('keysChanged', {amount: 1})
             //inventory.items.keys -= 1;
-            player.collisionResponse(this);
+            collisionResponse(player, this);
  
             if (!this.carryingKey && inventory.items.keys > 0) {            
                 this.carryingKey = true;
@@ -190,11 +193,11 @@ class Bat {
         this.collider.x = this.x;
         this.collider.y = this.y;
         this.collider.width = this.width;
-        this.collider.height = this.height;
-        this.collider.left = this.x;
-        this.collider.right = this.x + this.width;
-        this.collider.top = this.y;
-        this.collider.bottom = this.y + this.height;
+        this.collider.height = 8;
+        this.collider.left = this.x+1;
+        this.collider.right = this.collider.left + this.width;
+        this.collider.top = this.y+2;
+        this.collider.bottom = this.collider.top + this.collider.height;
     }
 
     checkWorldCollision(X, Y) {

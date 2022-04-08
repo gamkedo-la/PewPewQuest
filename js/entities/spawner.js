@@ -70,84 +70,10 @@ class Spawner {
         this.currentAnimation = this.spritesheet.animations['idle'];
         this.spawning = false;
 
-        // this.spritesheet = spritesheet({
-        //     image: img['bug'],
-        //     frameWidth: 16,
-        //     frameHeight: 16,
-        //     frameMargin: 0,
-        //     animations: {
-
-        //         east: {
-        //             frames: '0..3',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-
-        //         west: {
-        //             frames: '4..7',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-
-        //         south: {
-        //             frames: '8..11',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-
-        //         north: {
-        //             frames: '12..15',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-
-        //         southeast: {
-        //             frames: '16..19',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-
-        //         southwest: {
-        //             frames: '20..23',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-
-        //         northwest: {
-        //             frames: '24..27',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-
-        //         northeast: {
-        //             frames: '28..31',
-        //             frameRate: 30,
-        //             loop: true,
-        //             noInterrupt: true
-        //         },
-        //     }
-        // })
-
-        // this.currentAnimation = this.spritesheet.animations['east'];
-
-        // this.directions = ['east', 'southeast', 'south', 'southwest', 'west', 'northwest', 'north', 'northeast', 'east'];
-
     }
 
     draw() {
-        // this.currentAnimation.render({
-        //     x: Math.floor(this.x-view.x+this.bump),
-        //     y: Math.floor(this.y-view.y),
-        //     width: 16,
-        //     height: 16
-        // })
+
         fillRect(Math.floor(this.x-view.x+this.bump),
         Math.floor(this.y-view.y), this.width, this.height, COLORS.tahitiGold);
 
@@ -164,15 +90,13 @@ class Spawner {
     }
 
     update() {
-        
-        // this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
         this.currentAnimation.update();
         if (this.spawning) {
             if (this.currentAnimation.done) {
                 this.spawning = false;
                 this.spawnTarget.x = this.x +  (Math.random() * 2 - 1) * 15;
                 this.spawnTarget.y = this.y + (Math.random() * 2 - 1) * 15;
-                let bug = new Enemy(this.spawnTarget.x/8, this.spawnTarget.y/8);
+                let bug = new Bug(this.spawnTarget.x/8, this.spawnTarget.y/8);
                 world.entities.push(bug);
                 this.currentAnimation = this.spritesheet.animations['idle'];
             }
@@ -199,7 +123,7 @@ class Spawner {
         if(rectCollision(this.collider, player.collider)) {
             //signal.dispatch('keysChanged', {amount: 1})
             //inventory.items.keys -= 1;
-            player.collisionResponse();
+            collisionResponse(player, this);
            
         }
 
