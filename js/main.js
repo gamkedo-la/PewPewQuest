@@ -63,6 +63,7 @@ const imageList = [
 'smallFont',
 'spawner',
 'tiles',
+'scrapper',
 
 ]
 
