@@ -4,10 +4,10 @@ class Flashlight {
         this.y = y*8;
         this.width = 24;
         this.height = 24;
-        this.left = this.x-4;
-        this.right = this.x + 8;
-        this.top = this.y-4;
-        this.bottom = this.y + 8;
+        this.left = this.x;
+        this.right = this.x + this.width;
+        this.top = this.y;
+        this.bottom = this.y + this.height;
     }
 
     update() {
@@ -18,7 +18,7 @@ class Flashlight {
     
     draw() {
         canvasContext.drawImage(img["flashlight"], this.x-view.x, this.y-view.y);
-        //fillRect(this.x-view.x, this.y-view.y, this.width, this.height, 'rgba(255, 0,0,0.3)');
+        //fillRect(this.left-view.x, this.top-view.y,this.right - this.left, this.bottom - this.top, 'rgba(255, 0,0,0.3)');
 
     }
 

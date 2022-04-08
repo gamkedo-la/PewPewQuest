@@ -12,10 +12,10 @@ var player = {
     yAcceleration: 0,
     maxSpeed: 400,
     maxAcceleration: 150,
-    friction: 0.5,
+    friction: .85,
     xFacing: 0,
     yFacing: 0,
-    keyVelocityCap: .9,
+    keyVelocityCap: .5,
     captured: false,
     capturer: {},
 
@@ -115,22 +115,22 @@ var player = {
             let gamepady = gamepad.yAxis();
             // console.log("gamepad: "+gamepadx+","+gamepady);
             
-            if (gamepadx<-0.1) { // L
+            if (gamepadx<-0.05) { // L
                 this.xVelocity = this.maxAcceleration * gamepadx;
                 this.yFacing = 0;
                 this.xFacing = -1;
             }
-            else if (gamepadx>0.1) { // R
+            else if (gamepadx>0.05) { // R
                 this.xVelocity = this.maxAcceleration * gamepadx;
                 this.yFacing = 0;
                 this.xFacing = 1;
             }
-            if (gamepady<-0.1) { // U
+            if (gamepady<-0.05) { // U
                 this.yVelocity = this.maxAcceleration * gamepady;
                 this.xFacing = 0;
                 this.yFacing = -1;
             }
-            else if (gamepady>0.1) { // D
+            else if (gamepady>0.05) { // D
                 this.yVelocity = this.maxAcceleration * gamepady;
                 this.xFacing = 0;
                 this.yFacing = 1;
@@ -198,7 +198,7 @@ var player = {
             //apply x movement
             this.x += this.xVelocity * 1/FRAMES_PER_SECOND;
             this.xVelocity = clamp(this.xVelocity, -this.maxSpeed, this.maxSpeed);
-            this.xVelocity *= this.friction * 1/FRAMES_PER_SECOND;
+            this.xVelocity *= this.friction;
 
             //check for x collisions
             this.updateCollider(this.x, this.y);
@@ -211,7 +211,7 @@ var player = {
             //apply y movement
             this.y += this.yVelocity * 1/FRAMES_PER_SECOND;
             this.yVelocity =  clamp(this.yVelocity, -this.maxSpeed, this.maxSpeed);
-            this.yVelocity *= this.friction * 1/FRAMES_PER_SECOND;
+            this.yVelocity *= this.friction;
         
             //check for y collisions
             this.updateCollider(this.x, this.y);
