@@ -148,15 +148,24 @@ class Enforcer {
         this.previous.y = this.y;
         this.playerDistance = this.findDistanceToPlayer();
         //console.log(this.playerDistance);
-
+        
        
-        if(this.playerDistance < 500) {
-            //this.onScreenSound.volume.gain.value = map(this.playerDistance, 0, 150, 0.2, 0);
-            this.offScreenSound.volume.gain.value = map(this.playerDistance, 50, 500, 0.2, 0);
+      
+        if(this.state != this.states.PLAYER_CAPTURED) {
+            let clampedDistance = clamp(this.playerDistance, 0, 500);
+            let clampedOnScreenDistance = clamp(this.playerDistance, 0, 300);
+            if(clampedDistance > 0){
+                this.onScreenSound.volume.gain.value = map(clampedOnScreenDistance,  1, 300, 0.5, 0);
+                this.offScreenSound.volume.gain.value = map(clampedDistance, 1, 500, 0.5, 0);
+            }
         }else{
-            this.offScreenSound.volume.gain.value = 0;
-            this.onScreenSound.volume.gain.value = 0;
+            this.onScreenSound.volume.gain.value = 0.4;
+            this.offScreenSound.volume.gain.value = 0.4;
         }
+        
+        
+           
+       
         //console.log(this.playerDistance);
                 
         this.health = this.armorPoints.reduce((acc, armorPoint) => {acc += armorPoint.health; return acc}, 0);
