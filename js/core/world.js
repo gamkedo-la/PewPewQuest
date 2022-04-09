@@ -6,6 +6,7 @@ const World = function World(widthInTiles=100, heightInTiles=100, tileSize=8){
     this.decorData = [];
     this.entities = [];
     this.bullets = [];
+    this.safeSpots = [];
     this.noCollide = false;
     //world entities need updated every frame regardless of whether they are in the viewport
     this.worldEntities = [];
@@ -266,6 +267,12 @@ World.prototype.populateMapObjects = function(){
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
+                case SAFE_SPOT:{
+                    let safeSpot = {x: i, y: j};
+                    world.safeSpots.push(safeSpot);
+                    this.setTileAtPosition(i, j, 0);
+
+                }
             }
         }
     }
@@ -331,6 +338,7 @@ World.prototype.populateMapPalette = function(palette){
     ENFORCER = palette[44];
     SCRAPPER = palette[45];
     TREASURE = palette[46];
+    SAFE_SPOT = palette[47];
     PARTICLE = 1000;
 
     COMBAT_MODE=palette[8];

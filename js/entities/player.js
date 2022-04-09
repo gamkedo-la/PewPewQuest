@@ -11,7 +11,7 @@ var player = {
     xAcceleration: 0,
     yAcceleration: 0,
     maxSpeed: 400,
-    maxAcceleration: 150,
+    maxAcceleration: 100,
     friction: .85,
     xFacing: 0,
     yFacing: 0,
@@ -56,6 +56,8 @@ var player = {
     update: function () {
         //console.log(player.x, player.y, player.xVelocity, player.yVelocity);
 
+        
+
         if(this.captured){
             this.x = this.capturer.x;
             this.y = this.capturer.y;
@@ -79,6 +81,8 @@ var player = {
             this.updateCollider(this.x, this.y);
             if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.3)};
             if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.3)}
+
+           
         
 
             //update rect:
@@ -178,6 +182,13 @@ var player = {
             if (Key.justReleased(Key.x) || gp?.buttons[1].pressed) {
                 inventory.selection++;
                 inventory.selection = inventory.selection % inventory.itemList.length;
+            }
+
+            //if our velocity is zero and we're colliding with a wall, allow the teleport button to be pressed
+            if (this.xVelocity == 0 && this.yVelocity == 0 && this.tileCollisionCheck(world, 0)) {
+                if (Key.justReleased(Key.t) || gp?.buttons[3].pressed) {
+                    this.teleport();
+                }
             }
 
 
@@ -314,6 +325,28 @@ var player = {
             world.bullets.push(bullet);
             bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
+        }
+    },
+
+    teleport: function(){
+        //blow some particles before we go at player position
+        let splode = new Splode(this.x, this.y, 40, COLORS.goldenFizz);
+        for(let i = 0; i < 20; i++) {
+            let particle = new Particle(this.x + Math.random()*this.width, this.y-5, Math.random()*2 - 1, Math.random() * 2 - 1,
+             {color: COLORS.elfGreen, life: 30});
+            world.entities.push(particle);
+        }
+        world.entities.push(splode);
+
+        this.x = world.safeSpots[0].x * world.tileSize;
+        this.y = world.safeSpots[0].y * world.tileSize;
+        
+        this.previousX = this.x;
+        this.previousY = this.y;
+        for(let i = 0; i < 20; i++){
+            let particle = new Particle(this.x + Math.random()*this.width, this.y-5, Math.random()*2 - 1, Math.random() * 2 - 1,
+            {color: COLORS.elfGreen, life: 30});
+           world.entities.push(particle);
         }
     },
 

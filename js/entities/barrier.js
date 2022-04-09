@@ -121,6 +121,8 @@ class Barrier {
                 inventory.items.keys = 0;
                 
                     collisionResponse(player, this);
+                    player.xVelocity = -player.xVelocity;
+                    player.yVelocity = -player.yVelocity;
                 
                 this.bump = 20;
                 

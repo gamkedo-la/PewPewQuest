@@ -33,6 +33,7 @@ const Key = {
     l: 76,
     m: 77,
     o: 79,
+    t: 84,
 
     isDown(keyCode) {
         return this._pressed[keyCode];
