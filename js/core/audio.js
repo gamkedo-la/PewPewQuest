@@ -8,6 +8,7 @@ const CROSSFADE_TIME = 0.25;
 const HARDPAN_THRESH = 400;
 const DROPOFF_MIN = 100;
 const DROPOFF_MAX = 500;
+const MAX_SOURCES = 32;
 
 const AudioGlobal = function AudioGlobal() {
 
@@ -18,6 +19,7 @@ const AudioGlobal = function AudioGlobal() {
 	var soundEffectsVolume;
 	var currentMusicTrack;
 	var musicStartTime = 0;
+	var currentSoundSources = [];
 
 //--//Set up WebAudioAPI nodes------------------------------------------------
 	this.init = function(callback) {
@@ -46,7 +48,17 @@ const AudioGlobal = function AudioGlobal() {
 		masterBus.connect(audioCtx.destination);
 		console.log("Audio initialized.");
 		this.initialized = true;
-		callback()
+
+		callback();
+	}
+
+	this.update = function() {
+		if (!this.initialized) return;
+
+		var now = performance.now();
+		for (var i = currentSoundSources.length-1; i >= 0; i--) {
+			if (currentSoundSources[i].endTime <= now) currentSoundSources.splice(i, 1);
+		}
 	}
 
 //--//volume handling functions-----------------------------------------------
@@ -104,7 +116,7 @@ const AudioGlobal = function AudioGlobal() {
 
 //--//Audio playback classes--------------------------------------------------
 	this.playSound = function(buffer, pan = 0, vol = 1, rate = 1, loop = false) {
-		if (!this.initialized) return;
+		if (!this.initialized || currentSoundSources.length >= MAX_SOURCES || buffer == null) return;
 
 		var source = audioCtx.createBufferSource();
 		var gainNode = audioCtx.createGain();
@@ -121,6 +133,9 @@ const AudioGlobal = function AudioGlobal() {
 		gainNode.gain.value = vol;
 		panNode.pan.value = pan;
 		source.start();
+
+		source.endTime = performance.now() + source.buffer.duration;
+		currentSoundSources.push(source);
 
 		return {sound: source, volume: gainNode, pan: panNode};
 	}

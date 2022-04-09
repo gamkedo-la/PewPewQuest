@@ -274,6 +274,7 @@ function gameLoop() {
             miniMapScreen.update();
             break;
     }
+    audio.update();
     Key.update();
     stats.end();
 }
