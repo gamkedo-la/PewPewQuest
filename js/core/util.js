@@ -243,6 +243,12 @@ function wallCheck(x,y){
     return world.getTileAtPosition(x,y) === 0;          
 }
 
+function distanceBetweenPoints(pointA, pointB){
+    let dx = pointA.x - pointB.x,
+        dy = pointA.y - pointB.y;
+    return Math.sqrt(dx*dx + dy*dy);
+}
+
 
 
 
