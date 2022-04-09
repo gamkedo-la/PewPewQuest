@@ -248,7 +248,7 @@ class Scrapper {
         map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
 
-        world.entities.splice(world.entities.indexOf(this), 1);
+        world.worldEntities.splice(world.entities.indexOf(this), 1);
 
         for(let i = 0; i < 40; i++) {
             let angle = (Math.PI*2/40) * i;

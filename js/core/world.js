@@ -255,7 +255,14 @@ World.prototype.populateMapObjects = function(){
                     let scrapper = new Scrapper(i,j, ...neighbors);
                     //we want Enforcers to follow player beyond screen bounds, so
                     //it goes in worldEntties. 
-                    world.entities.push(scrapper);
+                    world.worldEntities.push(scrapper);
+                    this.setTileAtPosition(i, j, 0);
+                    break;
+                }
+                case TREASURE:{
+                    let treasure = new Treasure(i,j);   
+                    world.entities.push(treasure);
+                    console.log("treasure placed");
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
@@ -323,6 +330,7 @@ World.prototype.populateMapPalette = function(palette){
     SPAWNER = palette[43];
     ENFORCER = palette[44];
     SCRAPPER = palette[45];
+    TREASURE = palette[46];
     PARTICLE = 1000;
 
     COMBAT_MODE=palette[8];
@@ -333,6 +341,7 @@ World.prototype.populateMapPalette = function(palette){
 }
 
 World.prototype.populateCSSColorsArray = function(){
+    //these color constants meant to be used for drawing.
     COLORS = {
         transparent: convertUint32ToRGBA(COLOR_BLACK__TRANSPARENT),
         valhalla: convertUint32ToRGBA(COLOR_VALHALLA),
