@@ -161,8 +161,8 @@ class Scrapper {
 
         this.currentAnimation = this.spritesheet.animations['idle_east'];
 
-        // -- order here is based on calculation in findDirection
-        this.directions = ['north', 'east', 'south', 'west'];
+        // order here is based on calculation in findDirection
+        this.directions = ['west', 'north', 'east', 'south'];
         this.state = 'idle';
 
     }
@@ -283,19 +283,15 @@ class Scrapper {
     findDirection() {
         let xDir = this.target.x - this.x;
         let yDir = this.target.y - this.y;
-
         let angle = Math.atan2(yDir, xDir);
-        let cardinalUnit = Math.PI / 2;
-        let dir = Math.round(angle / cardinalUnit) + 1;
-
-        /*
-        let angle = Math.atan2(yDir, xDir);
-        let cardinalUnit = Math.PI/4;
-        let cardinalAngle = Math.round(angle/cardinalUnit) * cardinalUnit;
-        */
-       // console.log(Math.round(cardinalAngle/cardinalUnit))
-        //console.log(`angle: ${angle} gives ${dir} a/c: ${angle/cardinalUnit}`);
-        return clamp(dir, 0, 3);
+        // slice of the unit circle that each direction occupies
+        let cardinalUnit = (2*Math.PI) / this.directions.length;
+        // to map values of -PI to PI to the direction index, first add PI (to give values in the range of 0 to 2*PI), then
+        // divide by the "cardinalUnit" or size of each directional slice of the unit circle.  Rounding this will give values
+        // in the range from 0 to # of directions + 1.  Mod this by the # of directions to handle the special case of the "west"
+        // direction which occurs at the beginning of the range (-PI) and end of the range (PI) of values.
+        let dir_i = Math.round((angle + Math.PI) / cardinalUnit) % this.directions.length;
+        return dir_i;
     }
 
     findDirectionTowardsPlayer() {

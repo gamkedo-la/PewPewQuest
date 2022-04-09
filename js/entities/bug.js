@@ -106,7 +106,8 @@ class Bug {
 
         this.currentAnimation = this.spritesheet.animations['east'];
 
-        this.directions = ['east', 'southeast', 'south', 'southwest', 'west', 'northwest', 'north', 'northeast', 'east'];
+        //this.directions = ['east', 'southeast', 'south', 'southwest', 'west', 'northwest', 'north', 'northeast', 'east'];
+        this.directions = ['west', 'northwest', 'north', 'northeast', 'east', 'southeast', 'south', 'southwest'];
 
     }
 
@@ -220,6 +221,7 @@ class Bug {
         )
     }
 
+    /*
     findDirection() {
         let xDir = this.target.x - this.x;
         let yDir = this.target.y - this.y;
@@ -228,6 +230,21 @@ class Bug {
         let cardinalAngle = Math.round(angle/cardinalUnit) * cardinalUnit;
        // console.log(Math.round(cardinalAngle/cardinalUnit))
         return clamp( Math.round(cardinalAngle/cardinalUnit), 0, 7);
+    }
+    */
+
+    findDirection() {
+        let xDir = this.target.x - this.x;
+        let yDir = this.target.y - this.y;
+        let angle = Math.atan2(yDir, xDir);
+        // slice of the unit circle that each direction occupies
+        let cardinalUnit = (2*Math.PI) / this.directions.length;
+        // to map values of -PI to PI to the direction index, first add PI (to give values in the range of 0 to 2*PI), then
+        // divide by the "cardinalUnit" or size of each directional slice of the unit circle.  Rounding this will give values
+        // in the range from 0 to # of directions + 1.  Mod this by the # of directions to handle the special case of the "west"
+        // direction which occurs at the beginning of the range (-PI) and end of the range (PI) of values.
+        let dir_i = Math.round((angle + Math.PI) / cardinalUnit) % this.directions.length;
+        return dir_i;
     }
 
     findDirectionTowardsPlayer() {
