@@ -40,26 +40,117 @@ class Scrapper {
         this.spritesheet = spritesheet({
             image: img['scrapper'],
             frameWidth: 24,
-            frameHeight: 23,
+            frameHeight: 24,
             frameMargin: 0,
             animations: {
 
-                idle: {
+                idle_north: {
                     frames: '0..3',
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
                 },
 
-                grab: {
+                grab_north: {
                     frames: '4..9',
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
                 },
 
-                carry: {
+                carry_north: {
                     frames: '10..13',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                sleep_north: {
+                    frames: '14',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                idle_west: {
+                    frames: '15..18',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                grab_west: {
+                    frames: '19..24',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                carry_west: {
+                    frames: '25..28',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                sleep_west: {
+                    frames: '29',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                idle_south: {
+                    frames: '30..33',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                grab_south: {
+                    frames: '34..39',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                carry_south: {
+                    frames: '40..43',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                sleep_south: {
+                    frames: '44',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                idle_east: {
+                    frames: '45..48',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                grab_east: {
+                    frames: '49..54',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                carry_east: {
+                    frames: '55..58',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+
+                sleep_east: {
+                    frames: '59',
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
@@ -68,9 +159,11 @@ class Scrapper {
             }
         })
 
-        this.currentAnimation = this.spritesheet.animations['idle'];
+        this.currentAnimation = this.spritesheet.animations['idle_east'];
 
-        //this.directions = ['east', 'southeast', 'south', 'southwest', 'west', 'northwest', 'north', 'northeast', 'east'];
+        // -- order here is based on calculation in findDirection
+        this.directions = ['north', 'east', 'south', 'west'];
+        this.state = 'idle';
 
     }
 
@@ -79,7 +172,7 @@ class Scrapper {
             x: Math.floor(this.x-view.x+this.bump),
             y: Math.floor(this.y-view.y),
             width: 24,
-            height: 23
+            height: 24
         })
     
         if(this.health < 100) {
@@ -89,7 +182,9 @@ class Scrapper {
 
     update() {
         
-        //this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
+        let anim_tag = `${this.state}_${this.directions[this.findDirection()]}`;
+        //console.log(`dir: ${this.findDirection()} anim_tag: ${anim_tag}`);
+        this.currentAnimation = this.spritesheet.animations[ anim_tag ];
         this.currentAnimation.update();
         if(ticker%this.moveInterval == 0){
             this.target.x = this.x + (Math.random() * 2 - 1) * 15;
@@ -188,11 +283,19 @@ class Scrapper {
     findDirection() {
         let xDir = this.target.x - this.x;
         let yDir = this.target.y - this.y;
+
+        let angle = Math.atan2(yDir, xDir);
+        let cardinalUnit = Math.PI / 2;
+        let dir = Math.round(angle / cardinalUnit) + 1;
+
+        /*
         let angle = Math.atan2(yDir, xDir);
         let cardinalUnit = Math.PI/4;
         let cardinalAngle = Math.round(angle/cardinalUnit) * cardinalUnit;
+        */
        // console.log(Math.round(cardinalAngle/cardinalUnit))
-        return clamp( Math.round(cardinalAngle/cardinalUnit), 0, 7);
+        //console.log(`angle: ${angle} gives ${dir} a/c: ${angle/cardinalUnit}`);
+        return clamp(dir, 0, 3);
     }
 
     findDirectionTowardsPlayer() {
