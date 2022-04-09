@@ -29,6 +29,11 @@ class Enforcer {
         this.moveSpeed = 0.2;
         this.captureCoolDownMax = 500;
         this.captureCoolDown = 0;
+        this.wanderRadius = 200;
+
+        this.soundsStarted = false;
+        this.onScreenSound = {};
+        this.offScreenSound = {};
 
         this.collider = {
             x: this.x,
@@ -128,12 +133,31 @@ class Enforcer {
     }
 
     update() {
+        if(!this.soundsStarted) {
+            this.soundsStarted = true;
+            //this.playSound = function(buffer, pan = 0, vol = 1, rate = 1, loop = false) {
+               
+                this.offScreenSound = audio.playSound(loader.sounds[`enforcer_offscreen`], 0, 1, 1, true);
+                this.onScreenSound  = audio.playSound(loader.sounds[`enforcer_onscreen`], 0, 1, 1, true);
+                //console.log(this.offscreenSound);
+        }
+
+       
 
         this.previous.x = this.x;
         this.previous.y = this.y;
         this.playerDistance = this.findDistanceToPlayer();
         //console.log(this.playerDistance);
 
+       
+        if(this.playerDistance < 500) {
+            //this.onScreenSound.volume.gain.value = map(this.playerDistance, 0, 150, 0.2, 0);
+            this.offScreenSound.volume.gain.value = map(this.playerDistance, 50, 500, 0.2, 0);
+        }else{
+            this.offScreenSound.volume.gain.value = 0;
+            this.onScreenSound.volume.gain.value = 0;
+        }
+        //console.log(this.playerDistance);
                 
         this.health = this.armorPoints.reduce((acc, armorPoint) => {acc += armorPoint.health; return acc}, 0);
         
@@ -143,6 +167,7 @@ class Enforcer {
         if(this.health <= 100) {
             this.state = this.states.EVADE;
         }
+       
 
         switch(this.state) {
 
@@ -175,6 +200,7 @@ class Enforcer {
             }
 
             case this.states.EVADE: {
+
                 this.currentAnimation = this.spritesheet.animations['idle'];
 
                 this.angle = this.findDirectionTowardsPoint(player);
@@ -182,8 +208,11 @@ class Enforcer {
                 this.moveSpeed = 0.3;
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
-                if(this.playerDistance > 150) {
+                if(this.playerDistance > 100) {
                     this.heal();
+                }
+                if(this.health >= 200) {
+                    this.state = this.states.WANDER;
                 }
                 
                 break;
@@ -297,8 +326,10 @@ class Enforcer {
 
     heal(){
         this.armorPoints.forEach(function(armorPoint, i, array){
-            if(armorPoint.health < 100 && armorPoint.dead == false) {
+            if(armorPoint.health < 100) {
+                if(armorPoint.health < 0) { armorPoint.health = 0;}
                 armorPoint.health += 1;
+                armorPoint.dead = false;
             }
     })
     }

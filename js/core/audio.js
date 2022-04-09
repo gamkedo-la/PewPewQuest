@@ -8,7 +8,8 @@ const CROSSFADE_TIME = 0.25;
 const HARDPAN_THRESH = 400;
 const DROPOFF_MIN = 100;
 const DROPOFF_MAX = 500;
-const MAX_SOURCES = 32;
+const MAX_SOURCES = 16;
+var currentSoundSources = [];
 
 const AudioGlobal = function AudioGlobal() {
 
@@ -19,7 +20,7 @@ const AudioGlobal = function AudioGlobal() {
 	var soundEffectsVolume;
 	var currentMusicTrack;
 	var musicStartTime = 0;
-	var currentSoundSources = [];
+	//var currentSoundSources = [];
 
 //--//Set up WebAudioAPI nodes------------------------------------------------
 	this.init = function(callback) {
