@@ -289,7 +289,7 @@ var player = {
     },
 
     fireBullet: function(){
-        audio.playSound(loader.sounds.pewpew2, 0, 0.2)
+        audio.playSound(loader.sounds.pewpew2, 0, 0.1)
         let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
         world.bullets.push(bullet);
         bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
@@ -301,7 +301,7 @@ var player = {
             bulletYVelocity = this.shootTarget.y * 8;
         if(Math.abs(bulletXVelocity) > 0.2 || Math.abs(bulletYVelocity) > 0.2){
             if(ticker%2==0){
-                audio.playSound(loader.sounds.pewpew2, 0, 0.2)
+                audio.playSound(loader.sounds.pewpew2, 0, 0.)
                 let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
                 world.bullets.push(bullet);
                 bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);

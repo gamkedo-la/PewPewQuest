@@ -79,7 +79,7 @@ class Bullet {
         //let splode = new Splode(this.x, this.y, 10, 'yellow');
         //world.entities.push(splode);
 
-        audio.playSound(loader.sounds[`splode0${Math.floor(Math.random()*8)}`], map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.3, 1+Math.random()*0.2, false);
+        audio.playSound(loader.sounds[`splode0${Math.floor(Math.random()*8)}`], map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.1, 1+Math.random()*0.2, false);
         world.bullets.splice(world.bullets.indexOf(this), 1);
     }
 

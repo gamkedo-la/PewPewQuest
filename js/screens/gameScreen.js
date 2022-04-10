@@ -1,6 +1,7 @@
 var gameScreen = {
 
     cameraTypeToggle: true,
+    bgmStarted: false,
    
     reset: function () {
        
@@ -40,6 +41,10 @@ var gameScreen = {
        },
 
     update: function () {
+        if(!this.bgmStarted) {
+            this.bgmStarted = true;
+            audio.playSound(loader.sounds['bgm_exploration'], 0, 0.3, 1, true);
+        }
         if(Key.justReleased(Key.m)) {
             signal.dispatch('miniMap');
         }
