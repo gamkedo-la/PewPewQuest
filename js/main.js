@@ -17,8 +17,8 @@ canvas.width = 320;
 canvas.height = 180;
 
 var stats = Stats();
-stats.showPanel(0);
-document.body.appendChild(stats.dom);
+//stats.showPanel(0);
+//document.body.appendChild(stats.dom);
 
 
 //globals and constants
