@@ -172,8 +172,8 @@ class Bug {
             this.die();
         }
         this.bump = lerp(this.bump, 0, 0.1);
-        this.x = intLerp(this.x, this.target.x, moveSpeedw);
-        this.y = intLerp(this.y, this.target.y, moveSpeedw);
+        this.x = intLerp(this.x, this.target.x, moveSpeed);
+        this.y = intLerp(this.y, this.target.y, moveSpeed);
 
         if(this.checkWorldCollision(this.x, this.y) ) {
             this.x = this.previous.x;
