@@ -121,7 +121,7 @@ class Bug {
     
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
-        }dw
+        }
     }
 
     update() {
