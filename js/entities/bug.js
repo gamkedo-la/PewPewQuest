@@ -125,20 +125,43 @@ class Bug {
     }
 
     update() {
+        let angle = this.findDirectionTowardsPlayer();
+        let moveAmount = 8;
+        let moveSpeed = 0.1;
         
         this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
         this.currentAnimation.update();
         if(ticker%this.moveInterval == 0){
+            let startTarget = {x: this.target.x, y: this.target.y};
             this.target.x = this.x + (Math.random() * 2 - 1) * 7;
             this.target.y = this.y + (Math.random() * 2 - 1) * 7;
-            this.target.x += Math.cos(this.findDirectionTowardsPlayer()) * 10;
-            this.target.y += Math.sin(this.findDirectionTowardsPlayer()) * 10;
+            this.target.x += Math.cos(angle) * moveAmount;
+            this.target.y += Math.sin(angle) * moveAmount;
 
             if(this.checkWorldCollision(this.target.x, this.target.y) ) {
-                this.target.x = this.x + (Math.random() * 2 - 1) * 16;
-                this.target.y = this.y + (Math.random() * 2 - 1) * 16;
-                this.target.x += Math.cos(this.findDirectionTowardsPlayer()) * 10;
-                this.target.y += Math.sin(this.findDirectionTowardsPlayer()) * 10;
+                let randomTurnDirection = Math.random() > 0.5 ? 1 : -1;
+                this.target.x = startTarget.x;
+                this.target.y = startTarget.y;
+                this.target.x  += Math.cos(Math.PI/2) * moveAmount * randomTurnDirection;
+                this.target.y  += Math.sin(Math.PI/2) * moveAmount  * randomTurnDirection;
+                if(this.checkWorldCollision(this.target.x, this.target.y)){
+                    this.target.x = startTarget.x;
+                    this.target.y = startTarget.y;
+                    this.target.x  += Math.cos(Math.PI/2) * moveAmount * randomTurnDirection;
+                    this.target.y  += Math.sin(Math.PI/2) * moveAmount * randomTurnDirection;
+                    if(this.checkWorldCollision(this.target.x, this.target.y)){
+                        this.target.x = startTarget.x;
+                        this.target.y = startTarget.y;
+                        this.target.x  += Math.cos(Math.PI/2) * moveAmount * randomTurnDirection;
+                        this.target.y  += Math.sin(Math.PI/2) * moveAmount  * randomTurnDirection;
+                        if(this.checkWorldCollision(this.target.x, this.target.y)){
+                            this.target.x = startTarget.x;
+                            this.target.y = startTarget.y;
+                            this.target.x  += Math.cos(Math.PI/2) * moveAmount * randomTurnDirection;
+                            this.target.y  += Math.sin(Math.PI/2) * moveAmount * randomTurnDirection;
+                        }
+                    }
+                }
             }
         }
 
@@ -149,8 +172,8 @@ class Bug {
             this.die();
         }
         this.bump = lerp(this.bump, 0, 0.1);
-        this.x = intLerp(this.x, this.target.x, 0.05);
-        this.y = intLerp(this.y, this.target.y, 0.05);
+        this.x = intLerp(this.x, this.target.x, moveSpeedw);
+        this.y = intLerp(this.y, this.target.y, moveSpeedw);
 
         if(this.checkWorldCollision(this.x, this.y) ) {
             this.x = this.previous.x;
