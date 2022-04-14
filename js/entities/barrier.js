@@ -116,6 +116,7 @@ class Barrier {
                 this.removeBarrier();
             }
             else {
+                audio.playSound(loader.sounds.barrierHit, 0, 0.4)
                 signal.dispatch("keysChanged", {amount: inventory.items.keys});
                 this.keysRequiredToUnlock -= inventory.items.keys;
                 inventory.items.keys = 0;
