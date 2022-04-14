@@ -129,17 +129,16 @@ class Bug {
         this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
         this.currentAnimation.update();
         if(ticker%this.moveInterval == 0){
-            this.target.x = this.x + (Math.random() * 2 - 1) * 15;
-            this.target.y = this.y + (Math.random() * 2 - 1) * 15;
-            this.targetX += Math.cos(this.findDirectionTowardsPlayer()) * 32;
-            this.targetY += Math.sin(this.findDirectionTowardsPlayer()) * 32;
+            this.target.x = this.x + (Math.random() * 2 - 1) * 7;
+            this.target.y = this.y + (Math.random() * 2 - 1) * 7;
+            this.target.x += Math.cos(this.findDirectionTowardsPlayer()) * 10;
+            this.target.y += Math.sin(this.findDirectionTowardsPlayer()) * 10;
 
-            while(this.checkWorldCollision(this.target.x, this.target.y) ) {
-                this.target.x = this.x + (Math.random() * 2 - 1) * 15;
-                this.target.y = this.y + (Math.random() * 2 - 1) * 15;
-                this.targetX += Math.cos(this.findDirectionTowardsPlayer()) * 32;
-                this.targetY += Math.sin(this.findDirectionTowardsPlayer()) * 32;
-
+            if(this.checkWorldCollision(this.target.x, this.target.y) ) {
+                this.target.x = this.x + (Math.random() * 2 - 1) * 16;
+                this.target.y = this.y + (Math.random() * 2 - 1) * 16;
+                this.target.x += Math.cos(this.findDirectionTowardsPlayer()) * 10;
+                this.target.y += Math.sin(this.findDirectionTowardsPlayer()) * 10;
             }
         }
 
@@ -150,8 +149,8 @@ class Bug {
             this.die();
         }
         this.bump = lerp(this.bump, 0, 0.1);
-        this.x = intLerp(this.x, this.target.x, 0.1);
-        this.y = intLerp(this.y, this.target.y, 0.1);
+        this.x = intLerp(this.x, this.target.x, 0.05);
+        this.y = intLerp(this.y, this.target.y, 0.05);
 
         if(this.checkWorldCollision(this.x, this.y) ) {
             this.x = this.previous.x;

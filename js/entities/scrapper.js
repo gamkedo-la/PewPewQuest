@@ -37,6 +37,15 @@ class Scrapper {
             y: this.y
         }
 
+        this.states = {
+            PLAYER_PILOTED: 1,
+            DAMAGED: 2,
+            SEEK_TILE: 3,
+            EATING_TILE: 4,
+            DELIVERING_TILE: 5
+        }
+        this.state = this.states.SEEK_TILE
+
         this.spritesheet = spritesheet({
             image: img['scrapper'],
             frameWidth: 24,
