@@ -14,7 +14,7 @@ var currentSoundSources = [];
 const AudioGlobal = function AudioGlobal() {
 
 	this.initialized = false;
-	var audioCtx, musicBus, soundEffectsBus, filterBus, masterBus;
+	var audioCtx, musicBus, soundEffectsBus, bitCrushBus, filterBus, masterBus;
 	var isMuted;
 	var musicVolume;
 	var soundEffectsVolume;
@@ -32,6 +32,7 @@ const AudioGlobal = function AudioGlobal() {
 		this.context = audioCtx;
 		musicBus = audioCtx.createGain();
 		soundEffectsBus = audioCtx.createGain();
+		bitCrushBus = audioCtx.createWaveShaper();
 		reverbBus = audioCtx.createConvolver();
 		masterBus = audioCtx.createGain();
 
@@ -41,10 +42,12 @@ const AudioGlobal = function AudioGlobal() {
 		musicBus.gain.value = musicVolume;
 		soundEffectsBus.gain.value = soundEffectsVolume;
 		reverbBus.buffer = loader.sounds.reverb;
+		this.setBitDepth(16);
 
 		musicBus.connect(masterBus);
+		soundEffectsBus.connect(bitCrushBus);
 		soundEffectsBus.connect(reverbBus);
-		soundEffectsBus.connect(masterBus);
+		bitCrushBus.connect(masterBus);
 		reverbBus.connect(masterBus);
 		masterBus.connect(audioCtx.destination);
 		console.log("Audio initialized.");
@@ -206,6 +209,18 @@ const AudioGlobal = function AudioGlobal() {
 //--//Gameplay functions------------------------------------------------------
 	this.assignReverb = function(buffer) {
 		reverbBus.buffer = buffer;
+	}
+
+	this.setBitDepth = function(value) {
+		var x;
+		var nSamples = 65536
+		var curve = new Float32Array(nSamples);
+		var nLevels = Math.pow(2, value);
+		for (var i = 0; i < nSamples; i++) {
+			x = i * nLevels / nSamples;
+			curve[i] = (2 * Math.floor(x) + 1) / nLevels - 1;
+		}
+		bitCrushBus.curve = curve;
 	}
 
 	this.duckMusic = function (duration, volume = 0) {
