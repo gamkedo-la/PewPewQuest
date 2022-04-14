@@ -121,27 +121,39 @@ class Bug {
     
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
-        }
+        }dw
     }
 
     update() {
         let angle = this.findDirectionTowardsPlayer();
         let moveAmount = 8;
         let moveSpeed = 0.1;
+        this.moveInterval = 2;
         
         this.currentAnimation = this.spritesheet.animations[ this.directions[this.findDirection() ] ];
         this.currentAnimation.update();
         if(ticker%this.moveInterval == 0){
             let startTarget = {x: this.target.x, y: this.target.y};
-            this.target.x = this.x + (Math.random() * 2 - 1) * 7;
-            this.target.y = this.y + (Math.random() * 2 - 1) * 7;
+            this.target.x = this.x + (Math.random() * 2 - 1) * 4;
+            this.target.y = this.y + (Math.random() * 2 - 1) * 4;
             this.target.x += Math.cos(angle) * moveAmount;
             this.target.y += Math.sin(angle) * moveAmount;
+            while(this.checkWorldCollision(this.target.x, this.target.y) ) {
+                this.target.x = startTarget.x;
+                this.target.y = startTarget.y;
+                this.target.x += (Math.random() * 2 - 1) * 4;
+                this.target.y += (Math.random() * 2 - 1) * 4;
+
+            }
+
+
 
             if(this.checkWorldCollision(this.target.x, this.target.y) ) {
                 let randomTurnDirection = Math.random() > 0.5 ? 1 : -1;
                 this.target.x = startTarget.x;
                 this.target.y = startTarget.y;
+                this.target.x += (Math.random() * 2 - 1) * 4;
+                this.target.y += (Math.random() * 2 - 1) * 4;
                 this.target.x  += Math.cos(Math.PI/2) * moveAmount * randomTurnDirection;
                 this.target.y  += Math.sin(Math.PI/2) * moveAmount  * randomTurnDirection;
                 if(this.checkWorldCollision(this.target.x, this.target.y)){
