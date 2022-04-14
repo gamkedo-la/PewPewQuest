@@ -144,15 +144,18 @@ const AudioGlobal = function AudioGlobal() {
 		return {sound: source, volume: gainNode, pan: panNode};
 	}
 
-	this.playMusic = function(buffer) {
+	this.playMusic = function(buffer, mixVolume = 1) {
         if (!this.initialized) return;
 
 		var source = audioCtx.createBufferSource();
+		var mixNode = audioCtx.createGain();
 		var gainNode = audioCtx.createGain();
 
-		source.connect(gainNode);
+		source.connect(mixNode);
+		mixNode.connect(musicBus);
 		gainNode.connect(musicBus);
 
+		mixNode.gain.value = mixVolume;
 		source.buffer = buffer;
 
 		source.loop = true;
@@ -162,11 +165,10 @@ const AudioGlobal = function AudioGlobal() {
 			currentMusicTrack.sound.stop(audioCtx.currentTime + CROSSFADE_TIME);
 		}
 
-		source.start(); // FIXME: causes errors in chrome
+		source.start(); 
 		currentMusicTrack = {sound: source, volume: gainNode};
 
 		musicStartTime = audioCtx.currentTime;
-
 
 		return {sound: source, volume: gainNode};
 	}
