@@ -106,7 +106,6 @@ class Bug {
 
         this.currentAnimation = this.spritesheet.animations['east'];
 
-        //this.directions = ['east', 'southeast', 'south', 'southwest', 'west', 'northwest', 'north', 'northeast', 'east'];
         this.directions = ['west', 'northwest', 'north', 'northeast', 'east', 'southeast', 'south', 'southwest'];
 
     }
@@ -119,7 +118,7 @@ class Bug {
             height: 16
         })
 
-         fillRect(this.collider.left-view.x, this.collider.top-view.y, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
+        // fillRect(this.collider.left-view.x, this.collider.top-view.y, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
 
     
         if(this.health < 100) {
@@ -142,6 +141,7 @@ class Bug {
             this.target.x += Math.cos(angle) * moveAmount;
             this.target.y += Math.sin(angle) * moveAmount;
             let i = 1000;
+
             while(i > 0 && this.checkWorldCollision(this.target.x, this.target.y) ) {
                 i--
                 this.target.x = startTarget.x;
@@ -150,8 +150,6 @@ class Bug {
                 this.target.y += (Math.random() * 2 - 1) * 4;
 
             }
-
-
 
             if(this.checkWorldCollision(this.target.x, this.target.y) ) {
                 let randomTurnDirection = Math.random() > 0.5 ? 1 : -1;
@@ -181,9 +179,7 @@ class Bug {
                 }
             }
         }
-
-       
-        
+ 
         this.updateCollider();
         if(this.health < 0) {
             this.die();
@@ -259,18 +255,6 @@ class Bug {
             world.getTileAtPixel(X+this.width, Y+this.height) != 0
         )
     }
-
-    /*
-    findDirection() {
-        let xDir = this.target.x - this.x;
-        let yDir = this.target.y - this.y;
-        let angle = Math.atan2(yDir, xDir);
-        let cardinalUnit = Math.PI/4;
-        let cardinalAngle = Math.round(angle/cardinalUnit) * cardinalUnit;
-       // console.log(Math.round(cardinalAngle/cardinalUnit))
-        return clamp( Math.round(cardinalAngle/cardinalUnit), 0, 7);
-    }
-    */
 
     findDirection() {
         let xDir = this.target.x - this.x;
