@@ -118,6 +118,9 @@ class Bug {
             width: 16,
             height: 16
         })
+
+         fillRect(this.collider.left-view.x, this.collider.top-view.y, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
+
     
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
@@ -138,7 +141,9 @@ class Bug {
             this.target.y = this.y + (Math.random() * 2 - 1) * 4;
             this.target.x += Math.cos(angle) * moveAmount;
             this.target.y += Math.sin(angle) * moveAmount;
-            while(this.checkWorldCollision(this.target.x, this.target.y) ) {
+            let i = 1000;
+            while(i > 0 && this.checkWorldCollision(this.target.x, this.target.y) ) {
+                i--
                 this.target.x = startTarget.x;
                 this.target.y = startTarget.y;
                 this.target.x += (Math.random() * 2 - 1) * 4;
@@ -234,14 +239,14 @@ class Bug {
     }
 
     updateCollider() {
-        this.collider.x = this.x;
-        this.collider.y = this.y;
+        this.collider.x = this.x + 3;
+        this.collider.y = this.y + 3;
         this.collider.width = this.width;
         this.collider.height = this.height;
-        this.collider.left = this.x;
-        this.collider.right = this.x + this.width;
-        this.collider.top = this.y;
-        this.collider.bottom = this.y + this.height;
+        this.collider.left = this.x + 3;
+        this.collider.right = this.x + 3 + this.width;
+        this.collider.top = this.y + 3;
+        this.collider.bottom = this.y + 3 + this.height;
     }
 
     checkWorldCollision(X, Y) {
