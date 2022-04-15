@@ -271,7 +271,17 @@ World.prototype.populateMapObjects = function(){
                     let safeSpot = {x: i, y: j};
                     world.safeSpots.push(safeSpot);
                     this.setTileAtPosition(i, j, 0);
+                    break;
 
+                }
+                case TILE_EATER:{
+                    let neighbors = this.getNeighbors(i, j);
+                    let tileeater = new Tileeater(i,j, ...neighbors);
+                    //we want Enforcers to follow player beyond screen bounds, so
+                    //it goes in worldEntties. 
+                    world.worldEntities.push(tileeater);
+                    this.setTileAtPosition(i, j, 0);
+                    break;
                 }
             }
         }
@@ -339,6 +349,7 @@ World.prototype.populateMapPalette = function(palette){
     SCRAPPER = palette[45];
     TREASURE = palette[46];
     SAFE_SPOT = palette[47];
+    TILE_EATER = palette[48];
     PARTICLE = 1000;
 
     COMBAT_MODE=palette[8];
