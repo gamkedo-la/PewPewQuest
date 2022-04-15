@@ -66,9 +66,10 @@ getMousePosition = (event) =>  {
     mouse = {
       x: ( (event.clientX - rect.left) * scaleX),   // scale mouse coordinates after they have
       y: ( (event.clientY - rect.top) * scaleY),     // been adjusted to be relative to element
-      pressed: event.buttons
+      pressed: event.buttons,
+      type: event.type
     }
-    //console.log(mouse);   
+   // console.log(mouse);   
   }
 
 function lerp(v0, v1, t) {
@@ -95,6 +96,9 @@ function rectCollision(rect1, rect2) {
         rect1.top < rect2.bottom &&
         rect2.top < rect1.bottom
       );
+}
+
+function rectVsCircle(rect, circle){
 }
 
 function pointInRect(x, y, rect){

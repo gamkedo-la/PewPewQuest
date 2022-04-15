@@ -296,6 +296,6 @@ window.addEventListener('keydown',  function (event) { Key.onKeydown(event); eve
 window.addEventListener('blur',     function (event) { paused = true; }, false);
 window.addEventListener('focus',    function (event) { paused = false; }, false);
 canvas.addEventListener('mousemove',getMousePosition);
-canvas.addEventListener('mouseDown',getMousePosition);
-canvas.addEventListener('mouseUp',getMousePosition);
+canvas.addEventListener('mousedown',getMousePosition);
+canvas.addEventListener('mouseup',getMousePosition);
 init();

@@ -1,18 +1,18 @@
 class Bullet {
-    constructor(x,y, xVelocity, yVelocity, color= '#8888FF') {
+    constructor(x,y, xVelocity, yVelocity, color= '#8888FF', width = 3, height = 3, life = 100) {
         this.type = BULLET
         this.color = color;
         this.x = x;
         this.y = y;
-        this.height = 3;
-        this.width = 3;
+        this.height = width;
+        this.width = height;
         this.xVelocity = xVelocity;
         this.yVelocity = yVelocity;
         this.speed = 0;
         this.prevX = this.x;
         this.prevY = this.y;
         this.gravity =  0.5;
-        this.life = 100;
+        this.life = life;
         this.collider = {
             top: this.y - this.height / 2,
             bottom: this.y + this.height / 2,
@@ -55,6 +55,8 @@ class Bullet {
     
     draw() {
         pixelLine(this.x-view.x, this.y-view.y, this.prevX-view.x, this.prevY-view.y, this.color);
+        //fillRect(this.collider.left-view.x, this.collider.top-view.y, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
+
     }
 
     hit() {

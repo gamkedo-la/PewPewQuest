@@ -18,6 +18,14 @@ var player = {
     keyVelocityCap: .5,
     captured: false,
     capturer: {},
+    hasSabre: true,
+    swinging: false,
+    swingAngle: 0,
+    swingStart: 0,
+    swingEnd: 0,
+    swingTimer: 0,
+    swingTimerMax: 7,
+    swing: 0,
 
     shootTarget: {
         x: 0,
@@ -45,18 +53,37 @@ var player = {
                 let x = -3 + Math.sin(angle+ticker/30)*radius;
                 let y = -1 + Math.cos(angle+ticker/30)*radius;
 
-            // strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
+            strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
             canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
                 
             }
+            if(this.swinging){
+                pixelLine(this.x-view.x + 3, this.y-view.y + 3,
+                    this.x + 3 -view.x + Math.cos(this.swing) * 20,
+                    this.y+ 3 -view.y + Math.sin(this.swing) * 20,
+                    );
+                pixelLine(this.x-view.x + 3, this.y-view.y + 3,
+                    this.x + 3 -view.x + Math.cos(this.swing*0.8) * 20,
+                    this.y+ 3 -view.y + Math.sin(this.swing*0.8) * 20,
+                    "rgba(0,0,255,1)");
+                //pixelLine(this.x-view.x, this.y-view.y, 100, 100);
+            }
         }
+        
       
     },
 
     update: function () {
         //console.log(player.x, player.y, player.xVelocity, player.yVelocity);
 
-        
+        this.swingStart = this.swingAngle - Math.PI/2;
+        this.swingEnd = this.swingAngle + Math.PI/2;
+        this.swing = lerp(this.swingStart, this.swingEnd, this.swingTimer/this.swingTimerMax);
+        this.swingTimer--;
+        if(this.swingTimer < 0){
+            this.swinging = false;
+        }
+
 
         if(this.captured){
             this.x = this.capturer.x;
@@ -79,8 +106,13 @@ var player = {
             }
         }else{
             this.updateCollider(this.x, this.y);
-            if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.3)};
-            if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.3)}
+            if(this.hasSabre){
+
+            }
+            else{
+                if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.3)};
+                if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.3)}
+            }
 
            
         
@@ -166,10 +198,20 @@ var player = {
             }
        
             //bullet firing-----------------------------------------------------
-            if (Key.justReleased(Key.z)) { this.fireBullet(); }
-            if(mouse.pressed){ this.mouseFireBullet(); } 
+            if(this.hasSabre){
+                if (Key.justReleased(Key.z)) {
+                    this.swingSabre();
+                }
+                if(mouse.pressed){ this.mouseSwingSabre() }
+                if(gp){ }
+                 
+            }else{
+                if (Key.justReleased(Key.z)) { this.fireBullet(); }
+                if(mouse.pressed){ this.mouseFireBullet(); }
+            }
+
         
-            if(gp){this.gamepadFireBullet()}
+           
 
             //other actions-----------------------------------------------------
 
@@ -182,6 +224,10 @@ var player = {
             if (Key.justReleased(Key.x) || gp?.buttons[1].pressed) {
                 inventory.selection++;
                 inventory.selection = inventory.selection % inventory.itemList.length;
+            }
+
+            if (Key.justReleased(Key.l)) {
+                this.hasSabre = !this.hasSabre;
             }
 
             //if our velocity is zero and we're colliding with a wall, allow the teleport button to be pressed
@@ -263,7 +309,7 @@ var player = {
         
     },
 
-    tileCollisionCheck: function(world, tileCheck){
+    tileCollisionCheck(world, tileCheck){
         
         let leftTile =      Math.floor(this.collider.left / world.tileSize),
             rightTile =     Math.floor(this.collider.right / world.tileSize),
@@ -284,51 +330,51 @@ var player = {
         }
     },
 
-    tilesThatCollide: function(tile){
+    tilesThatCollide(tile){
         return tile >= 0;
     },
 
-    fireBullet: function(){
+    fireBullet(){
         audio.playSound(loader.sounds.pewpew2, 0, 0.1)
-        let bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
+        let bullet = new Bullet(this.x + 3, this.y + 3, this.xFacing * 8, this.yFacing * 8);
         world.bullets.push(bullet);
-        bullet = new Bullet(this.x, this.y, this.xFacing * 8, this.yFacing * 8);
+        bullet = new Bullet(this.x + 3, this.y + 3, this.xFacing * 8, this.yFacing * 8);
         world.bullets.push(bullet);
     },
 
-    gamepadFireBullet: function(){
+    gamepadFireBullet(){
         let bulletXVelocity = this.shootTarget.x * 8,
             bulletYVelocity = this.shootTarget.y * 8;
         if(Math.abs(bulletXVelocity) > 0.2 || Math.abs(bulletYVelocity) > 0.2){
             if(ticker%2==0){
                 audio.playSound(loader.sounds.pewpew2, 0, 0.)
-                let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+                let bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
                 world.bullets.push(bullet);
-                bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+                bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
                 world.bullets.push(bullet);
             }
         }
     },
 
-    mouseFireBullet: function(){
+    mouseFireBullet(){
         let worldMouseY = mouse.y + view.y;
         let worldMouseX = mouse.x + view.x;
-        let bulletXDistance = worldMouseX - this.x;
-        let bulletYDistance = worldMouseY - this.y;
+        let bulletXDistance = worldMouseX - this.x + 3;
+        let bulletYDistance = worldMouseY - this.y + 3;
         let bulletAngle = Math.atan2(bulletYDistance, bulletXDistance);
         let bulletDistance = Math.sqrt(bulletXDistance * bulletXDistance + bulletYDistance * bulletYDistance);
         let bulletXVelocity = Math.cos(bulletAngle) * 8 * map(bulletDistance, 0, view.width/2, 0.1, 1);
         let bulletYVelocity = Math.sin(bulletAngle) * 8 * map(bulletDistance, 0, view.height/2, 0.1, 1);
         if(ticker%3==0){
             audio.playSound(loader.sounds.pewpew2, 0, 0.2)
-            let bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+            let bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
-            bullet = new Bullet(this.x, this.y, bulletXVelocity, bulletYVelocity);
+            bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
         }
     },
 
-    teleport: function(){
+    teleport(){
         //blow some particles before we go at player position
         let splode = new Splode(this.x, this.y, 40, COLORS.goldenFizz);
         for(let i = 0; i < 20; i++) {
@@ -349,5 +395,42 @@ var player = {
            world.entities.push(particle);
         }
     },
+
+    swingSabre(){
+        this.swinging = true;
+
+    },
+
+    mouseSwingSabre(){
+        this.swinging = true;
+       
+        let worldMouseY = mouse.y + view.y;
+        let worldMouseX = mouse.x + view.x;
+        let bulletXDistance = worldMouseX - this.x;
+        let bulletYDistance = worldMouseY - this.y;
+        this.swingAngle = Math.atan2(bulletYDistance, bulletXDistance);
+        this.swingTimer = this.swingTimerMax;
+        let bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle) * 15,
+            this.y +Math.sin(this.swingAngle) * 15,
+             0, 0, COLORS.transparent,
+            20, 20, 90);
+        world.bullets.push(bullet);
+        bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle-Math.PI/4) * 15,
+            this.y +Math.sin(this.swingAngle-Math.PI/4) * 15,
+             0, 0, COLORS.transparent,
+            20, 20, 45);
+        world.bullets.push(bullet);
+        bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle+Math.PI/4) * 15,
+            this.y +Math.sin(this.swingAngle+Math.PI/4) * 15,
+             0, 0, COLORS.transparent,
+            20, 20, 45);
+        world.bullets.push(bullet);
+
+    }
+
+
 
 }
