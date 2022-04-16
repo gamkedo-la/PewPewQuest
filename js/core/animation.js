@@ -1,5 +1,5 @@
 class Animation {
-  constructor({spriteSheet, frames, frameRate, loop = true} = {}) {
+  constructor({spriteSheet, frames, frameRate = 30, loop = true, noInterrupt = true} = {}) {
 
     
     this.spriteSheet = spriteSheet;
@@ -13,6 +13,8 @@ class Animation {
     
     this.loop = loop;
 
+    this.noInterrupt = noInterrupt;
+
     let { width, height, margin = 0 } = spriteSheet.frame;
 
     
@@ -23,6 +25,15 @@ class Animation {
 
     
     this.margin = margin;
+
+    if (!this.frames) {
+      const imageWidth = this.spriteSheet.image.width;
+      const imageHeight = this.spriteSheet.image.height;
+      const framesPerRow = imageWidth / this.width;
+      const framesPerCol = imageHeight / this.height;
+      const frameCount = framesPerRow * framesPerCol
+      for (let i = 0; i < frameCount; i++) this.frames.push(i);
+    }
 
     
     this.currentFrame = 0;
