@@ -1,5 +1,6 @@
 class Tileeater {
     constructor(tileX, tileY, northTile, southTile, eastTile, westTile) {
+        this.type = TILE_EATER;
         this.tileX = tileX
         this.tileY = tileY
         this.x = tileX * 8;

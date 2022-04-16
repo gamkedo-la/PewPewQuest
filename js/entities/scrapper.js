@@ -202,6 +202,11 @@ class Scrapper {
         //console.log(`dir: ${this.findDirection()} anim_tag: ${anim_tag}`);
         this.currentAnimation = this.spritesheet.animations[ anim_tag ];
         this.currentAnimation.update();
+
+        let tileEater = world.worldEntities.filter(e => e.type === TILE_EATER)[0];
+
+        this.startX = tileEater.x + 40;
+        this.startY = tileEater.y + 40;
         
 
        switch(this.state){
