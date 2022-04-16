@@ -66,6 +66,7 @@ const imageList = [
 'scrapper',
 'tileeater_r1',
 'tileeater_r2',
+'tileeater_r3',
 
 ]
 

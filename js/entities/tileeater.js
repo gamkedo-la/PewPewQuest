@@ -1,3 +1,39 @@
+
+/**
+ * armor point centered at x,y
+ */
+class ArmorPoint {
+    constructor(spec={}) {
+        this.x = spec.x || 0;
+        this.y = spec.y || 0;
+        this.height = spec.height || 4;
+        this.width = spec.width || 4;
+        this.halfHeight = this.height/2;
+        this.halfWidth = this.width/2;
+        this.health = spec.health || 100;
+        this.color = spec.color || COLORS.dirtyRed;
+        this.bump = 0;
+    }
+    get left() {
+        return this.x-this.halfWidth;
+    }
+    get right() {
+        return this.x+this.halfWidth;
+    }
+    get top() {
+        return this.y-this.halfHeight;
+    }
+    get bottom() {
+        return this.y+this.halfHeight;
+    }
+
+    draw() {
+        fillRect( Math.floor(this.left-view.x + (ticker%2==0?this.bump:-this.bump) ),
+                  Math.floor(this.top-view.y),
+                  this.width, this.height, this.color );
+    }
+}
+
 class Tileeater {
     constructor(tileX, tileY, northTile, southTile, eastTile, westTile) {
         this.type = TILE_EATER;
@@ -20,8 +56,10 @@ class Tileeater {
 
         this.r1angle = 0;
         this.r2angle = 0;
+        this.r3angle = 0;
         this.r1rate = .02;
         this.r2rate = -.03;
+        this.r3rate = .01;
 
         this.collider = {
             x: this.x,
@@ -33,6 +71,15 @@ class Tileeater {
             top: this.y,
             bottom: this.y + this.width,
         }
+
+        this.apAngles = [.42, 1.15, Math.PI-1.15, Math.PI-.42, -.42, -1.15, -Math.PI+1.15, -Math.PI+.42];
+        this.apRadius = 31;
+        this.armorPoints = this.apAngles.map(angle => 
+            new ArmorPoint({
+                x: this.x + this.width/2 + Math.cos(this.r1angle+angle)*this.apRadius, 
+                y: this.y + this.height/2 + Math.sin(this.r1angle+angle)*this.apRadius,
+            })
+        );
 
         this.target = {
             x: this.x,
@@ -82,8 +129,31 @@ class Tileeater {
             }
         })
 
+        this.r3sprites = spritesheet({
+            image: img['tileeater_r3'],
+            frameWidth: 68,
+            frameHeight: 68,
+            frameMargin: 0,
+            animations: {
+                idle: {
+                    frames: '0',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+            }
+        })
+
         this.r1anim = this.r1sprites.animations['idle'];
         this.r2anim = this.r2sprites.animations['idle'];
+        this.r3anim = this.r3sprites.animations['idle'];
+
+        this.dockpoints = [
+            {x: this.x+this.width/2, y:this.y+4},
+            {x: this.x+this.width/2, y:this.y+this.height-4},
+            {x:this.x+4, y: this.y+this.height/2},
+            {x: this.x+this.width-4, y: this.y+this.height/2},
+        ]
 
         // order here is based on calculation in findDirection
         //this.directions = ['west', 'north', 'east', 'south'];
@@ -92,43 +162,58 @@ class Tileeater {
     }
 
     draw() {
-
-        //console.log(`view: ${view.x},${view.y}`);
-        // test
-            /*
-            x: Math.floor(this.x-view.x+this.bump),
-            y: Math.floor(this.y-view.y),
-            */
         let w = this.collider.right - this.collider.left;
         let h = this.collider.bottom - this.collider.top;
         let x = this.collider.left - view.x + w/2;
         let y = this.collider.top - view.y + h/2;
+        // -- outer ring
         canvasContext.save();
         canvasContext.translate(x,y)
         canvasContext.rotate(this.r1angle);
-        //fillRect(-w/2, -h/2, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
-
         this.r1anim.render({
             x: -w/2,
             y: -h/2,
             width: w,
             height: h
         })
-
         canvasContext.rotate(-this.r1angle);
+        // -- middle ring
         canvasContext.rotate(this.r2angle);
-
         this.r2anim.render({
             x: -w/2,
             y: -h/2,
             width: w,
             height: h
         })
-
+        canvasContext.rotate(-this.r2angle);
+        // -- inner ring
+        canvasContext.rotate(this.r3angle);
+        this.r3anim.render({
+            x: -w/2,
+            y: -h/2,
+            width: w,
+            height: h
+        })
         canvasContext.restore();
+
+        // -- dock points
+        /*
+        for (const dp of this.dockpoints) {
+            fillRect(dp.x-view.x-2, dp.y-view.y-2, 4, 4, COLORS.topaz);
+        }
+        */
     
+        // -- health bar
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
+        }
+
+        // dbg center
+        //fillRect(this.x-view.x+this.width/2-2, this.y-view.y+this.height/2-2, 4, 4, "green");
+
+        // armor points
+        for (const ap of this.armorPoints) {
+            ap.draw();
         }
     }
 
@@ -137,8 +222,12 @@ class Tileeater {
         // update angles
         this.r1angle += this.r1rate;
         this.r2angle += this.r2rate;
+        this.r3angle += this.r3rate;
         if (this.r1angle > Math.PI*2) this.r1angle = this.r1angle - Math.PI*2;
+        if (this.r2angle > Math.PI*2) this.r2angle = this.r2angle - Math.PI*2;
+        if (this.r3angle > Math.PI*2) this.r3angle = this.r3angle - Math.PI*2;
         
+
         //let anim_tag = `${this.state}_${this.directions[this.findDirection()]}`;
         //console.log(`dir: ${this.findDirection()} anim_tag: ${anim_tag}`);
         //this.currentAnimation = this.spritesheet.animations[ anim_tag ];
@@ -193,6 +282,22 @@ class Tileeater {
                 this.bump = 5;
             }
         })
+
+        // compute delta from last position
+        let dx = this.x - this.previous.x;
+        let dy = this.y - this.previous.y;
+
+        // update dock points
+        for (const dp of this.dockpoints) {
+            dp.x += dx;
+            dp.y += dy;
+        }
+
+        // update armor points
+        for (let i=0; i<this.armorPoints.length; i++) {
+            this.armorPoints[i].x = this.x + this.width/2 + Math.cos(this.r1angle+this.apAngles[i])*this.apRadius;
+            this.armorPoints[i].y = this.y + this.height/2 + Math.sin(this.r1angle+this.apAngles[i])*this.apRadius;
+        }
 
         this.previous.x = this.x;
         this.previous.y = this.y;
