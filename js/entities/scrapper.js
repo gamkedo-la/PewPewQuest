@@ -4,18 +4,23 @@ class Scrapper {
         this.tileY = tileY
         this.x = tileX * 8;
         this.y = tileY * 8;
+        this.startX = tileX * 8;
+        this.startY = tileY * 8;
         this.northTile = northTile;
         this.southTile = southTile;
         this.eastTile = eastTile;
         this.westTile = westTile;
         this.neighbors = [ northTile, southTile, eastTile, westTile ];
         this.height = 15;
+        this.angle = 0;
         this.width = 15;
         this.bump = 0;
         this.health = 100;
+        this.tileTimer = 0;
+        this.tileTimerMax = 200;
         //this.moveInterval = 5;
         this.moveSpeed = 0.2;
-        this.moveInterval = 100;
+        this.moveInterval = 300;
 
         this.collider = {
             x: this.x,
@@ -45,6 +50,8 @@ class Scrapper {
             DELIVERING_TILE: 5
         }
         this.state = this.states.SEEK_TILE
+
+        this.animState = "idle"
 
         this.spritesheet = spritesheet({
             image: img['scrapper'],
@@ -172,7 +179,7 @@ class Scrapper {
 
         // order here is based on calculation in findDirection
         this.directions = ['west', 'north', 'east', 'south'];
-        this.state = 'idle';
+        this.animState = 'idle';
 
     }
 
@@ -191,26 +198,78 @@ class Scrapper {
 
     update() {
         
-        let anim_tag = `${this.state}_${this.directions[this.findDirection()]}`;
+        let anim_tag = `${this.animState}_${this.directions[this.findDirection()]}`;
         //console.log(`dir: ${this.findDirection()} anim_tag: ${anim_tag}`);
         this.currentAnimation = this.spritesheet.animations[ anim_tag ];
         this.currentAnimation.update();
-        if(ticker%this.moveInterval == 0){
-            this.target.x = this.x + (Math.random() * 2 - 1) * 15;
-            this.target.y = this.y + (Math.random() * 2 - 1) * 15;
-            this.targetX += Math.cos(this.findDirectionTowardsPlayer()) * 32;
-            this.targetY += Math.sin(this.findDirectionTowardsPlayer()) * 32;
+        
 
-            while(this.checkWorldCollision(this.target.x, this.target.y) ) {
-                this.target.x = this.x + (Math.random() * 2 - 1) * 15;
-                this.target.y = this.y + (Math.random() * 2 - 1) * 15;
-                this.targetX += Math.cos(this.findDirectionTowardsPlayer()) * 32;
-                this.targetY += Math.sin(this.findDirectionTowardsPlayer()) * 32;
-
+       switch(this.state){
+            case this.states.PLAYER_PILOTED: {
+                //
+                break;
             }
-        }
+            case this.states.DAMAGED: {
+                break;
+            }
+            case this.states.SEEK_TILE: {
+                //find nearest tile from spawn/start location that isn't eaten
+                   //pick random tile location from onscreen tiles
+                   
 
-       
+                     //if tile is solid and not eaten, move to it
+ 
+                if(ticker%this.moveInterval == 0) {
+                this.angle = Math.random() * Math.PI*2;
+                }
+                this.moveSpeed = 0.2;
+                this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
+                this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
+                this.captureCoolDown--;
+                let tile = world.getTileAtPixel(this.x + 20, this.y + 10)
+                if(tile != 0 && tile != COLOR_DIRTY_RED) {
+                    this.tileTimer = this.tileTimerMax;
+                    this.state = this.states.EATING_TILE;
+                }
+
+                break;
+            }
+            case this.states.EATING_TILE: {
+                //change animation to grabbing/eating
+                this.animState="grab";
+                this.tileTimer--
+                if(this.tileTimer <= 0) {
+                    this.state = this.states.DELIVERING_TILE;
+                    world.data[ world.pixelToTileIndex(this.x + 20, this.y + 10) ] = COLOR_DIRTY_RED;
+                }
+                //emit particles from target tile
+                //if tile timer is zero,
+                    //change tile to glitch tile
+                    //change state to delivering tile
+                break;
+            }   
+            case this.states.DELIVERING_TILE: {
+                this.animState = "carry";
+                this.angle = Math.atan2(this.startY - this.y, this.startX - this.x);
+                this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
+                this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
+
+                if(this.x - this.startX < 0.1 && this.y - this.startY < 0.1) {
+                    this.state = this.states.SEEK_TILE;
+                }
+
+                //find nearest tileeater
+                //plot a path. I don't see a way around needing A* for this one, unless we confine
+                //the appearance of these guys to big areas that also contain tile eaters
+
+                //move towards tile eater
+                //if tile eater is within range,
+                    //set animation direction to south
+                    //trigger docking animation/tween
+                    
+                break;
+            }
+       }
         
         this.updateCollider();
         if(this.health < 0) {
@@ -220,11 +279,6 @@ class Scrapper {
         this.x = intLerp(this.x, this.target.x, 0.1);
         this.y = intLerp(this.y, this.target.y, 0.1);
 
-        if(this.checkWorldCollision(this.x, this.y) ) {
-            this.x = this.previous.x;
-            this.y = this.previous.y;
-        }
-
         if(this.bump < 0.01) { this.bump = 0;}
         
         if(rectCollision(this.collider, player.collider)) {
@@ -233,8 +287,6 @@ class Scrapper {
            collisionResponse(player, this);
            
         }
-
-        //todo, need a line vs. rect method for bullets vs evertything
 
         world.bullets.forEach(bullet => {
             if(rectCollision(this.collider, bullet.collider)) {
