@@ -112,6 +112,17 @@ function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
 
+function clampRoll(value, min, max) {
+    let r = max-min;
+    if (value > max) {
+        return min + ((value-max) % r);
+    }
+    if (value < min) {
+        return max - ((min-value) % r);
+    }
+    return value;
+}
+
 function map(value, istart, istop, ostart, ostop) {
     return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
 }
