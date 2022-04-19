@@ -180,7 +180,15 @@ class Scrapper {
         this.currentAnimation = this.spritesheet.animations['idle_east'];
 
         // order here is based on calculation in findDirection
+        this.direction = 2;
         this.directions = ['west', 'north', 'east', 'south'];
+        this.tileGripOffsets = [
+            {x: -2, y: 12},
+            {x: 12, y: 0},
+            {x: 28, y: 12},
+            {x: 12, y: 23}
+        ]
+        this.tileGripOffset = this.tileGripOffsets[this.direction];
         this.animState = 'idle';
 
     }
@@ -196,11 +204,19 @@ class Scrapper {
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
         }
+        pset(this.x - view.x + this.tileGripOffsets[0].x, this.y - view.y + this.tileGripOffsets[0].y, COLORS.tahitiGold);
+        pset(this.x - view.x + this.tileGripOffsets[1].x, this.y - view.y + this.tileGripOffsets[1].y, COLORS.tahitiGold);
+        pset(this.x - view.x + this.tileGripOffsets[2].x, this.y - view.y + this.tileGripOffsets[2].y, COLORS.tahitiGold);
+        pset(this.x - view.x + this.tileGripOffsets[3].x, this.y - view.y + this.tileGripOffsets[3].y, COLORS.tahitiGold);
     }
 
     update() {
-        
-        let anim_tag = `${this.animState}_${this.directions[this.findDirection()]}`;
+        if(ticker%50 === 0 && this.state != this.states.EATING_TILE) {
+            this.direction = this.findDirection();
+        }
+        this.tileGripOffset = this.tileGripOffsets[this.direction];
+
+        let anim_tag = `${this.animState}_${this.directions[this.direction]}`;
         //console.log(`dir: ${this.findDirection()} anim_tag: ${anim_tag}`);
         this.currentAnimation = this.spritesheet.animations[ anim_tag ];
         this.currentAnimation.update();
@@ -234,7 +250,7 @@ class Scrapper {
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
                 this.captureCoolDown--;
-                let tile = world.getTileAtPixel(this.x + 20, this.y + 10)
+                let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
                 if(tile != 0 && tile != COLOR_DIRTY_RED) {
                     this.tileTimer = this.tileTimerMax;
                     this.state = this.states.EATING_TILE;
@@ -248,7 +264,12 @@ class Scrapper {
                 this.tileTimer--
                 if(this.tileTimer <= 0) {
                     this.state = this.states.DELIVERING_TILE;
-                    world.data[ world.pixelToTileIndex(this.x + 20, this.y + 10) ] = COLOR_DIRTY_RED;
+                    let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
+                    if(tile != 0) {
+                        world.data[ world.pixelToTileIndex(
+                        this.x + this.tileGripOffset.x,
+                        this.y + this.tileGripOffset.y) ] = COLOR_DIRTY_RED;
+                    }
                 }
                 //emit particles from target tile
                 //if tile timer is zero,

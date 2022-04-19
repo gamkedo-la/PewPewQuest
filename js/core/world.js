@@ -36,15 +36,15 @@ World.prototype.pixelToTileID = function pixelToTileID(x, y){
 }
 
 World.prototype.pixelToTileIndex = function pixelToTileIndex(x, y){
-    let tx = Math.round(x / this.tileSize);
-    let ty = Math.round(y / this.tileSize);
+    let tx = Math.floor(x / this.tileSize);
+    let ty = Math.floor(y / this.tileSize);
     return this.getIndexAtPosition(tx, ty);
 }
 
 World.prototype.pixelToTileGrid = function pixelToTileGrid(x, y){
     return {
-            x: Math.round(x / this.tileSize),
-            y: Math.round(y / this.tileSize)
+            x: Math.floor(x / this.tileSize),
+            y: Math.floor(y / this.tileSize)
             }
 }
 
