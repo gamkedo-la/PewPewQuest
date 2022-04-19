@@ -51,7 +51,6 @@ class Tileeater {
         this.height = 68;
         this.width = 68;
         this.bump = 0;
-        this.health = 100;
         //this.moveInterval = 5;
         this.moveSpeed = 0.2;
         this.moveInterval = 100;
@@ -68,6 +67,12 @@ class Tileeater {
         this.r1recalc = 0;
         this.r2recalc = 0;
         this.r3recalc = 0;
+
+        this.r1alive = true;
+        this.r2alive = true;
+        this.r2health = 500;
+        this.r2alive = true;
+        this.r3health = 300;
 
         this.collider = {
             x: this.x,
@@ -88,6 +93,8 @@ class Tileeater {
                 y: this.y + this.height/2 + Math.sin(this.r1angle+angle)*this.apRadius,
             })
         );
+        this.health = this.armorPoints.reduce((acc, armorPoint) => {acc += armorPoint.health; return acc}, 0);
+        this.maxHealth = this.health;
 
         this.target = {
             x: this.x,
@@ -97,17 +104,6 @@ class Tileeater {
             x: this.x,
             y: this.y
         }
-
-        this.states = {
-            IDLE: 1,
-            AIMING: 2,
-            SHOOTING: 2,
-            DOCK_WEST: 3,
-            DOCK_NORTH: 4,
-            DOCK_EAST: 4,
-            DOCK_SOUTH: 5
-        }
-        this.state = this.states.IDLE;
 
         this.r1sprites = spritesheet({
             image: img['tileeater_r1'],
@@ -198,23 +194,27 @@ class Tileeater {
         // -- outer ring
         canvasContext.save();
         canvasContext.translate(x,y)
-        canvasContext.rotate(this.r1angle);
-        this.r1anim.render({
-            x: -w/2,
-            y: -h/2,
-            width: w,
-            height: h
-        })
-        canvasContext.rotate(-this.r1angle);
+        if (this.r1alive) {
+            canvasContext.rotate(this.r1angle);
+            this.r1anim.render({
+                x: -w/2,
+                y: -h/2,
+                width: w,
+                height: h
+            })
+            canvasContext.rotate(-this.r1angle);
+        }
         // -- middle ring
-        canvasContext.rotate(this.r2angle);
-        this.r2anim.render({
-            x: -w/2,
-            y: -h/2,
-            width: w,
-            height: h
-        })
-        canvasContext.rotate(-this.r2angle);
+        if (this.r2alive) {
+            canvasContext.rotate(this.r2angle);
+            this.r2anim.render({
+                x: -w/2,
+                y: -h/2,
+                width: w,
+                height: h
+            })
+            canvasContext.rotate(-this.r2angle);
+        }
         // -- inner ring
         canvasContext.rotate(this.r3angle);
         this.r3anim.render({
@@ -233,7 +233,7 @@ class Tileeater {
         */
     
         // -- health bar
-        if(this.health < 800) {
+        if(this.health < this.maxHealth) {
             fillRect(this.x-5 - view.x, this.y - view.y - 8, this.health/20, 2, COLORS.tahitiGold);
         }
 
@@ -321,7 +321,7 @@ class Tileeater {
                     this.r3recalc = randomInt(60,150);
                 }
                 // detect state change
-                if (range < this.firingRange) {
+                if (range < this.firingRange && this.r2alive) {
                     this.state = 'aiming';
                     this.r1anim = this.r1sprites.animations['idle'];
                     this.r2anim = this.r2sprites.animations['idle'];
@@ -345,7 +345,7 @@ class Tileeater {
             }
 
             case 'aiming': {
-                if (range > this.firingRange) {
+                if (range > this.firingRange || !this.r2alive) {
                     this.state = 'idle';
                     this.r1anim = this.r1sprites.animations['idle'];
                     this.r2anim = this.r2sprites.animations['idle'];
@@ -369,6 +369,12 @@ class Tileeater {
             }
 
             case 'firing': {
+                if (!this.r2alive) {
+                    this.state = 'idle';
+                    this.r1anim = this.r1sprites.animations['idle'];
+                    this.r2anim = this.r2sprites.animations['idle'];
+                    this.r3anim = this.r3sprites.animations['idle'];
+                }
                 if (this.delay) {
                     this.delay--;
                 } else {
@@ -451,7 +457,7 @@ class Tileeater {
         // bullet collision detection
         world.bullets.forEach(bullet => {
             if (bullet.actor === this) return;
-            //update for 3 colliders
+            // check for collisions w/ armor points
             for(let armorPoint of this.armorPoints) {
                 if(armorPoint.health > 0 ) {
                     if(rectCollision(bullet.collider, armorPoint)) {
@@ -465,6 +471,25 @@ class Tileeater {
                         bullet.hit();
                         bullet.die();
                     }
+                }
+            }
+            // check for blocked collisions
+            let center = {x: this.x + this.width/2, y: this.y + this.height/2};
+            let d = distanceBetweenPoints(center, bullet);
+            if (this.r1alive) {
+                // bullets hitting outer shell w/ armor points don't do dammage
+                if (d < 28) bullet.die();
+            } else if (this.r2alive) {
+                if (d < 24) {
+                    bullet.hit();
+                    bullet.die();
+                    this.health -= 5;
+                }
+            } else {
+                if (d < 18) {
+                    bullet.hit();
+                    bullet.die();
+                    this.health -= 5;
                 }
             }
         })
@@ -486,7 +511,9 @@ class Tileeater {
         })
         
         // -- health is determined by armor points
-        this.health = this.armorPoints.reduce((acc, armorPoint) => {acc += armorPoint.health; return acc}, 0);
+        if (this.r1alive) {
+            this.health = this.armorPoints.reduce((acc, armorPoint) => {acc += armorPoint.health; return acc}, 0);
+        }
         if(this.health <= 0) {
             this.die();
         }
@@ -513,12 +540,10 @@ class Tileeater {
     }
 
     die() {
-        inventory.score+=100;
+        // effects on each "death"
         audio.playSound(loader.sounds[`bigSplode0${Math.floor(Math.random()*8)}`],
-        map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
+            map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
-
-        world.worldEntities.splice(world.entities.indexOf(this), 1);
 
         for(let i = 0; i < 40; i++) {
             let angle = (Math.PI*2/40) * i;
@@ -526,6 +551,27 @@ class Tileeater {
             world.bullets.push(new Bullet(this.x, this.y, Math.cos(angle)*4*Math.random(), Math.sin(angle)*2*Math.random(), COLORS.dirtyRed));
         }
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.dirtyRed));
+
+        // ring 1 death
+        if (this.r1alive) {
+            console.log(`-- ring 1 death`);
+            this.r1alive = false;
+            this.health = this.r2health;
+            this.maxHealth = this.r2health;
+        // ring 2 death
+        } else if (this.r2alive) {
+            console.log(`-- ring 2 death`);
+            this.r2alive = false;
+            this.health = this.r3health;
+            this.maxHealth = this.r3health;
+        // final death
+        } else {
+            console.log(`-- ring 3 death`);
+            this.r3alive = false;
+            inventory.score+=10000;
+            world.worldEntities.splice(world.entities.indexOf(this), 1);
+        }
+
     }
 
     updateCollider() {
