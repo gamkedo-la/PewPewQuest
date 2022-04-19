@@ -156,11 +156,12 @@ class Tileeater {
         this.r2anim = this.r2sprites.animations['idle'];
         this.r3anim = this.r3sprites.animations['idle'];
 
+        let dockoff = 8;
         this.dockpoints = [
-            {x: this.x+this.width/2, y:this.y+4},
-            {x: this.x+this.width/2, y:this.y+this.height-4},
-            {x:this.x+4, y: this.y+this.height/2},
-            {x: this.x+this.width-4, y: this.y+this.height/2},
+            {x: this.x+this.width/2, y:this.y+dockoff, state: 'dock_north'},
+            {x: this.x+this.width/2, y:this.y+this.height-dockoff, state: 'dock_south'},
+            {x: this.x+dockoff, y: this.y+this.height/2, state: 'dock_west'},
+            {x: this.x+this.width-dockoff, y: this.y+this.height/2, state: 'dock_east'},
         ]
 
         // order here is based on calculation in findDirection
@@ -205,21 +206,14 @@ class Tileeater {
         canvasContext.restore();
 
         // -- dock points
-        /*
         for (const dp of this.dockpoints) {
             fillRect(dp.x-view.x-2, dp.y-view.y-2, 4, 4, COLORS.topaz);
         }
-        */
     
         // -- health bar
         if(this.health < 800) {
             fillRect(this.x-5 - view.x, this.y - view.y - 8, this.health/20, 2, COLORS.tahitiGold);
         }
-        /*
-        if(this.health < 100) {
-            fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
-        }
-        */
 
         // dbg center
         //fillRect(this.x-view.x+this.width/2-2, this.y-view.y+this.height/2-2, 4, 4, "green");
@@ -252,7 +246,7 @@ class Tileeater {
         if (this.r1rate === 0 && this.r2rate === 0 && this.r3rate === 0) {
             if (!this.dockLocked) {
                 this.dockLocked = true;
-                this.delay = 30;
+                this.delay = 40;
             } else {
                 if (this.delay > 0) {
                     this.delay--;
@@ -336,7 +330,11 @@ class Tileeater {
                 if (this.delay) {
                     this.delay--;
                 } else {
-                    this.state = 'idle';
+                    if (range < this.playerRange) {
+                        this.state = 'aiming';
+                    } else {
+                        this.state = 'idle';
+                    }
                 }
                 break;
             }
@@ -536,6 +534,19 @@ class Tileeater {
         // direction which occurs at the beginning of the range (-PI) and end of the range (PI) of values.
         let dir_i = Math.round((angle + Math.PI) / cardinalUnit) % this.directions.length;
         return dir_i;
+    }
+
+    findBestDock(actor) {
+        let best = this.dockpoints[0];
+        let bestd = distanceBetweenPoints(this.dockpoints[0], actor);
+        for (let i=1; i<this.dockpoints.length; i++) {
+            let d = distanceBetweenPoints(this.dockpoints[i], actor);
+            if (d < bestd) {
+                best = this.dockpoints[i];
+                bestd = d;
+            }
+        }
+        return best;
     }
 
     findPlayerRange() {

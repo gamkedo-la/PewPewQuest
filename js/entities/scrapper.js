@@ -21,6 +21,7 @@ class Scrapper {
         //this.moveInterval = 5;
         this.moveSpeed = 0.2;
         this.moveInterval = 300;
+        this.dockRange = 20;
 
         this.collider = {
             x: this.x,
@@ -47,7 +48,8 @@ class Scrapper {
             DAMAGED: 2,
             SEEK_TILE: 3,
             EATING_TILE: 4,
-            DELIVERING_TILE: 5
+            DELIVERING_TILE: 5,
+            DOCKING: 6
         }
         this.state = this.states.SEEK_TILE
 
@@ -205,9 +207,10 @@ class Scrapper {
 
         let tileEater = world.worldEntities.filter(e => e.type === TILE_EATER)[0];
 
-        this.startX = tileEater.x + 40;
-        this.startY = tileEater.y + 40;
-        
+        // pick tile eater dock that is closest
+        let bestDock = tileEater.findBestDock(this);
+        this.startX = bestDock.x;
+        this.startY = bestDock.y;
 
        switch(this.state){
             case this.states.PLAYER_PILOTED: {
@@ -259,9 +262,17 @@ class Scrapper {
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
 
+                // signal tileeater to start dock sequence
+                if (distanceBetweenPoints(bestDock, this) < this.dockRange) {
+                    this.state = this.states.DOCKING;
+                    this.dockingTimer = 120;
+                }
+
+                /*
                 if(this.x - this.startX < 0.1 && this.y - this.startY < 0.1) {
                     this.state = this.states.SEEK_TILE;
                 }
+                */
 
                 //find nearest tileeater
                 //plot a path. I don't see a way around needing A* for this one, unless we confine
@@ -274,6 +285,41 @@ class Scrapper {
                     
                 break;
             }
+            case this.states.DOCKING: {
+                // handle docking delay (don't get stuck in docking state if tileeater is busy with other states)
+                this.dockingTimer--;
+                if (this.dockingTimer <= 0) {
+                    this.state = this.states.SEEK_TILE;
+                    this.waitForDock = false;
+                    break;
+                }
+                // detect out of range
+                if (distanceBetweenPoints(bestDock, this) > this.dockRange) {
+                    this.state = this.states.DELIVERING_TILE;
+                    this.waitForDock = false;
+                    break;
+                }
+                // signal tile eater
+                if (tileEater.state === 'idle') {
+                    console.log(`setting tileeater state: ${bestDock.state}`);
+                    tileEater.state = bestDock.state;
+                }
+                // wait for tile eater to be locked to requested dock
+                if (!tileEater.dockLocked) {
+                    this.waitForDock = true;
+                } else {
+                    // finish carrying to dock
+                    this.waitForDock = false;
+                    this.animState = "carry";
+                    this.angle = Math.atan2(this.startY - this.y, this.startX - this.x);
+                    this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
+                    this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
+                    if(this.x - this.startX < 0.1 && this.y - this.startY < 0.1) {
+                        this.state = this.states.SEEK_TILE;
+                    }
+                }
+                break;
+            }
        }
         
         this.updateCollider();
@@ -281,8 +327,10 @@ class Scrapper {
             this.die();
         }
         this.bump = lerp(this.bump, 0, 0.1);
-        this.x = intLerp(this.x, this.target.x, 0.1);
-        this.y = intLerp(this.y, this.target.y, 0.1);
+        if (!this.waitForDock) {
+            this.x = intLerp(this.x, this.target.x, 0.1);
+            this.y = intLerp(this.y, this.target.y, 0.1);
+        }
 
         if(this.bump < 0.01) { this.bump = 0;}
         
