@@ -308,13 +308,12 @@ class Tileeater {
             case 'aiming': {
                 if (range > this.playerRange) {
                     this.state = 'idle';
-                    this.r2rate = (Math.random() > .5) ? 0.01 : -.01;
                     break;
                 }
                 // determine angle to target
                 let targetAngle = clampRoll(this.findDirectionTowardsPlayer() + Math.PI * .5, 0, Math.PI*2);
                 let delta = clampRoll(targetAngle - this.r2angle, -Math.PI, Math.PI);
-                this.r2rate = (delta > 0) ? .02 : -.02;
+                this.r2rate = (delta > 0) ? .04 : -.04;
                 // close enough to player angle, fire
                 if (Math.abs(delta) < .1) {
                     this.state = 'firing';
