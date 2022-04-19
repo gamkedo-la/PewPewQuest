@@ -55,7 +55,9 @@ class Tileeater {
         //this.moveInterval = 5;
         this.moveSpeed = 0.2;
         this.moveInterval = 100;
-        this.playerRange = 75;
+
+        this.firingRange = 75;
+        this.collisionRange = 32;
 
         this.r1angle = 0;
         this.r2angle = 0;
@@ -134,6 +136,18 @@ class Tileeater {
                     loop: true,
                     noInterrupt: true
                 },
+                alarm: {
+                    frames: '1..2',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+                firing: {
+                    frames: '3..9',
+                    frameRate: 8,
+                    loop: true,
+                    noInterrupt: true
+                },
             }
         })
 
@@ -145,6 +159,12 @@ class Tileeater {
             animations: {
                 idle: {
                     frames: '0',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+                alarm: {
+                    frames: '1..2',
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
@@ -206,14 +226,18 @@ class Tileeater {
         canvasContext.restore();
 
         // -- dock points
+        /*
         for (const dp of this.dockpoints) {
             fillRect(dp.x-view.x-2, dp.y-view.y-2, 4, 4, COLORS.topaz);
         }
+        */
     
         // -- health bar
         if(this.health < 800) {
             fillRect(this.x-5 - view.x, this.y - view.y - 8, this.health/20, 2, COLORS.tahitiGold);
         }
+
+        fillRect(this.collider.left-view.x, this.collider.top-view.y, w, h, 'rgba(255,0,0,.15)');
 
         // dbg center
         //fillRect(this.x-view.x+this.width/2-2, this.y-view.y+this.height/2-2, 4, 4, "green");
@@ -224,25 +248,24 @@ class Tileeater {
         }
     }
 
+    rotateTo(which, targetAngle, rate) {
+        let angleTag = `${which}angle`;
+        let rateTag = `${which}rate`;
+        let delta = clampRoll(targetAngle - this[angleTag], -Math.PI, Math.PI);
+        if (Math.abs(delta) < .1) {
+            this[rateTag] = 0;
+            this[angleTag] = targetAngle;
+            return true;
+        } else {
+            this[rateTag] = (delta > 0) ? rate : -rate;
+            return false;
+        }
+    }
+
     updateDock(targetAngle) {
-        let r1delta = clampRoll(targetAngle - this.r1angle, -Math.PI, Math.PI);
-        this.r1rate = (r1delta > 0) ? .04 : -.04;
-        let r2delta = clampRoll(targetAngle - this.r2angle, -Math.PI, Math.PI);
-        this.r2rate = (r2delta > 0) ? .04 : -.04;
-        let r3delta = clampRoll(targetAngle - this.r3angle, -Math.PI, Math.PI);
-        this.r3rate = (r3delta > 0) ? .04 : -.04;
-        if (Math.abs(r1delta) < .1) {
-            this.r1rate = 0;
-            this.r1angle = targetAngle;
-        }
-        if (Math.abs(r2delta) < .1) {
-            this.r2rate = 0;
-            this.r2angle = targetAngle;
-        }
-        if (Math.abs(r3delta) < .1) {
-            this.r3rate = 0;
-            this.r3angle = targetAngle;
-        }
+        this.rotateTo('r1', targetAngle, .04);
+        this.rotateTo('r2', targetAngle, .04);
+        this.rotateTo('r3', targetAngle, .04);
         if (this.r1rate === 0 && this.r2rate === 0 && this.r3rate === 0) {
             if (!this.dockLocked) {
                 this.dockLocked = true;
@@ -285,8 +308,11 @@ class Tileeater {
                     this.r3recalc = randomInt(60,150);
                 }
                 // detect state change
-                if (range < this.playerRange) {
+                if (range < this.firingRange) {
                     this.state = 'aiming';
+                    this.r1anim = this.r1sprites.animations['idle'];
+                    this.r2anim = this.r2sprites.animations['idle'];
+                    this.r3anim = this.r3sprites.animations['alarm'];
                 }
                 // -- movement
                 if(ticker%this.moveInterval == 0){
@@ -306,22 +332,26 @@ class Tileeater {
             }
 
             case 'aiming': {
-                if (range > this.playerRange) {
+                if (range > this.firingRange) {
                     this.state = 'idle';
+                    this.r1anim = this.r1sprites.animations['idle'];
+                    this.r2anim = this.r2sprites.animations['idle'];
+                    this.r3anim = this.r3sprites.animations['idle'];
                     break;
                 }
                 // determine angle to target
-                let targetAngle = clampRoll(this.findDirectionTowardsPlayer() + Math.PI * .5, 0, Math.PI*2);
-                let delta = clampRoll(targetAngle - this.r2angle, -Math.PI, Math.PI);
-                this.r2rate = (delta > 0) ? .04 : -.04;
-                // close enough to player angle, fire
-                if (Math.abs(delta) < .1) {
+                let r2target = clampRoll(this.findDirectionTowardsPlayer() + Math.PI * .5, 0, Math.PI*2);
+                // check if close enough to player angle, fire
+                if (this.rotateTo('r2', r2target, .04)) {
                     this.state = 'firing';
-                    //this.state = 'dock_south';
-                    this.r2rate = 0;
-                    this.delay = 20;
+                    this.r1anim = this.r1sprites.animations['idle'];
+                    this.r2anim = this.r2sprites.animations['firing'];
+                    this.r2anim.reset();
+                    this.r3anim = this.r3sprites.animations['alarm'];
+                    this.delay = 40;
                 }
-                //console.log(`r2angle: ${this.r2angle} targetangle: ${this.targetAngle} delta: ${delta}`);
+                let r3target = 0;
+                this.rotateTo('r3', r3target, .04);
                 break;
             }
 
@@ -329,10 +359,16 @@ class Tileeater {
                 if (this.delay) {
                     this.delay--;
                 } else {
-                    if (range < this.playerRange) {
+                    if (range < this.firingRange) {
                         this.state = 'aiming';
+                        this.r1anim = this.r1sprites.animations['idle'];
+                        this.r2anim = this.r2sprites.animations['idle'];
+                        this.r3anim = this.r3sprites.animations['alarm'];
                     } else {
                         this.state = 'idle';
+                        this.r1anim = this.r1sprites.animations['idle'];
+                        this.r2anim = this.r2sprites.animations['idle'];
+                        this.r3anim = this.r3sprites.animations['idle'];
                     }
                 }
                 break;
@@ -372,19 +408,11 @@ class Tileeater {
         this.r1angle = clampRoll(this.r1angle, 0, Math.PI*2);
         this.r2angle = clampRoll(this.r2angle, 0, Math.PI*2);
         this.r3angle = clampRoll(this.r3angle, 0, Math.PI*2);
-        /*
-        if (this.r1angle > Math.PI*2) this.r1angle = this.r1angle - Math.PI*2;
-        if (this.r2angle > Math.PI*2) this.r2angle = this.r2angle - Math.PI*2;
-        if (this.r3angle > Math.PI*2) this.r3angle = this.r3angle - Math.PI*2;
-        */
-        
 
-        //let anim_tag = `${this.state}_${this.directions[this.findDirection()]}`;
-        //console.log(`dir: ${this.findDirection()} anim_tag: ${anim_tag}`);
-        //this.currentAnimation = this.spritesheet.animations[ anim_tag ];
-        //this.currentAnimation.update();
-
-       
+        // update animations
+        this.r1anim.update();
+        this.r2anim.update();
+        this.r3anim.update();
         
         this.updateCollider();
 
@@ -399,26 +427,12 @@ class Tileeater {
 
         if(this.bump < 0.01) { this.bump = 0;}
         
-        if(rectCollision(this.collider, player.collider)) {
-            //signal.dispatch('keysChanged', {amount: 1})
-            //inventory.items.keys -= 1;
+        if (range < this.collisionRange) {
+        //if(rectCollision(this.collider, player.collider)) {
            collisionResponse(player, this);
-           
         }
 
         //todo, need a line vs. rect method for bullets vs evertything
-
-        /*
-        world.bullets.forEach(bullet => {
-            if(rectCollision(this.collider, bullet.collider)) {
-                audio.playSound(loader.sounds[`enemyHurt0${Math.floor(Math.random()*8)}`],
-                map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.4, 1+Math.random()*0.2, false);
-                this.health -= 10;
-                bullet.die();
-                this.bump = 5;
-            }
-        })
-        */
 
         // bullet collision detection
         world.bullets.forEach(bullet => {

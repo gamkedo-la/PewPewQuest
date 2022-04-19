@@ -209,6 +209,7 @@ function getAABBDistanceBetween(e1, e2){
 
 function getAABBOverlap(e1, e2){
     //console.log(e1, e2);
+    /*
     let dx = 0, dy = 0
     if (e1.left < e2.left)
     {
@@ -218,7 +219,6 @@ function getAABBOverlap(e1, e2){
     {
         dx =(e2.right) - e1.left;
     }
-
     if (e1.top < e2.top)
     {
         dy = (e1.bottom) - e2.top;
@@ -227,10 +227,18 @@ function getAABBOverlap(e1, e2){
     {
         dy = (e2.bottom) - e1.top;
     }
-
-    
-
     return ({dx:dx, dy:dy});
+    */
+
+    // bounding box of collision
+    let minx = Math.max(e1.left, e2.left);
+    let maxx = Math.min(e1.right, e2.right);
+    let miny = Math.max(e1.top, e2.top);
+    let maxy = Math.min(e1.bottom, e2.bottom);
+    let width = maxx-minx;
+    let height = maxy-miny;
+    return ({dx:width, dy: height});
+    
 }
 function collisionResponse(entity1, entity){
     //entity1 is moving, entity is static
