@@ -262,6 +262,36 @@ class Scrapper {
                 //change animation to grabbing/eating
                 this.animState="grab";
                 this.tileTimer--
+                for(let i = 0; i < 2; i++) {
+                    let particle = new Particle(
+                        this.x + this.tileGripOffset.x +  Math.random()*8 - 4,
+                        this.y + this.tileGripOffset.y,
+                        0, Math.random() * -1,
+                        {color: COLORS.dirtyRed, life: Math.random() * 20}
+                         );
+                    world.entities.push(particle);
+                    particle = new Particle(
+                        this.x + this.tileGripOffset.x,
+                        this.y + this.tileGripOffset.y + Math.random()*8 - 4,
+                        Math.random() * -1, 0,
+                        {color: COLORS.dirtyRed, life: Math.random() * 20}
+                         );
+                    world.entities.push(particle);
+                    particle = new Particle(
+                        this.x + this.tileGripOffset.x +  Math.random()*8 - 4,
+                        this.y + this.tileGripOffset.y,
+                        0, Math.random(),
+                        {color: COLORS.dirtyRed, life: Math.random() * 20}
+                         );
+                    world.entities.push(particle);
+                    particle = new Particle(
+                        this.x + this.tileGripOffset.x,
+                        this.y + this.tileGripOffset.y +  Math.random()*8 -4,
+                        Math.random(), 0,
+                        {color: COLORS.dirtyRed, life: Math.random() * 20}
+                         );
+                    world.entities.push(particle);
+                }
                 if(this.tileTimer <= 0) {
                     this.state = this.states.DELIVERING_TILE;
                     let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
