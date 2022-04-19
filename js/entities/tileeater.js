@@ -281,6 +281,19 @@ class Tileeater {
         }
     }
 
+    fireBullet() {
+        let tax = Math.cos(this.targetAngle);
+        let tay = Math.sin(this.targetAngle);
+        let fx = this.collider.left + this.width/2 + tax*36;
+        let fy = this.collider.top + this.height/2 + tay*36;
+        audio.playSound(loader.sounds.pewpew2, 0, 0.1)
+        for (let i=0; i<randomInt(2,8); i++) {
+            let bullet = new Bullet(fx, fy, tax * randomRange(3,5), tay * randomRange(3,5));
+            bullet.actor = this;
+            world.bullets.push(bullet);
+        }
+    }
+
     update() {
         
         // -- range to player
@@ -340,9 +353,9 @@ class Tileeater {
                     break;
                 }
                 // determine angle to target
-                let r2target = clampRoll(this.findDirectionTowardsPlayer() + Math.PI * .5, 0, Math.PI*2);
+                this.targetAngle = clampRoll(this.findDirectionTowardsPlayer(), 0, Math.PI*2);
                 // check if close enough to player angle, fire
-                if (this.rotateTo('r2', r2target, .04)) {
+                if (this.rotateTo('r2', this.targetAngle+Math.PI*.5, .04)) {
                     this.state = 'firing';
                     this.r1anim = this.r1sprites.animations['idle'];
                     this.r2anim = this.r2sprites.animations['firing'];
@@ -360,6 +373,7 @@ class Tileeater {
                     this.delay--;
                 } else {
                     if (range < this.firingRange) {
+                        this.fireBullet();
                         this.state = 'aiming';
                         this.r1anim = this.r1sprites.animations['idle'];
                         this.r2anim = this.r2sprites.animations['idle'];
@@ -436,6 +450,7 @@ class Tileeater {
 
         // bullet collision detection
         world.bullets.forEach(bullet => {
+            if (bullet.actor === this) return;
             //update for 3 colliders
             for(let armorPoint of this.armorPoints) {
                 if(armorPoint.health > 0 ) {
