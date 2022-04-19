@@ -55,7 +55,7 @@ class Tileeater {
         //this.moveInterval = 5;
         this.moveSpeed = 0.2;
         this.moveInterval = 100;
-        this.playerRange = 100;
+        this.playerRange = 75;
 
         this.r1angle = 0;
         this.r2angle = 0;
@@ -63,6 +63,9 @@ class Tileeater {
         this.r1rate = .02;
         this.r2rate = -.03;
         this.r3rate = .01;
+        this.r1recalc = 0;
+        this.r2recalc = 0;
+        this.r3recalc = 0;
 
         this.collider = {
             x: this.x,
@@ -227,6 +230,40 @@ class Tileeater {
         }
     }
 
+    updateDock(targetAngle) {
+        let r1delta = clampRoll(targetAngle - this.r1angle, -Math.PI, Math.PI);
+        this.r1rate = (r1delta > 0) ? .04 : -.04;
+        let r2delta = clampRoll(targetAngle - this.r2angle, -Math.PI, Math.PI);
+        this.r2rate = (r2delta > 0) ? .04 : -.04;
+        let r3delta = clampRoll(targetAngle - this.r3angle, -Math.PI, Math.PI);
+        this.r3rate = (r3delta > 0) ? .04 : -.04;
+        if (Math.abs(r1delta) < .1) {
+            this.r1rate = 0;
+            this.r1angle = targetAngle;
+        }
+        if (Math.abs(r2delta) < .1) {
+            this.r2rate = 0;
+            this.r2angle = targetAngle;
+        }
+        if (Math.abs(r3delta) < .1) {
+            this.r3rate = 0;
+            this.r3angle = targetAngle;
+        }
+        if (this.r1rate === 0 && this.r2rate === 0 && this.r3rate === 0) {
+            if (!this.dockLocked) {
+                this.dockLocked = true;
+                this.delay = 30;
+            } else {
+                if (this.delay > 0) {
+                    this.delay--;
+                } else {
+                    this.dockLocked = false;
+                    this.state = 'idle';
+                }
+            }
+        }
+    }
+
     update() {
         
         // -- range to player
@@ -235,12 +272,28 @@ class Tileeater {
         switch (this.state) {
             case 'idle': {
                 // adjust ring rotation rates
+                this.r1recalc--;
+                if (this.r1rate === 0 || this.r1recalc <= 0) {
+                    this.r1rate = randomRange(0.015, 0.03);
+                    if (Math.random() > .5) this.r1rate = -this.r1rate;
+                    this.r1recalc = randomInt(60,150);
+                }
+                this.r2recalc--;
+                if (this.r2rate === 0 || this.r2recalc <= 0) {
+                    this.r2rate = randomRange(0.015, 0.03);
+                    if (Math.random() > .5) this.r2rate = -this.r2rate;
+                    this.r2recalc = randomInt(60,150);
+                }
+                this.r3recalc--;
+                if (this.r3rate === 0 || this.r3recalc <= 0) {
+                    this.r3rate = randomRange(0.015, 0.03);
+                    if (Math.random() > .5) this.r3rate = -this.r3rate;
+                    this.r3recalc = randomInt(60,150);
+                }
                 // detect state change
                 if (range < this.playerRange) {
                     this.state = 'aiming';
-                    this.targetAngle = this.findDirectionTowardsPlayer();
                 }
-
                 // -- movement
                 if(ticker%this.moveInterval == 0){
                     this.target.x = this.x + (Math.random() * 2 - 1) * 15;
@@ -257,6 +310,7 @@ class Tileeater {
 
                 break;
             }
+
             case 'aiming': {
                 if (range > this.playerRange) {
                     this.state = 'idle';
@@ -264,28 +318,54 @@ class Tileeater {
                     break;
                 }
                 // determine angle to target
-                this.targetAngle = clampRoll(this.findDirectionTowardsPlayer() + Math.PI * .5, 0, Math.PI*2);
-                let delta = clampRoll(this.targetAngle - this.r2angle, -Math.PI, Math.PI);
+                let targetAngle = clampRoll(this.findDirectionTowardsPlayer() + Math.PI * .5, 0, Math.PI*2);
+                let delta = clampRoll(targetAngle - this.r2angle, -Math.PI, Math.PI);
                 this.r2rate = (delta > 0) ? .02 : -.02;
-
                 // close enough to player angle, fire
                 if (Math.abs(delta) < .1) {
                     this.state = 'firing';
+                    //this.state = 'dock_south';
                     this.r2rate = 0;
-                    this.fireDelay = 20;
+                    this.delay = 20;
                 }
                 //console.log(`r2angle: ${this.r2angle} targetangle: ${this.targetAngle} delta: ${delta}`);
-                
-                // determine angle to jk
                 break;
             }
+
             case 'firing': {
-                if (this.fireDelay) {
-                    this.fireDelay--;
+                if (this.delay) {
+                    this.delay--;
                 } else {
                     this.state = 'idle';
                 }
+                break;
             }
+
+            case 'dock_east': {
+                let targetAngle = Math.PI *1.5;
+                this.updateDock(targetAngle);
+                break;
+            }
+
+            case 'dock_west': {
+                let targetAngle = Math.PI *.5;
+                this.updateDock(targetAngle);
+                break;
+            }
+
+            case 'dock_north': {
+                let targetAngle = Math.PI;
+                this.updateDock(targetAngle);
+                break;
+            }
+
+            case 'dock_south': {
+                let targetAngle = 0;
+                this.updateDock(targetAngle);
+                break;
+            }
+
+
         }
 
         // update angles

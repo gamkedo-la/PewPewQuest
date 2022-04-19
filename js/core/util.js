@@ -108,6 +108,14 @@ function pointInRect(x, y, rect){
             y <= rect.bottom
 }
 
+function randomInt(max, min=0) {
+    return Math.round(Math.random() * (max-min)) + min;
+}
+
+function randomRange(max, min=0) {
+    return (Math.random() * (max-min)) + min;
+}
+
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
