@@ -53,7 +53,6 @@ class Scrapper {
         }
         this.state = this.states.SEEK_TILE
 
-        this.animState = "idle"
 
         this.spritesheet = spritesheet({
             image: img['scrapper'],
@@ -84,9 +83,16 @@ class Scrapper {
                 },
 
                 sleep_north: {
-                    frames: '14',
+                    frames: 14,
                     frameRate: 10,
                     loop: true,
+                    noInterrupt: true
+                },
+
+                unload_north: {
+                    frames: [14,14],
+                    frameRate: 1,
+                    loop: false,
                     noInterrupt: true
                 },
 
@@ -112,9 +118,16 @@ class Scrapper {
                 },
 
                 sleep_west: {
-                    frames: '29',
+                    frames: 29,
                     frameRate: 10,
                     loop: true,
+                    noInterrupt: true
+                },
+
+                unload_west: {
+                    frames: [29,29],
+                    frameRate: 1,
+                    loop: false,
                     noInterrupt: true
                 },
 
@@ -140,9 +153,16 @@ class Scrapper {
                 },
 
                 sleep_south: {
-                    frames: '44',
+                    frames: 44,
                     frameRate: 10,
                     loop: true,
+                    noInterrupt: true
+                },
+
+                unload_south: {
+                    frames: [44,44],
+                    frameRate: 1,
+                    loop: false,
                     noInterrupt: true
                 },
 
@@ -168,16 +188,21 @@ class Scrapper {
                 },
 
                 sleep_east: {
-                    frames: '59',
+                    frames: 59,
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
                 },
 
+                unload_east: {
+                    frames: [59,59],
+                    frameRate: 1,
+                    loop: false,
+                    noInterrupt: true
+                },
+
             }
         })
-
-        this.currentAnimation = this.spritesheet.animations['idle_east'];
 
         // order here is based on calculation in findDirection
         this.direction = 2;
@@ -189,7 +214,10 @@ class Scrapper {
             {x: 12, y: 23}
         ]
         this.tileGripOffset = this.tileGripOffsets[this.direction];
-        this.animState = 'idle';
+        
+        // -- this.currentAnimation
+        // -- this.animState
+        this.setDirectionalAnim("idle");
 
     }
 
@@ -210,16 +238,24 @@ class Scrapper {
         pset(this.x - view.x + this.tileGripOffsets[3].x, this.y - view.y + this.tileGripOffsets[3].y, COLORS.tahitiGold);
     }
 
+    setDirectionalAnim(state) {
+        this.animState = state;
+        let anim_tag = `${state}_${this.directions[this.direction]}`;
+        let anim = this.spritesheet.animations[ anim_tag ];
+        if (this.currentAnimation !== anim) {
+            anim.reset();
+            this.currentAnimation = anim;
+        }
+    }
+
     update() {
         if(ticker%50 === 0 && this.state != this.states.EATING_TILE) {
             this.direction = this.findDirection();
         }
         this.tileGripOffset = this.tileGripOffsets[this.direction];
 
-        let anim_tag = `${this.animState}_${this.directions[this.direction]}`;
-        //console.log(`dir: ${this.findDirection()} anim_tag: ${anim_tag}`);
-        this.currentAnimation = this.spritesheet.animations[ anim_tag ];
         this.currentAnimation.update();
+        //console.log(`anim state: ${this.animState} cf: ${this.currentAnimation.currentFrame} fl: ${this.currentAnimation.frames.length} accum: ${this.currentAnimation.accumulator.toFixed(2)} done: ${this.currentAnimation.done} loop: ${this.currentAnimation.loop}`);
 
         let tileEater = world.worldEntities.filter(e => e.type === TILE_EATER)[0];
 
@@ -227,6 +263,7 @@ class Scrapper {
         let bestDock = tileEater.findBestDock(this);
         this.startX = bestDock.x;
         this.startY = bestDock.y;
+        let waitForDock = false;
 
        switch(this.state){
             case this.states.PLAYER_PILOTED: {
@@ -237,6 +274,7 @@ class Scrapper {
                 break;
             }
             case this.states.SEEK_TILE: {
+                this.setDirectionalAnim("idle");
                 //find nearest tile from spawn/start location that isn't eaten
                    //pick random tile location from onscreen tiles
                    
@@ -244,7 +282,7 @@ class Scrapper {
                      //if tile is solid and not eaten, move to it
  
                 if(ticker%this.moveInterval == 0) {
-                this.angle = Math.random() * Math.PI*2;
+                    this.angle = Math.random() * Math.PI*2;
                 }
                 this.moveSpeed = 0.2;
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
@@ -260,7 +298,7 @@ class Scrapper {
             }
             case this.states.EATING_TILE: {
                 //change animation to grabbing/eating
-                this.animState="grab";
+                this.setDirectionalAnim("grab");
                 this.tileTimer--
                 for(let i = 0; i < 2; i++) {
                     let particle = new Particle(
@@ -308,7 +346,7 @@ class Scrapper {
                 break;
             }   
             case this.states.DELIVERING_TILE: {
-                this.animState = "carry";
+                this.setDirectionalAnim("carry");
                 this.angle = Math.atan2(this.startY - this.y, this.startX - this.x);
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
@@ -316,24 +354,8 @@ class Scrapper {
                 // signal tileeater to start dock sequence
                 if (distanceBetweenPoints(bestDock, this) < this.dockRange) {
                     this.state = this.states.DOCKING;
-                    this.dockingTimer = 120;
+                    this.dockingTimer = 150;
                 }
-
-                /*
-                if(this.x - this.startX < 0.1 && this.y - this.startY < 0.1) {
-                    this.state = this.states.SEEK_TILE;
-                }
-                */
-
-                //find nearest tileeater
-                //plot a path. I don't see a way around needing A* for this one, unless we confine
-                //the appearance of these guys to big areas that also contain tile eaters
-
-                //move towards tile eater
-                //if tile eater is within range,
-                    //set animation direction to south
-                    //trigger docking animation/tween
-                    
                 break;
             }
             case this.states.DOCKING: {
@@ -341,31 +363,44 @@ class Scrapper {
                 this.dockingTimer--;
                 if (this.dockingTimer <= 0) {
                     this.state = this.states.SEEK_TILE;
-                    this.waitForDock = false;
+                    this.unloading = false;
                     break;
                 }
                 // detect out of range
-                if (distanceBetweenPoints(bestDock, this) > this.dockRange) {
+                let range = distanceBetweenPoints(bestDock, this);
+                if (range > this.dockRange) {
                     this.state = this.states.DELIVERING_TILE;
-                    this.waitForDock = false;
+                    this.unloading = false;
                     break;
                 }
                 // signal tile eater
                 if (tileEater.state === 'idle') {
-                    console.log(`setting tileeater state: ${bestDock.state}`);
                     tileEater.state = bestDock.state;
-                }
+                    waitForDock = true;
                 // wait for tile eater to be locked to requested dock
-                if (!tileEater.dockLocked) {
-                    this.waitForDock = true;
-                } else {
-                    // finish carrying to dock
-                    this.waitForDock = false;
-                    this.animState = "carry";
+                } else if (!tileEater.dockLocked || tileEater.state !== bestDock.state) {
+                    waitForDock = true;
+                // finish carrying to dock
+                } else if (range > .2) {
+                    waitForDock = false;
+                    this.setDirectionalAnim("carry");
                     this.angle = Math.atan2(this.startY - this.y, this.startX - this.x);
                     this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                     this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
-                    if(this.x - this.startX < 0.1 && this.y - this.startY < 0.1) {
+                // within range of dock...
+                } else {
+                    if (!this.unloading) {
+                        this.unloading = true;
+                        this.animState = bestDock.unloadAnim;
+                        this.currentAnimation = this.spritesheet.animations[this.animState];
+                        this.currentAnimation.reset();
+                    }
+                    if (!this.currentAnimation.done) {
+                        // console.log(`anim done: ${this.currentAnimation.done}`);
+                    // finish ... go back to seeking next tile
+                    } else {
+                        console.log(`loading is done: ${this.currentAnimation.done}`);
+                        this.unloading = false;
                         this.state = this.states.SEEK_TILE;
                     }
                 }
@@ -378,7 +413,7 @@ class Scrapper {
             this.die();
         }
         this.bump = lerp(this.bump, 0, 0.1);
-        if (!this.waitForDock) {
+        if (!waitForDock) {
             this.x = intLerp(this.x, this.target.x, 0.1);
             this.y = intLerp(this.y, this.target.y, 0.1);
         }

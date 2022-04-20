@@ -127,7 +127,7 @@ class Tileeater {
             frameMargin: 0,
             animations: {
                 idle: {
-                    frames: '0',
+                    frames: 0,
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
@@ -173,11 +173,15 @@ class Tileeater {
         this.r3anim = this.r3sprites.animations['idle'];
 
         let dockoff = 8;
+        let scrapperOffset = {
+            x: -12,
+            y: -12,
+        }
         this.dockpoints = [
-            {x: this.x+this.width/2, y:this.y+dockoff, state: 'dock_north'},
-            {x: this.x+this.width/2, y:this.y+this.height-dockoff, state: 'dock_south'},
-            {x: this.x+dockoff, y: this.y+this.height/2, state: 'dock_west'},
-            {x: this.x+this.width-dockoff, y: this.y+this.height/2, state: 'dock_east'},
+            {x: this.x+this.width/2+scrapperOffset.x, y:this.y+scrapperOffset.y+dockoff, state: 'dock_north', unloadAnim: 'unload_north'},
+            {x: this.x+this.width/2+scrapperOffset.x, y:this.y+scrapperOffset.y+this.height-dockoff, state: 'dock_south', unloadAnim: 'unload_south'},
+            {x: this.x+scrapperOffset.x+dockoff, y: this.y+this.height/2+scrapperOffset.y, state: 'dock_west', unloadAnim: 'unload_west'},
+            {x: this.x+scrapperOffset.x+this.width-dockoff, y: this.y+this.height/2+scrapperOffset.y, state: 'dock_east', unloadAnim: 'unload_east'},
         ]
 
         // order here is based on calculation in findDirection
@@ -225,22 +229,16 @@ class Tileeater {
         })
         canvasContext.restore();
 
-        // -- dock points
-        /*
-        for (const dp of this.dockpoints) {
-            fillRect(dp.x-view.x-2, dp.y-view.y-2, 4, 4, COLORS.topaz);
-        }
-        */
-    
         // -- health bar
         if(this.health < this.maxHealth) {
             fillRect(this.x-5 - view.x, this.y - view.y - 8, this.health/20, 2, COLORS.tahitiGold);
         }
 
-        fillRect(this.collider.left-view.x, this.collider.top-view.y, w, h, 'rgba(255,0,0,.15)');
 
-        // dbg center
-        //fillRect(this.x-view.x+this.width/2-2, this.y-view.y+this.height/2-2, 4, 4, "green");
+        // dbg
+        // fillRect(this.x-view.x+this.width/2-2, this.y-view.y+this.height/2-2, 4, 4, "green");
+        // fillRect(this.collider.left-view.x, this.collider.top-view.y, w, h, 'rgba(255,0,0,.15)');
+        // for (const dp of this.dockpoints) fillRect(dp.x-view.x-2, dp.y-view.y-2, 4, 4, COLORS.topaz);
 
         // armor points
         for (const ap of this.armorPoints) {
@@ -554,19 +552,16 @@ class Tileeater {
 
         // ring 1 death
         if (this.r1alive) {
-            console.log(`-- ring 1 death`);
             this.r1alive = false;
             this.health = this.r2health;
             this.maxHealth = this.r2health;
         // ring 2 death
         } else if (this.r2alive) {
-            console.log(`-- ring 2 death`);
             this.r2alive = false;
             this.health = this.r3health;
             this.maxHealth = this.r3health;
         // final death
         } else {
-            console.log(`-- ring 3 death`);
             this.r3alive = false;
             inventory.score+=10000;
             world.worldEntities.splice(world.entities.indexOf(this), 1);
