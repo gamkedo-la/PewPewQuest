@@ -329,14 +329,6 @@ class Tileeater {
                 if(ticker%this.moveInterval == 0){
                     this.target.x = this.x + (Math.random() * 2 - 1) * 15;
                     this.target.y = this.y + (Math.random() * 2 - 1) * 15;
-                    this.targetX += Math.cos(this.findDirectionTowardsPlayer()) * 32;
-                    this.targetY += Math.sin(this.findDirectionTowardsPlayer()) * 32;
-                    while(this.checkWorldCollision(this.target.x, this.target.y) ) {
-                        this.target.x = this.x + (Math.random() * 2 - 1) * 15;
-                        this.target.y = this.y + (Math.random() * 2 - 1) * 15;
-                        this.targetX += Math.cos(this.findDirectionTowardsPlayer()) * 32;
-                        this.targetY += Math.sin(this.findDirectionTowardsPlayer()) * 32;
-                    }
                 }
 
                 break;
