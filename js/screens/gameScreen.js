@@ -106,7 +106,7 @@ var gameScreen = {
                 entity.update()
             }else{
 
-                if (entity.type == SPLODE){
+                if (entity.type == SPLODE || entity.type == PARTICLE) {
                     entity.die();
                 }
 
