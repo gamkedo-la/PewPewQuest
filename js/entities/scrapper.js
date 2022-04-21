@@ -91,7 +91,7 @@ class Scrapper {
                 },
 
                 unload_north: {
-                    frames: '70..74',
+                    frames: ['70..74',74,74],
                     frameRate: 10,
                     loop: false,
                     noInterrupt: true
@@ -126,7 +126,7 @@ class Scrapper {
                 },
 
                 unload_west: {
-                    frames: '65..69',
+                    frames: ['65..69',69,69],
                     frameRate: 10,
                     loop: false,
                     noInterrupt: true
@@ -161,7 +161,7 @@ class Scrapper {
                 },
 
                 unload_south: {
-                    frames: '75..79',
+                    frames: ['75..79',79,79],
                     frameRate: 10,
                     loop: false,
                     noInterrupt: true
@@ -380,7 +380,7 @@ class Scrapper {
                 // signal tileeater to start dock sequence
                 if (distanceBetweenPoints(bestDock, this) < this.dockRange) {
                     this.state = this.states.DOCKING;
-                    this.dockingTimer = 160;
+                    this.dockingTimer = 250;
                 }
                 break;
             }
