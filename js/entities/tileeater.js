@@ -177,11 +177,12 @@ class Tileeater {
             x: -12,
             y: -12,
         }
+        // directions here come from the scrapper definition
         this.dockpoints = [
-            {x: this.x+this.width/2+scrapperOffset.x, y:this.y+scrapperOffset.y+dockoff, state: 'dock_north', unloadAnim: 'unload_north'},
-            {x: this.x+this.width/2+scrapperOffset.x, y:this.y+scrapperOffset.y+this.height-dockoff, state: 'dock_south', unloadAnim: 'unload_south'},
-            {x: this.x+scrapperOffset.x+dockoff, y: this.y+this.height/2+scrapperOffset.y, state: 'dock_west', unloadAnim: 'unload_west'},
-            {x: this.x+scrapperOffset.x+this.width-dockoff, y: this.y+this.height/2+scrapperOffset.y, state: 'dock_east', unloadAnim: 'unload_east'},
+            {x: this.x+this.width/2+scrapperOffset.x, y:this.y+scrapperOffset.y+dockoff, state: 'dock_north', dir: 1, unloadAnim: 'unload_north'},
+            {x: this.x+this.width/2+scrapperOffset.x, y:this.y+scrapperOffset.y+this.height-dockoff, state: 'dock_south', dir: 3, unloadAnim: 'unload_south'},
+            {x: this.x+scrapperOffset.x+dockoff, y: this.y+this.height/2+scrapperOffset.y, state: 'dock_west', dir: 0, unloadAnim: 'unload_west'},
+            {x: this.x+scrapperOffset.x+this.width-dockoff, y: this.y+this.height/2+scrapperOffset.y, state: 'dock_east', dir: 2, unloadAnim: 'unload_east'},
         ]
 
         // order here is based on calculation in findDirection

@@ -22,6 +22,7 @@ class Scrapper {
         this.moveSpeed = 0.2;
         this.moveInterval = 300;
         this.dockRange = 20;
+        this.unloadOffset = {x: 0, y: 0};
 
         this.collider = {
             x: this.x,
@@ -90,8 +91,8 @@ class Scrapper {
                 },
 
                 unload_north: {
-                    frames: [14,14],
-                    frameRate: 1,
+                    frames: '70..74',
+                    frameRate: 10,
                     loop: false,
                     noInterrupt: true
                 },
@@ -125,8 +126,8 @@ class Scrapper {
                 },
 
                 unload_west: {
-                    frames: [29,29],
-                    frameRate: 1,
+                    frames: '65..69',
+                    frameRate: 10,
                     loop: false,
                     noInterrupt: true
                 },
@@ -160,8 +161,8 @@ class Scrapper {
                 },
 
                 unload_south: {
-                    frames: [44,44],
-                    frameRate: 1,
+                    frames: '75..79',
+                    frameRate: 10,
                     loop: false,
                     noInterrupt: true
                 },
@@ -195,8 +196,8 @@ class Scrapper {
                 },
 
                 unload_east: {
-                    frames: [59,59],
-                    frameRate: 1,
+                    frames: ['60..64',64,64],
+                    frameRate: 10,
                     loop: false,
                     noInterrupt: true
                 },
@@ -213,6 +214,12 @@ class Scrapper {
             {x: 28, y: 12},
             {x: 12, y: 23}
         ]
+        this.directionVectors = [
+            {x:-1, y: 0},
+            {x:0, y: -1},
+            {x:1, y: 0},
+            {x:0, y: 1},
+        ];
         this.tileGripOffset = this.tileGripOffsets[this.direction];
         this.tileCarryOffsets = [
             {x: 8, y: 8},
@@ -232,7 +239,7 @@ class Scrapper {
         if (this.grabbedTile) {
             let offset = this.tileCarryOffsets[this.direction];
             //fillRect(this.x-view.x+offset.x, this.y-view.y+offset.y, 8, 8, "green");
-            world.drawImageTileAt(this.x+offset.x, this.y+offset.y, this.grabbedTile);
+            world.drawImageTileAt(this.x+offset.x+this.unloadOffset.x, this.y+offset.y+this.unloadOffset.y, this.grabbedTile);
         }
 
         this.currentAnimation.render({
@@ -373,7 +380,7 @@ class Scrapper {
                 // signal tileeater to start dock sequence
                 if (distanceBetweenPoints(bestDock, this) < this.dockRange) {
                     this.state = this.states.DOCKING;
-                    this.dockingTimer = 150;
+                    this.dockingTimer = 160;
                 }
                 break;
             }
@@ -384,6 +391,7 @@ class Scrapper {
                     this.state = this.states.SEEK_TILE;
                     this.unloading = false;
                     this.grabbedTile = null;
+                    this.unloadOffset = { x: 0, y: 0};
                     break;
                 }
                 // detect out of range
@@ -413,12 +421,20 @@ class Scrapper {
                 } else {
                     if (!this.unloading) {
                         this.unloading = true;
-                        //this.animState = bestDock.unloadAnim;
-                        //this.currentAnimation = this.spritesheet.animations[this.animState];
+                        // animation is set to unloading, which is a non-looping animation
+                        this.animState = bestDock.unloadAnim;
+                        this.direction = bestDock.dir;
+                        this.currentAnimation = this.spritesheet.animations[this.animState];
                         this.currentAnimation.reset();
+                        this.unloadOffset = { x: 0, y: 0};
                     }
                     if (!this.currentAnimation.done) {
-                        // console.log(`anim done: ${this.currentAnimation.done}`);
+                        // update unloading offset
+                        if (ticker%4 === 0) {
+                            let dv = this.directionVectors[this.direction];
+                            this.unloadOffset.x -= dv.x;
+                            this.unloadOffset.y -= dv.y;
+                        }
                     // finish ... go back to seeking next tile
                     } else {
                         console.log(`loading is done: ${this.currentAnimation.done}`);
@@ -427,6 +443,7 @@ class Scrapper {
                         this.setDirectionalAnim("carry", dir); 
                         this.state = this.states.SEEK_TILE;
                         this.grabbedTile = null;
+                        this.unloadOffset = { x: 0, y: 0};
                     }
                 }
                 break;
@@ -527,4 +544,5 @@ class Scrapper {
         let angle = Math.atan2(yDir, xDir);
         return angle;
     }
+
 }
