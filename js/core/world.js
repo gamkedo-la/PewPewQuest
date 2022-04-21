@@ -177,6 +177,17 @@ World.prototype.drawImageTile = function(i,j,basicTileColor){
 
 }
 
+World.prototype.drawImageTileAt = function(x,y,tileInfo){
+    let tilesheet = img['tiles']
+    let row = palette.indexOf(tileInfo.tile) * 8
+    let column = this.decorData[this.widthInTiles * tileInfo.j + tileInfo.i] * 8
+    canvasContext.drawImage(
+        tilesheet,
+        column, row, 8, 8,
+        x-view.x, y-view.y, this.tileSize, this.tileSize
+    );
+}
+
 World.prototype.drawGlitchTile = function(i,j,basicTileColor){
     let tilesheet = img['tiles']
     let row = palette.indexOf(basicTileColor) * 8

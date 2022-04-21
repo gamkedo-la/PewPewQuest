@@ -214,6 +214,12 @@ class Scrapper {
             {x: 12, y: 23}
         ]
         this.tileGripOffset = this.tileGripOffsets[this.direction];
+        this.tileCarryOffsets = [
+            {x: 8, y: 8},
+            {x: 8, y: 8},
+            {x: 8, y: 8},
+            {x: 8, y: 8}
+        ];
         
         // -- this.currentAnimation
         // -- this.animState
@@ -222,6 +228,13 @@ class Scrapper {
     }
 
     draw() {
+        // draw grabbed tile
+        if (this.grabbedTile) {
+            let offset = this.tileCarryOffsets[this.direction];
+            //fillRect(this.x-view.x+offset.x, this.y-view.y+offset.y, 8, 8, "green");
+            world.drawImageTileAt(this.x+offset.x, this.y+offset.y, this.grabbedTile);
+        }
+
         this.currentAnimation.render({
             x: Math.floor(this.x-view.x+this.bump),
             y: Math.floor(this.y-view.y),
@@ -339,6 +352,11 @@ class Scrapper {
                         this.x + this.tileGripOffset.x,
                         this.y + this.tileGripOffset.y) ] = COLOR_DIRTY_RED;
                     }
+                    this.grabbedTile = {
+                        tile: tile,
+                        i: Math.floor((this.x + this.tileGripOffset.x)/8),
+                        j: Math.floor((this.y + this.tileGripOffset.y)/8),
+                    };
                 }
                 //emit particles from target tile
                 //if tile timer is zero,
@@ -365,6 +383,7 @@ class Scrapper {
                 if (this.dockingTimer <= 0) {
                     this.state = this.states.SEEK_TILE;
                     this.unloading = false;
+                    this.grabbedTile = null;
                     break;
                 }
                 // detect out of range
@@ -407,6 +426,7 @@ class Scrapper {
                         let dir = ['dock_west', 'dock_north', 'dock_east', 'dock_south'].indexOf(bestDock.state);
                         this.setDirectionalAnim("carry", dir); 
                         this.state = this.states.SEEK_TILE;
+                        this.grabbedTile = null;
                     }
                 }
                 break;
