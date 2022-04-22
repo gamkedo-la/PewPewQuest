@@ -51,6 +51,7 @@ const imageList = [
 'bridge-inventory',
 'bridge',
 'bug',
+"checkpoint_v1",
 'enforcer',
 'environment',
 'flashlight-inventory',
