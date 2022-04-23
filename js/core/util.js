@@ -79,7 +79,7 @@ function intLerp(v0, v1, t) {
     return Math.round(v0*(1-t)+v1*t);
 }
 
-function inView(x,y,){
+function inView(x,y){
     let screenX = x - view.x,
         screenY = y - view.y,
         padding = 10;
@@ -98,7 +98,54 @@ function rectCollision(rect1, rect2) {
       );
 }
 
-function rectVsCircle(rect, circle){
+function rectVsCircle(rect, circle) {
+    // assumes rect is axis aligned
+    // circle can only collide along its cardinal radii or with a corner of the rect
+    if (circle.center.y >= rect.top && circle.center.y <= rect.bottom) {
+        //vertically aligned, need to check horizontal
+        if ((circle.center.x - circle.radius < rect.right) &&
+            (circle.center.x + circle.radius > rect.left)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (circle.center.x >= rect.left && circle.center.x <= rect.right) {
+        //horizontally aligned, need to check vertical
+        if ((circle.center.y + circle.radius > rect.top) &&
+            (circle.center.y - circle.radius < rect.bottom)) {
+            return true;
+        } else {
+            return false
+        }
+    } else {
+        //check for corner collisions
+        const squaredRadius = circle.radius * circle.radius;
+        if (circle.center.x < rect.left) {
+            if (circle.center.y < rect.top) {
+                // check rect's top left corner
+                const deltaXSquared = (rect.left - circle.center.x) * (rect.left - circle.center.x);
+                const deltaYSquared = (rect.top - circle.center.y) * (rect.top - circle.center.y);
+                return (deltaXSquared + deltaYSquared <= squaredRadius)
+            } else if (circle.center.y > rect.bottom) {
+                // check rect's bottom left corner
+                const deltaXSquared = (rect.left - circle.center.x) * (rect.left - circle.center.x);
+                const deltaYSquared = (rect.bottom - circle.center.y) * (rect.bottom - circle.center.y);
+                return (deltaXSquared + deltaYSquared <= squaredRadius)
+            }
+        } else if (circle.center.x > rect.right) {
+            if (circle.center.y < rect.top) {
+                // check rect's top right corner
+                const deltaXSquared = (rect.right - circle.center.x) * (rect.right - circle.center.x);
+                const deltaYSquared = (rect.top - circle.center.y) * (rect.top - circle.center.y);
+                return (deltaXSquared + deltaYSquared <= squaredRadius)
+            } else if (circle.center.y > rect.bottom) {
+                // check rect's bottom right corner
+                const deltaXSquared = (rect.right - circle.center.x) * (rect.right - circle.center.x);
+                const deltaYSquared = (rect.bottom - circle.center.y) * (rect.bottom - circle.center.y);
+                return (deltaXSquared + deltaYSquared <= squaredRadius)
+            }
+        }
+    }
 }
 
 function pointInRect(x, y, rect){
