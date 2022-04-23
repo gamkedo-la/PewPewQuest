@@ -1,6 +1,7 @@
 class Bullet {
-    constructor(x,y, xVelocity, yVelocity, color= '#8888FF', width = 3, height = 3, life = 100) {
+    constructor(x,y, xVelocity, yVelocity, color= '#8888FF', width = 3, height = 3, life = 100, enemy=false) {
         this.type = BULLET
+        this.enemy = enemy;
         this.color = color;
         this.x = x;
         this.y = y;
@@ -82,7 +83,11 @@ class Bullet {
         //world.entities.push(splode);
 
         audio.playSound(loader.sounds[`splode0${Math.floor(Math.random()*8)}`], map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.1, 1+Math.random()*0.2, false);
-        world.bullets.splice(world.bullets.indexOf(this), 1);
+        if (this.enemy) {
+            world.enemyBullets.splice(world.bullets.indexOf(this), 1);
+        } else {
+            world.bullets.splice(world.bullets.indexOf(this), 1);
+        }
     }
 
     updateCollider() {

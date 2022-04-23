@@ -210,6 +210,17 @@ var player = {
                 if(mouse.pressed){ this.mouseFireBullet(); }
             }
 
+            //bullet collisions-----------------------------------------------------
+            world.enemyBullets.forEach(bullet => {
+                if(rectCollision(this.collider, bullet.collider)) {
+                    //this.saved = true;
+                    //this.bump = 5;
+                    // -- for now... just splode the bullet
+                    bullet.hit();
+                    bullet.die();
+                }
+            });
+
         
            
 

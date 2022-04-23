@@ -28,6 +28,12 @@ var gameScreen = {
             }
         });
 
+        world.enemyBullets.forEach(function (bullet) {
+            if(inView(bullet.x, bullet.y)){
+                bullet.draw()
+            }
+        });
+
         world.worldEntities.forEach(function (entity) {
             if(inView(entity.x, entity.y)){
                 entity.draw();
@@ -114,6 +120,13 @@ var gameScreen = {
             
         });
         world.bullets.forEach(function (bullet) {
+            if(inView(bullet.x, bullet.y)){
+                bullet.update()
+            }else{
+                bullet.die()
+            }
+        });
+        world.enemyBullets.forEach(function (bullet) {
             if(inView(bullet.x, bullet.y)){
                 bullet.update()
             }else{

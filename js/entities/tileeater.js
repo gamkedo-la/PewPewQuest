@@ -288,8 +288,9 @@ class Tileeater {
         audio.playSound(loader.sounds.pewpew2, 0, 0.1)
         for (let i=0; i<randomInt(2,8); i++) {
             let bullet = new Bullet(fx, fy, tax * randomRange(3,5), tay * randomRange(3,5));
+            bullet.enemy = true;
             bullet.actor = this;
-            world.bullets.push(bullet);
+            world.enemyBullets.push(bullet);
         }
     }
 
