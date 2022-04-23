@@ -282,6 +282,8 @@ World.prototype.populateMapObjects = function(){
                     let safeSpot = {x: i, y: j};
                     world.safeSpots.push(safeSpot);
                     this.setTileAtPosition(i, j, 0);
+                    let checkpoint = new Checkpoint(i,j);   
+                    world.entities.push(checkpoint);
                     break;
 
                 }
