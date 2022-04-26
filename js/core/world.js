@@ -95,6 +95,8 @@ World.prototype.populateWithImage = function populateWithImage(image){
     ctx.drawImage(image, 0, 0);
     data = new Uint32Array(ctx.getImageData(0, 0, image.width, image.height).data.buffer); 
     this.environmentData = data;
+
+    
     
     palette = this.data.slice(0, 256);
     this.populateMapPalette(palette);
@@ -182,6 +184,7 @@ World.prototype.drawImageTileAt = function(x,y,tileInfo){
     let tilesheet = img['tiles']
     let row = palette.indexOf(tileInfo.tile) * 8
     let column = this.decorData[this.widthInTiles * tileInfo.j + tileInfo.i] * 8
+    
     canvasContext.drawImage(
         tilesheet,
         column, row, 8, 8,
@@ -292,7 +295,7 @@ World.prototype.populateMapObjects = function(){
                     let neighbors = this.getNeighbors(i, j);
                     let tileeater = new Tileeater(i,j, ...neighbors);
                     //we want Enforcers to follow player beyond screen bounds, so
-                    //it goes in worldEntties. 
+                    //it goes in worldEntties. ww
                     world.worldEntities.push(tileeater);
                     this.setTileAtPosition(i, j, 0);
                     break;
@@ -300,6 +303,13 @@ World.prototype.populateMapObjects = function(){
             }
         }
     }
+
+    for(let i = 0; i < this.environmentData.length; i++){
+        if(this.environmentData[i] == DARK_MODE){
+            this.decorData[i] = 0;
+        }
+    }
+
 }
 
 
@@ -368,6 +378,7 @@ World.prototype.populateMapPalette = function(palette){
 
     COMBAT_MODE=palette[8];
     EXPLORATION_MODE=palette[0];
+    DARK_MODE=palette[31];
 
     world.data.fill(0, 0, 256);
 
