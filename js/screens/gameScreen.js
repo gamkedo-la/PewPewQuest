@@ -6,6 +6,7 @@ var gameScreen = {
     reset: function () {
        
         player.placeAtTile(playerStart.x, playerStart.y )
+        player.health = player.maxHealth;
         view.targetX = Math.floor((playerStart.x * world.tileSize) / view.width) * view.width
         view.targetY = Math.floor((playerStart.y * world.tileSize) / view.height) * view.height
         view.x = view.targetX

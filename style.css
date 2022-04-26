@@ -5,6 +5,7 @@ body {
 }
 
 canvas {
+    cursor: none;
     width: 1600px;
     height: 900px;
     image-rendering: pixelated;

@@ -1,8 +1,9 @@
 class Bullet {
-    constructor(x,y, xVelocity, yVelocity, color= '#8888FF', width = 3, height = 3, life = 100, enemy=false) {
+    constructor(x,y, xVelocity, yVelocity, color= '#8888FF', width = 3, height = 3, life = 100, enemy=false, damage=1) {
         this.type = BULLET
         this.enemy = enemy;
         this.color = color;
+        this.damage = damage;
         this.x = x;
         this.y = y;
         this.height = width;

@@ -469,6 +469,7 @@ class Scrapper {
             //signal.dispatch('keysChanged', {amount: 1})
             //inventory.items.keys -= 1;
            collisionResponse(player, this);
+           player.hurt(5);
            
         }
 
@@ -476,7 +477,8 @@ class Scrapper {
             if(rectCollision(this.collider, bullet.collider)) {
                 audio.playSound(loader.sounds[`enemyHurt0${Math.floor(Math.random()*8)}`],
                 map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.4, 1+Math.random()*0.2, false);
-                this.health -= 10;
+                //this.health -= 10;
+                //reaect but no health lost, scrappers invulnerable
                 bullet.die();
                 this.bump = 5;
             }

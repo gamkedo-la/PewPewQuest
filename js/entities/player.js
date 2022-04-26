@@ -27,6 +27,9 @@ var player = {
     swingTimerMax: 7,
     swing: 0,
 
+    health: 500,
+    maxHealth: 500,
+
     shootTarget: {
         x: 0,
         y: 0
@@ -216,6 +219,7 @@ var player = {
                     //this.saved = true;
                     //this.bump = 5;
                     // -- for now... just splode the bullet
+                    player.hurt(bullet.damage);
                     bullet.hit();
                     bullet.die();
                 }
@@ -404,6 +408,14 @@ var player = {
             let particle = new Particle(this.x + Math.random()*this.width, this.y-5, Math.random()*2 - 1, Math.random() * 2 - 1,
             {color: COLORS.elfGreen, life: 30});
            world.entities.push(particle);
+        }
+    },
+
+    hurt(damage){
+        this.health -= damage;
+        if(this.health <= 0){
+            this.health = 0;
+            gameState = GAMESTATE_GAME_OVER;
         }
     },
 
