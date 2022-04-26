@@ -1,16 +1,16 @@
 class Scrapper {
-    constructor(tileX, tileY, northTile, southTile, eastTile, westTile) {
+    constructor(tileX, tileY, parent) {
         this.tileX = tileX
         this.tileY = tileY
         this.x = tileX * 8;
         this.y = tileY * 8;
         this.startX = tileX * 8;
         this.startY = tileY * 8;
-        this.northTile = northTile;
-        this.southTile = southTile;
-        this.eastTile = eastTile;
-        this.westTile = westTile;
-        this.neighbors = [ northTile, southTile, eastTile, westTile ];
+        //this.northTile = northTile;
+        //this.southTile = southTile;
+        //this.eastTile = eastTile;
+        //this.westTile = westTile;
+        //sthis.neighbors = [ northTile, southTile, eastTile, westTile ];
         this.height = 15;
         this.angle = 0;
         this.width = 15;
@@ -23,6 +23,7 @@ class Scrapper {
         this.moveInterval = 300;
         this.dockRange = 20;
         this.unloadOffset = {x: 0, y: 0};
+        this.tileEater = parent;
 
         this.collider = {
             x: this.x,
@@ -278,10 +279,10 @@ class Scrapper {
         //console.log(`anim state: ${this.animState} cf: ${this.currentAnimation.currentFrame} fl: ${this.currentAnimation.frames.length} accum: ${this.currentAnimation.accumulator.toFixed(2)} done: ${this.currentAnimation.done} loop: ${this.currentAnimation.loop}`);
 
         //eventually this will need to become find nearest tile eater, or parent tile eater
-        let tileEater = world.worldEntities.filter(e => e.type === TILE_EATER)[0];
+        //let tileEater = world.worldEntities.filter(e => e.type === TILE_EATER)[0];
 
         // pick tile eater dock that is closest
-        let bestDock = tileEater.findBestDock(this);
+        let bestDock = this.tileEater.findBestDock(this);
         this.startX = bestDock.x;
         this.startY = bestDock.y;
         let waitForDock = false;
@@ -405,11 +406,11 @@ class Scrapper {
                     break;
                 }
                 // signal tile eater
-                if (tileEater.state === 'idle') {
-                    tileEater.state = bestDock.state;
+                if (this.tileEater.state === 'idle') {
+                    this.tileEater.state = bestDock.state;
                     waitForDock = true;
                 // wait for tile eater to be locked to requested dock
-                } else if (!tileEater.dockLocked || tileEater.state !== bestDock.state) {
+                } else if (!this.tileEater.dockLocked || this.tileEater.state !== bestDock.state) {
                     waitForDock = true;
                 // finish carrying to dock
                 } else if (range > .2) {

@@ -11,7 +11,7 @@ class Checkpoint {
         this.height = 26;
         this.checked = false;
         this.spinTicks = 0;
-        this.maxSpinTicks = 90;
+        this.maxSpinTicks = 40;
 
         this.collider = {
             x: this.x+3,
@@ -40,7 +40,7 @@ class Checkpoint {
 
                 spinning: {
                     frames: '0..7',
-                    frameRate: 30,
+                    frameRate: 60,
                     loop: true,
                     noInterrupt: true
                 },
@@ -61,13 +61,6 @@ class Checkpoint {
     update() {
         this.updateCollider();
         this.currentAnimation.update();
-
-        if(rectCollision(this.collider, player.collider)) {
-            collisionResponse(player, this);
-        }
-
-        this.bump = lerp(this.bump, 0, 0.1);
-        if(this.bump < 0.01) { this.bump = 0;}
 
         world.bullets.forEach(bullet => {
             if(rectCollision(this.collider, bullet.collider)) {

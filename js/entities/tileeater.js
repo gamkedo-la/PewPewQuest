@@ -55,8 +55,10 @@ class Tileeater {
         this.moveSpeed = 0.2;
         this.moveInterval = 100;
 
-        this.firingRange = 75;
+        this.firingRange = 100;
         this.collisionRange = 32;
+
+        this.scrappers = [];
 
         this.r1angle = 0;
         this.r2angle = 0;
@@ -103,6 +105,14 @@ class Tileeater {
         this.previous = {
             x: this.x,
             y: this.y
+        }
+
+        this.children = 2; //eventually will be defined by neighbor tile, logic same as doorkey
+
+        for(let i=0; i<this.children; i++) {
+            let scrapper = new Scrapper(tileX, tileY, this);
+            //world.worldEntities.push(scrapper);
+            this.scrappers[i] = scrapper;
         }
 
         this.r1sprites = spritesheet({
@@ -245,6 +255,11 @@ class Tileeater {
         for (const ap of this.armorPoints) {
             ap.draw();
         }
+
+        // scrappers
+        for (const scrapper of this.scrappers) {
+            scrapper.draw();
+        }
     }
 
     rotateTo(which, targetAngle, rate) {
@@ -287,7 +302,7 @@ class Tileeater {
         let fy = this.collider.top + this.height/2 + tay*36;
         audio.playSound(loader.sounds.pewpew2, 0, 0.1)
         for (let i=0; i<randomInt(2,8); i++) {
-            let bullet = new Bullet(fx, fy, tax * randomRange(3,5), tay * randomRange(3,5));
+            let bullet = new Bullet(fx, fy, tax, tay, '#F00', 3, 3, 400);
             bullet.enemy = true;
             bullet.actor = this;
             world.enemyBullets.push(bullet);
@@ -296,7 +311,7 @@ class Tileeater {
 
     update() {
         
-        // -- range to player
+        // -- range to playerd
         let range = this.findPlayerRange();
 
         switch (this.state) {
@@ -528,6 +543,12 @@ class Tileeater {
 
         this.previous.x = this.x;
         this.previous.y = this.y;
+
+        // update scrappers
+        this.scrappers.forEach(function(scrapper){
+            scrapper.update();
+        })
+
         
     }
 
@@ -558,7 +579,11 @@ class Tileeater {
         } else {
             this.r3alive = false;
             inventory.score+=10000;
+            this.scrappers.forEach(scrapper => {
+                scrapper.die();
+            })
             world.worldEntities.splice(world.entities.indexOf(this), 1);
+
         }
 
     }
