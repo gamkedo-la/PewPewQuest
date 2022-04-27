@@ -79,10 +79,10 @@ function intLerp(v0, v1, t) {
     return Math.round(v0*(1-t)+v1*t);
 }
 
-function inView(x,y){
+function inView(x,y, pad=10){
     let screenX = x - view.x,
         screenY = y - view.y,
-        padding = 10;
+        padding=pad;
         return (screenX > -padding &&
                screenX < (view.width + padding) &&
                screenY > -padding &&

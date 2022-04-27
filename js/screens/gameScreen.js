@@ -36,7 +36,7 @@ var gameScreen = {
         });
 
         world.worldEntities.forEach(function (entity) {
-            if(inView(entity.x, entity.y)){
+            if(inView(entity.x, entity.y, 200)){
                 entity.draw();
             }
         });
