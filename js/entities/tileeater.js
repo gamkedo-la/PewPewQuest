@@ -72,9 +72,9 @@ class Tileeater {
 
         this.r1alive = true;
         this.r2alive = true;
-        this.r2health = 500;
+        this.r2health = 50;
         this.r2alive = true;
-        this.r3health = 300;
+        this.r3health = 50;
         this.hurtTicks = 0;
 
         this.collider = {
@@ -98,6 +98,8 @@ class Tileeater {
         );
         this.health = this.armorPoints.reduce((acc, armorPoint) => {acc += armorPoint.health; return acc}, 0);
         this.maxHealth = this.health;
+
+        this.tilesEaten = [];
 
         this.target = {
             x: this.x,
@@ -225,6 +227,14 @@ class Tileeater {
         let h = this.collider.bottom - this.collider.top;
         let x = this.collider.left - view.x + w/2;
         let y = this.collider.top - view.y + h/2;
+
+        //tiles eaten
+        for(let i=0; i<this.tilesEaten.length; i++) {
+            let tile = this.tilesEaten[i];
+            world.drawImageTileAt(x+view.x + Math.random()*16-12, y+view.y + Math.random()*16-12, tile);
+        }
+
+
         // -- outer ring
         canvasContext.save();
         canvasContext.translate(x,y)
@@ -523,9 +533,9 @@ class Tileeater {
                         armorPoint.bump = 2;
                         audio.playSound(loader.sounds[`enemyHurt0${Math.floor(Math.random()*8)}`],
                         map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.4, 1+Math.random()*0.2, false)
-                        armorPoint.health -= 5;
+                        armorPoint.health -= 59;
                         if(armorPoint.health < 50) {
-                            armorPoint.color = COLORS.loulou;
+                            armorPoint.color = ticker%2==0? COLORS.dirtyRed : COLORS.white;
                         }
                         this.hurtTicks = 10;
                         bullet.hit();
@@ -634,13 +644,16 @@ class Tileeater {
         } else {
             this.r3alive = false;
             inventory.score+=10000;
+            this.restoreTiles();
+
             this.scrappers.forEach(scrapper => {
                 scrapper.die();
             })
-            world.worldEntities.splice(world.entities.indexOf(this), 1);
 
+            this.scrappers = [];
+            world.worldEntities.splice(world.worldEntities.indexOf(this), 1);
+            
         }
-
     }
 
     updateCollider() {
@@ -705,5 +718,18 @@ class Tileeater {
         let yDir = py - (this.y+this.height*.5);
         let angle = Math.atan2(yDir, xDir);
         return angle;
+    }
+
+    restoreTiles() {
+        this.tilesEaten.forEach(tile => {
+            world.setTileAtPosition(tile.i, tile.j, tile.tile);
+        })
+
+        this.scrappers.forEach(scrapper => {
+            let tile = scrapper.grabbedTile;
+            if(tile){
+                world.setTileAtPosition(tile.i, tile.j, tile.tile);
+            }
+        })
     }
 }

@@ -44,8 +44,17 @@ var gameScreen = {
 
         player.draw();
         inventory.draw();
-        strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  COLORS.tahitiGold);
-       },
+        if(gp?.axes[2] != 0 || gp?.axes[3] != 0){
+            let x = player.x + 4 +  gp?.axes[2] * 20 - view.x;
+            let y = player.y + 4 + gp?.axes[3] * 20 - view.y;
+            strokePolygon(x, y, 6, 4, ticker/4,  COLORS.tahitiGold);
+        }else if(mouse) {
+            strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  COLORS.tahitiGold);
+
+        }
+        if(mouse){
+        }
+    },
 
     update: function () {
         if(!this.bgmStarted) {

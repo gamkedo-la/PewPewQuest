@@ -206,11 +206,12 @@ var player = {
                     this.swingSabre();
                 }
                 if(mouse.pressed){ this.mouseSwingSabre() }
-                if(gp){ }
+                //if(gp?.buttons[7].pressed){this.mouseSwingSabre() }
                  
             }else{
                 if (Key.justReleased(Key.z)) { this.fireBullet(); }
                 if(mouse.pressed){ this.mouseFireBullet(); }
+                if(gp?.buttons[7].pressed){this.gamepadFireBullet(); }
             }
 
             //bullet collisions-----------------------------------------------------

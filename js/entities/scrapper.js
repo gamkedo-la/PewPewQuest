@@ -53,8 +53,9 @@ class Scrapper {
             DELIVERING_TILE: 5,
             DOCKING: 6
         }
-        this.state = this.states.SEEK_TILE
+        this.state = this.states.SEEK_TILE;
 
+        this.tilesEaten = [];
 
         this.spritesheet = spritesheet({
             image: img['scrapper'],
@@ -288,10 +289,6 @@ class Scrapper {
         let waitForDock = false;
 
        switch(this.state){
-            case this.states.PLAYER_PILOTED: {
-                //
-                break;
-            }
             case this.states.DAMAGED: {
                 break;
             }
@@ -369,10 +366,6 @@ class Scrapper {
                         j: Math.floor((this.y + this.tileGripOffset.y)/8),
                     };
                 }
-                //emit particles from target tile
-                //if tile timer is zero,
-                    //change tile to glitch tile
-                    //change state to delivering tile
                 break;
             }   
             case this.states.DELIVERING_TILE: {
@@ -394,6 +387,10 @@ class Scrapper {
                 if (this.dockingTimer <= 0) {
                     this.state = this.states.SEEK_TILE;
                     this.unloading = false;
+                    
+                    //we go ahead and pass along the tile to the tile eater anyways, so restoration is possible
+                    this.tileEater.tilesEaten.push(this.grabbedTile);
+
                     this.grabbedTile = null;
                     this.unloadOffset = { x: 0, y: 0};
                     break;
@@ -444,7 +441,9 @@ class Scrapper {
                         console.log(`loading is done: ${this.currentAnimation.done}`);
                         this.unloading = false;
                         let dir = ['dock_west', 'dock_north', 'dock_east', 'dock_south'].indexOf(bestDock.state);
-                        this.setDirectionalAnim("carry", dir); 
+                        this.setDirectionalAnim("carry", dir);
+                        this.tileEater.tilesEaten.push(this.grabbedTile);
+                        //console.log(this.tileEater.tilesEaten);
                         this.state = this.states.SEEK_TILE;
                         this.grabbedTile = null;
                         this.unloadOffset = { x: 0, y: 0};
@@ -496,7 +495,9 @@ class Scrapper {
         map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
 
-        world.worldEntities.splice(world.entities.indexOf(this), 1);
+        //scrappers exist in child array of tileEaters now, so we will handle splicing them there
+        //world.worldEntities.splice(world.entities.indexOf(this), 1);
+
 
         for(let i = 0; i < 40; i++) {
             let angle = (Math.PI*2/40) * i;
