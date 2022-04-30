@@ -363,7 +363,7 @@ var player = {
             bulletYVelocity = this.shootTarget.y * 8;
         if(Math.abs(bulletXVelocity) > 0.2 || Math.abs(bulletYVelocity) > 0.2){
             if(ticker%2==0){
-                audio.playSound(loader.sounds.pewpew2, 0, 0.)
+                audio.playSound(loader.sounds.pewpew2, 0, 0.1)
                 let bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
                 world.bullets.push(bullet);
                 bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
