@@ -180,6 +180,25 @@ World.prototype.drawImageTile = function(i,j,basicTileColor){
 
 }
 
+World.prototype.drawFromMap = function(spriteRect, dx, dy){
+    let x = spriteRect.x,
+        y = spriteRect.y,
+        width = spriteRect.width,
+        height = spriteRect.height;
+
+    for(let i = 0; i < width; i++){
+        for(let j = 0; j < height; j++){
+            color = this.getTileAtPosition(x+i, y+j);
+            if(color == COLOR_DIRTY_RED){
+                color = Math.random() > 0.5 ? 0xFFFFFFFF : COLOR_BLACK_TRANSPARENT;
+            }
+            canvasContext.fillStyle = convertUint32ToRGBA(color);
+            canvasContext.fillRect(dx+i*2, dy+j*2, 2, 2);
+        }
+    }
+}
+
+
 World.prototype.drawImageTileAt = function(x,y,tileInfo){
     let tilesheet = img['tiles']
     let row = palette.indexOf(tileInfo.tile) * 8
@@ -300,6 +319,15 @@ World.prototype.populateMapObjects = function(){
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }
+                case CHALICE:{
+                    let safeSpot = {x: i, y: j};
+                    world.safeSpots.push(safeSpot);
+                    this.setTileAtPosition(i, j, 0);
+                    let chalice = new Chalice(i,j);   
+                    world.entities.push(chalice);
+                    break;
+
+                }
             }
         }
     }
@@ -323,7 +351,7 @@ World.prototype.populateMapPalette = function(palette){
 
     //these color constants are meant to be used for logic in the game, not for drawing.
     //for drawing functions use COLORS[]. 
-    COLOR_BLACK__TRANSPARENT = palette[0];
+    COLOR_BLACK_TRANSPARENT = palette[0];
     COLOR_VALHALLA = palette[1];
     COLOR_LOULOU = palette[2];
     COLOR_OILED_CEDAR = palette[3];
@@ -374,6 +402,7 @@ World.prototype.populateMapPalette = function(palette){
     TREASURE = palette[46];
     SAFE_SPOT = palette[47];
     TILE_EATER = palette[48];
+    CHALICE = palette[49];
     PARTICLE = 1000;
 
     COMBAT_MODE=palette[8];
@@ -387,7 +416,7 @@ World.prototype.populateMapPalette = function(palette){
 World.prototype.populateCSSColorsArray = function(){
     //these color constants meant to be used for drawing.
     COLORS = {
-        transparent: convertUint32ToRGBA(COLOR_BLACK__TRANSPARENT),
+        transparent: convertUint32ToRGBA(COLOR_BLACK_TRANSPARENT),
         valhalla: convertUint32ToRGBA(COLOR_VALHALLA),
         loulou: convertUint32ToRGBA(COLOR_LOULOU),
         oiledCedar: convertUint32ToRGBA(COLOR_OILED_CEDAR),
