@@ -75,6 +75,7 @@ class Tileeater {
         this.r2health = 500;
         this.r2alive = true;
         this.r3health = 300;
+        this.hurtTicks = 0;
 
         this.collider = {
             x: this.x,
@@ -122,7 +123,13 @@ class Tileeater {
             frameMargin: 0,
             animations: {
                 idle: {
-                    frames: '0',
+                    frames: 0,
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+                hurt: {
+                    frames: 10,
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
@@ -154,6 +161,12 @@ class Tileeater {
                     loop: true,
                     noInterrupt: true
                 },
+                hurt: {
+                    frames: 10,
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
             }
         })
 
@@ -164,13 +177,19 @@ class Tileeater {
             frameMargin: 0,
             animations: {
                 idle: {
-                    frames: '0',
+                    frames: 0,
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
                 },
                 alarm: {
                     frames: '1..2',
+                    frameRate: 10,
+                    loop: true,
+                    noInterrupt: true
+                },
+                hurt: {
+                    frames: 10,
                     frameRate: 10,
                     loop: true,
                     noInterrupt: true
@@ -211,33 +230,63 @@ class Tileeater {
         canvasContext.translate(x,y)
         if (this.r1alive) {
             canvasContext.rotate(this.r1angle);
-            this.r1anim.render({
-                x: -w/2,
-                y: -h/2,
-                width: w,
-                height: h
-            })
+            if (this.hurtTicks) {
+                let anim = this.r1sprites.animations['hurt'];
+                anim.render({
+                    x: -w/2,
+                    y: -h/2,
+                    width: w,
+                    height: h
+                })
+            } else {
+                this.r1anim.render({
+                    x: -w/2,
+                    y: -h/2,
+                    width: w,
+                    height: h
+                })
+            }
             canvasContext.rotate(-this.r1angle);
         }
         // -- middle ring
         if (this.r2alive) {
             canvasContext.rotate(this.r2angle);
-            this.r2anim.render({
+            if (!this.r1alive && this.hurtTicks) {
+                let anim = this.r2sprites.animations['hurt'];
+                anim.render({
+                    x: -w/2,
+                    y: -h/2,
+                    width: w,
+                    height: h
+                })
+            } else {
+                this.r2anim.render({
+                    x: -w/2,
+                    y: -h/2,
+                    width: w,
+                    height: h
+                })
+            }
+            canvasContext.rotate(-this.r2angle);
+        }
+        // -- inner ring
+        canvasContext.rotate(this.r3angle);
+        if (!this.r1alive && !this.r2alive && this.hurtTicks) {
+            let anim = this.r3sprites.animations['hurt'];
+            anim.render({
                 x: -w/2,
                 y: -h/2,
                 width: w,
                 height: h
             })
-            canvasContext.rotate(-this.r2angle);
+        } else {
+            this.r3anim.render({
+                x: -w/2,
+                y: -h/2,
+                width: w,
+                height: h
+            })
         }
-        // -- inner ring
-        canvasContext.rotate(this.r3angle);
-        this.r3anim.render({
-            x: -w/2,
-            y: -h/2,
-            width: w,
-            height: h
-        })
         canvasContext.restore();
 
         // -- health bar
@@ -461,6 +510,9 @@ class Tileeater {
 
         //todo, need a line vs. rect method for bullets vs evertything
 
+        // countdown hurt
+        if (this.hurtTicks > 0) this.hurtTicks--;
+
         // bullet collision detection
         world.bullets.forEach(bullet => {
             if (bullet.actor === this) return;
@@ -475,6 +527,7 @@ class Tileeater {
                         if(armorPoint.health < 50) {
                             armorPoint.color = COLORS.loulou;
                         }
+                        this.hurtTicks = 10;
                         bullet.hit();
                         bullet.die();
                     }
@@ -491,12 +544,14 @@ class Tileeater {
                     bullet.hit();
                     bullet.die();
                     this.health -= 5;
+                    this.hurtTicks = 10;
                 }
             } else {
                 if (d < 18) {
                     bullet.hit();
                     bullet.die();
                     this.health -= 5;
+                    this.hurtTicks = 10;
                 }
             }
         })
