@@ -125,7 +125,14 @@ class Enforcer {
            }
         }
 
-    
+        /*
+        let center = {x: this.x + this.width/2, y: this.y + this.height/2 + 2};
+        fillRect(center.x-2-view.x, center.y-2-view.y, 4, 4, 'green');
+        canvasContext.beginPath();
+        canvasContext.arc(center.x-view.x, center.y-view.y, 7, 0, Math.PI*2);
+        canvasContext.strokeStyle = "green";
+        canvasContext.stroke();
+        */
     
         if(this.health < 300) {
             fillRect(this.x-5 - view.x, this.y - view.y - 8, this.health/20, 2, COLORS.tahitiGold);
@@ -289,6 +296,13 @@ class Enforcer {
 
                 }
                
+            }
+
+            // bullets can hit enforcer "body" but do no damage
+            let center = {x: this.x + this.width/2, y: this.y + this.height/2 + 2};
+            let d = distanceBetweenPoints(center, bullet);
+            if (d < 7) {
+                bullet.hit();
             }
             
         })
