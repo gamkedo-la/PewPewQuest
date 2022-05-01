@@ -58,7 +58,7 @@ var gameScreen = {
     update: function () {
         if(!this.bgmStarted) {
             this.bgmStarted = true;
-            audio.playMusic(loader.sounds['bgm_exploration'], 0.07);
+            audio.playMusic(loader.sounds['bgm_exploration'], 0.8);
         }
         if(Key.justReleased(Key.m)) {
             signal.dispatch('miniMap');

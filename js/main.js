@@ -133,7 +133,7 @@ const soundList = [
 
     { name: "barrierHit" , url:"snd/barrier-hit.mp3" },
 
-    { name: "bgm_exploration", url:"snd/bgm-exploration.mp3" },
+    { name: "bgm_exploration", url:"snd/bgm-exploration-2.mp3" },
     // { name: "bullethit", url:"snd/Shoot 245"}
 
 ]
