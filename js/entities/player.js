@@ -26,9 +26,13 @@ var player = {
     swingTimer: 0,
     swingTimerMax: 7,
     swing: 0,
+    steps: -1,
+   
 
     health: 500,
     maxHealth: 500,
+    hurtCooldown: 0,
+    hurtCooldownMax: 100,
 
     shootTarget: {
         x: 0,
@@ -49,8 +53,14 @@ var player = {
 
     draw: function () {
         if(!this.captured) {
-            fillRect(Math.round(this.x-view.x), Math.round(this.y-view.y), this.width, this.height, COLORS.goldenFizz);
-            for(let i = 1; i <= inventory.items.keys; i++){
+            if(this.hurtCooldown > 0) {
+                if(ticker%4 == 0) {
+                    fillRect(Math.round(this.x-view.x), Math.round(this.y-view.y), this.width, this.height, COLORS.goldenFizz);
+                }
+            } else {
+                fillRect(Math.round(this.x-view.x), Math.round(this.y-view.y), this.width, this.height, COLORS.goldenFizz);
+            }
+                for(let i = 1; i <= inventory.items.keys; i++){
                 let radius = 20;
                 let angle = Math.PI*2/inventory.items.keys*i;
                 let x = -3 + Math.sin(angle+ticker/30)*radius;
@@ -77,8 +87,9 @@ var player = {
     },
 
     update: function () {
+        
         //console.log(player.x, player.y, player.xVelocity, player.yVelocity);
-
+        this.hurtCooldown--;
         this.swingStart = this.swingAngle - Math.PI/2;
         this.swingEnd = this.swingAngle + Math.PI/2;
         this.swing = lerp(this.swingStart, this.swingEnd, this.swingTimer/this.swingTimerMax);
@@ -293,7 +304,20 @@ var player = {
                 this.yVelocity = 0;
                 this.updateCollider(this.x, this.y);
             }
+            let footstep = Math.sqrt( Math.pow( Math.abs(this.xVelocity * 1/FRAMES_PER_SECOND), 2 ) +
+                                     Math.pow( Math.abs(this.yVelocity * 1/FRAMES_PER_SECOND), 2 ) );
 
+            this.steps += footstep;
+            console.log(footstep)
+            if(footstep < 0.1){
+                this.steps = -1;
+            }
+            //console.log(this.steps);
+           
+            if(this.steps > 30){
+                this.steps = -1;
+                audio.playSound(loader.sounds.playerFootstep03, 0, 0.6)
+            }
             this.previousX = this.x;
             this.previousY = this.y;
         }
@@ -413,7 +437,11 @@ var player = {
     },
 
     hurt(damage){
-        this.health -= damage;
+        if(this.hurtCooldown <= 0){
+            this.hurtCooldown = this.hurtCooldownMax;
+            audio.playSound(loader.sounds.playerHurt01, 0, 0.5)
+            this.health -= damage;
+        }
         if(this.health <= 0){
             this.health = 0;
             gameState = GAMESTATE_GAME_OVER;

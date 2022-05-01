@@ -37,7 +37,7 @@ class Chalice {
         if(this.canBeCollected){
             world.drawFromMap(this.mapSprite, this.x-view.x, this.y-view.y);
         } else {
-            if(ticker % 2 == 0){
+            if(ticker % 3 == 0){
                 world.drawFromMap(this.mapSprite, this.x-view.x, this.y-view.y);
             }
         }

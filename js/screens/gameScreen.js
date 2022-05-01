@@ -45,15 +45,14 @@ var gameScreen = {
         player.draw();
         inventory.draw();
         if(gp?.axes[2] != 0 || gp?.axes[3] != 0){
-            let x = player.x + 4 +  gp?.axes[2] * 20 - view.x;
-            let y = player.y + 4 + gp?.axes[3] * 20 - view.y;
+            let angle = Math.atan2(gp?.axes[3], gp?.axes[2])
+            let x = player.x + 4 +  Math.cos(angle) * 20 - view.x;
+            let y = player.y + 4 + Math.sin(angle) * 20 - view.y;
             strokePolygon(x, y, 6, 4, ticker/4,  COLORS.tahitiGold);
-        }else if(mouse) {
-            strokePolygon(mouse.x, mouse.y, 6, 4, ticker/4,  COLORS.tahitiGold);
-
-        }
-        if(mouse){
-        }
+        }else {
+            let x = mouse.x, y = mouse.y;
+                strokePolygon(x, y, 6, 4, ticker/4,  COLORS.tahitiGold);
+            }
     },
 
     update: function () {

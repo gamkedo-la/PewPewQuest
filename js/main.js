@@ -121,6 +121,9 @@ const soundList = [
     { name: "enemyHurt08", url:"snd/enemy-hurt-008.mp3" },
 
     { name: "playerHurt09", url:"snd/player-hurt-009.mp3" },
+    { name: "playerHurt01", url:"snd/player-hurt-001.mp3" },
+
+    { name: "playerFootstep03", url:"snd/player-footstep-003.mp3" },
 
     { name: "enforcer_offscreen" , url:"snd/enforcer_offscreen.mp3" },
     { name: "enforcer_onscreen" , url:"snd/enforcer_onscreen.mp3" },
