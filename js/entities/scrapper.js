@@ -309,6 +309,7 @@ class Scrapper {
                 this.captureCoolDown--;
                 let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
                 if(tile != 0 && tile != COLOR_DIRTY_RED) {
+                    audio.playSound(loader.sounds.eatingTile, 0, 0.15);
                     this.tileTimer = this.tileTimerMax;
                     this.state = this.states.EATING_TILE;
                 }
@@ -353,6 +354,7 @@ class Scrapper {
                 }
                 
                 if(this.tileTimer <= 0) {
+                    audio.playSound(loader.sounds.deliverTile, 0, 0.15);
                     this.state = this.states.DELIVERING_TILE;
                     let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
                     if(tile != 0) {
@@ -421,6 +423,7 @@ class Scrapper {
                 // within range of dock...
                 } else {
                     if (!this.unloading) {
+                        audio.playSound(loader.sounds.unloadingTile, 0, 0.15);
                         this.unloading = true;
                         // animation is set to unloading, which is a non-looping animation
                         this.animState = bestDock.unloadAnim;
@@ -438,6 +441,7 @@ class Scrapper {
                         }
                     // finish ... go back to seeking next tile
                     } else {
+                        //audio.playSound(loader.sounds.unloadingComplete, 0, 0.15);
                         console.log(`loading is done: ${this.currentAnimation.done}`);
                         this.unloading = false;
                         let dir = ['dock_west', 'dock_north', 'dock_east', 'dock_south'].indexOf(bestDock.state);

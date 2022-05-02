@@ -217,7 +217,7 @@ var player = {
                     this.swingSabre();
                 }
                 if(mouse.pressed){ this.mouseSwingSabre() }
-                //if(gp?.buttons[7].pressed){this.mouseSwingSabre() }
+                if(gamepad.buttonA()){this.mouseSwingSabre() }
                  
             }else{
                 if (Key.justReleased(Key.z)) { this.fireBullet(); }
@@ -308,7 +308,7 @@ var player = {
                                      Math.pow( Math.abs(this.yVelocity * 1/FRAMES_PER_SECOND), 2 ) );
 
             this.steps += footstep;
-            console.log(footstep)
+            //console.log(footstep)
             if(footstep < 0.1){
                 this.steps = -1;
             }

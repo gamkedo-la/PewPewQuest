@@ -77,6 +77,9 @@ const soundList = [
 
     { name: "test1", url:"snd/test1.mp3" },
     { name: "test2", url:"snd/test2.mp3" },
+    { name: "eatingTile", url:"snd/eating-tile.mp3" },
+    { name: "deliverTile", url:"snd/deliver-tile.mp3" },
+    { name: "unloadingTile", url:"snd/unloading-tile.mp3" },
     { name: "boop", url:"snd/boop.mp3" },
     { name: "splode01", url:"snd/small-explosion-001.mp3" },
     { name: "splode02", url:"snd/small-explosion-002.mp3" },
@@ -161,6 +164,7 @@ var view = {
 var playerStart= { x: 1217, y: 591}
 
 
+// replaces old gamepad global
 var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 var gp = gamepads[0];
 
