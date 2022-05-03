@@ -199,6 +199,7 @@ class Bug {
             //signal.dispatch('keysChanged', {amount: 1})
             //inventory.items.keys -= 1;
            collisionResponse(player, this);
+           player.hurt(10);
            
         }
 

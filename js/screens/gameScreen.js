@@ -2,11 +2,13 @@ var gameScreen = {
 
     cameraTypeToggle: true,
     bgmStarted: false,
+    cursorX: 0,
+    cursorY: 0,
    
     reset: function () {
        
         player.placeAtTile(playerStart.x, playerStart.y )
-        player.health = player.maxHealth;
+        player.health = player.startHealth;
         view.targetX = Math.floor((playerStart.x * world.tileSize) / view.width) * view.width
         view.targetY = Math.floor((playerStart.y * world.tileSize) / view.height) * view.height
         view.x = view.targetX
@@ -44,15 +46,21 @@ var gameScreen = {
 
         player.draw();
         inventory.draw();
-        if(gp?.axes[2] != 0 || gp?.axes[3] != 0){
-            let angle = Math.atan2(gp?.axes[3], gp?.axes[2])
+
+        //draw aim cursor, depending on mouse or gamepad input
+        cursorX = mouse.x;
+        cursorY = mouse.y;
+        if(gamepad.axis(2) ){
+            let angle = Math.atan2(gamepad.rightStick_yAxis(), gamepad.rightStick_xAxis());
             let x = player.x + 4 +  Math.cos(angle) * 20 - view.x;
             let y = player.y + 4 + Math.sin(angle) * 20 - view.y;
-            strokePolygon(x, y, 6, 4, ticker/4,  COLORS.tahitiGold);
-        }else {
-            let x = mouse.x, y = mouse.y;
-                strokePolygon(x, y, 6, 4, ticker/4,  COLORS.tahitiGold);
-            }
+            cursorX = x;
+            cursorY = y;
+        }
+        strokePolygon(cursorX, cursorY, 3, 2, ticker/8,  COLORS.tahitiGold);
+        strokePolygon(cursorX, cursorY, 3, 2, Math.PI/2 + ticker/8,  COLORS.tahitiGold);
+
+
     },
 
     update: function () {
@@ -148,7 +156,6 @@ var gameScreen = {
             
         });
 
-        
         player.update();
         inventory.update();
     }

@@ -27,7 +27,6 @@ class Treasure {
     }
 
     collect() {
-        console.log('collected treasure');
         signal.dispatch('getTreasure', {item: this});
         audio.playSound(loader.sounds.test2);
         for(let i = 0; i < 20; i++) {
@@ -36,6 +35,9 @@ class Treasure {
              world.entities.push(particle)
         }
         inventory.score += 100;
+        if(player.health < player.maxHealth){
+            player.health += 10;
+        }
         world.entities.splice(world.entities.indexOf(this), 1);
     }
 }

@@ -29,6 +29,8 @@ const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
 const GAMESTATE_MINIMAP = 4;
 
+const PRE_GAME_LOOP_COUNT = 5000;
+
 
 const FRAMES_PER_SECOND = 60;
 const SPLODE = 10;
@@ -165,8 +167,8 @@ var playerStart= { x: 1217, y: 591}
 
 
 // replaces old gamepad global
-var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-var gp = gamepads[0];
+//var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+//var gp = gamepads[0];
 
 mouse = {};
 
@@ -240,6 +242,13 @@ function begin(fps) {
     fpsInterval = 1000/fps;
     then = Date.now();
     startTime = then;
+    //pre-run some game logic so meta-items are eaten before the game starts
+    // if(gameState == GAMESTATE_PLAY){
+    //     let i = PRE_GAME_LOOP_COUNT;
+    //     while(i--){
+    //         gameLoop();
+    //     }
+    // }
     mainLoop();
 }
 
@@ -262,6 +271,8 @@ function mainLoop(){
         then = now - (elapsed % fpsInterval);
 
         // Put your drawing code here
+        
+        
         gameLoop();
 
     }
@@ -270,8 +281,8 @@ function mainLoop(){
 function gameLoop() {
     ticker++;
     stats.begin();
-    gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-    gp = gamepads[0];
+    //gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+    //gp = gamepads[0];
     switch (gameState) {
         case GAMESTATE_TITLE:
             titleScreen.draw();

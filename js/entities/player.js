@@ -18,7 +18,7 @@ var player = {
     keyVelocityCap: .5,
     captured: false,
     capturer: {},
-    hasSabre: true,
+    hasSabre: false,
     swinging: false,
     swingAngle: 0,
     swingStart: 0,
@@ -29,10 +29,11 @@ var player = {
     steps: -1,
    
 
-    health: 500,
+    health: 350,
+    startHealth: 350,
     maxHealth: 500,
     hurtCooldown: 0,
-    hurtCooldownMax: 100,
+    hurtCooldownMax: 25,
 
     shootTarget: {
         x: 0,
@@ -124,12 +125,9 @@ var player = {
 
             }
             else{
-                if(gp){this.shootTarget.x = lerp(this.shootTarget.x, gp.axes[2], 0.3)};
-                if(gp){this.shootTarget.y = lerp(this.shootTarget.y, gp.axes[3], 0.3)}
+                this.shootTarget.x = lerp(this.shootTarget.x, gamepad.rightStick_xAxis(), 0.3);
+                this.shootTarget.y = lerp(this.shootTarget.y, gamepad.rightStick_yAxis(), 0.3);
             }
-
-           
-        
 
             //update rect:
             this.updateCollider(this.x, this.y);
@@ -161,8 +159,8 @@ var player = {
         
             //------------------------------------- 
             // analog values are in the range -1..0..1
-            let gamepadx = gamepad.xAxis();
-            let gamepady = gamepad.yAxis();
+            let gamepadx = gamepad.leftStick_xAxis();
+            let gamepady = gamepad.leftStick_yAxis();
             // console.log("gamepad: "+gamepadx+","+gamepady);
             
             if (gamepadx<-0.05) { // L
@@ -217,12 +215,12 @@ var player = {
                     this.swingSabre();
                 }
                 if(mouse.pressed){ this.mouseSwingSabre() }
-                if(gamepad.buttonA()){this.mouseSwingSabre() }
+                if(gamepad.rightTrigger()){this.gamePadSwingSabre() }
                  
             }else{
                 if (Key.justReleased(Key.z)) { this.fireBullet(); }
                 if(mouse.pressed){ this.mouseFireBullet(); }
-                if(gp?.buttons[7].pressed){this.gamepadFireBullet(); }
+                if(gamepad.rightTrigger() ){this.gamepadFireBullet(); }
             }
 
             //bullet collisions-----------------------------------------------------
@@ -248,7 +246,7 @@ var player = {
                 startSlowMotion(5000); // five second of slowmo
             }
 
-            if (Key.justReleased(Key.x) || gp?.buttons[1].pressed) {
+            if (Key.justReleased(Key.x) || gamepad.rightShoulder()) {
                 inventory.selection++;
                 inventory.selection = inventory.selection % inventory.itemList.length;
             }
@@ -259,7 +257,7 @@ var player = {
 
             //if our velocity is zero and we're colliding with a wall, allow the teleport button to be pressed
             if (this.xVelocity == 0 && this.yVelocity == 0 && this.tileCollisionCheck(world, 0)) {
-                if (Key.justReleased(Key.t) || gp?.buttons[3].pressed) {
+                if (Key.justReleased(Key.t) || gamePad.buttonY()) {
                     this.teleport();
                 }
             }
@@ -424,6 +422,7 @@ var player = {
         }
         world.entities.push(splode);
 
+        //this needs to be replaced with call to function that finds nearest walkable tile
         this.x = world.safeSpots[0].x * world.tileSize;
         this.y = world.safeSpots[0].y * world.tileSize;
         
@@ -461,6 +460,36 @@ var player = {
         let bulletXDistance = worldMouseX - this.x;
         let bulletYDistance = worldMouseY - this.y;
         this.swingAngle = Math.atan2(bulletYDistance, bulletXDistance);
+        this.swingTimer = this.swingTimerMax;
+        let bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle) * 15,
+            this.y +Math.sin(this.swingAngle) * 15,
+             0, 0, COLORS.transparent,
+            20, 20, 90);
+        world.bullets.push(bullet);
+        bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle-Math.PI/4) * 15,
+            this.y +Math.sin(this.swingAngle-Math.PI/4) * 15,
+             0, 0, COLORS.transparent,
+            20, 20, 45);
+        world.bullets.push(bullet);
+        bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle+Math.PI/4) * 15,
+            this.y +Math.sin(this.swingAngle+Math.PI/4) * 15,
+             0, 0, COLORS.transparent,
+            20, 20, 45);
+        world.bullets.push(bullet);
+
+    },
+
+    gamePadSwingSabre(){
+        this.swinging = true;
+       
+        // let worldMouseY = mouse.y + view.y;
+        // let worldMouseX = mouse.x + view.x;
+        // let bulletXDistance = worldMouseX - this.x;
+        // let bulletYDistance = worldMouseY - this.y;
+        this.swingAngle = Math.atan2(gamepad.rightStick_yAxis(), gamepad.rightStick_xAxis());
         this.swingTimer = this.swingTimerMax;
         let bullet = new Bullet(
             this.x +Math.cos(this.swingAngle) * 15,

@@ -3,9 +3,12 @@ var inventory = {
         keys: 0,
         bridge: 0,
         torch: 0,
+        gun: 0,
+        sabre: 0,
+        chalice: 0
     },
 
-    itemList: ["keys", "torch", "bridge"],
+    itemList: ["keys", "torch", "sabre", "gun", "chalice"],
     
     selection: 0,
 
@@ -31,8 +34,18 @@ var inventory = {
         fillRect(230, this.rect.y, playerHealthBarWidth, this.rect.height, COLORS.elfGreen);
         //textString, pos={x: 0, y: 0}, hspacing=0, vspacing = 2, scale=1
         gameFont.drawText(this.score.toString().padStart(12, '0'), {x: 240, y: this.rect.y + 6}, 0, 0, 1);
-        tinyFont.drawText(`E: ${world.entities.length} WE: ${world.worldEntities.length} B: ${world.bullets.length}`,
-        {x: 4, y: 4}, 0, 0, 1);
+
+//debug text------------------------------------------------------------------------------
+tinyFont.drawText(
+    `E: ${world.entities.length} WE: ${world.worldEntities.length} B: ${world.bullets.length}`,
+    {x: 4, y: 4}, 0, 0, 1
+);
+tinyFont.drawText(
+`A: ${gamepad.buttonA()} B: ${gamepad.buttonB()} X: ${gamepad.buttonX()} Y: ${gamepad.buttonY()}LT: ${gamepad.leftTrigger()} RT: ${gamepad.rightTrigger()}
+LX: ${gamepad.leftStick_xAxis()} LY: ${gamepad.leftStick_yAxis()} RX: ${gamepad.rightStick_xAxis()} RY: ${gamepad.rightStick_yAxis()}`,
+{x: 4, y: 12}, 0, 0, 1
+        );
+//----------------------------------------------------------------------------------------
 
         //draw items
         let start = drawPosition;
