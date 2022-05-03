@@ -7,10 +7,13 @@ var miniMapScreen = {
         clearScreen('black');
         //todo: add centered text function to spriteFont
         world.drawMiniMap();
+        strokePolygon(cursorX, cursorY, 3, 2, ticker/8,  COLORS.tahitiGold);
+        strokePolygon(cursorX, cursorY, 3, 2, Math.PI/2 + ticker/8,  COLORS.tahitiGold);
     },
 
     update: function () {
-
+        cursorX = mouse.x;
+        cursorY = mouse.y;
         scaleTarget = 8;
         scale = lerp(scale, scaleTarget, 0.1);
 
