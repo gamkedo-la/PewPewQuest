@@ -198,7 +198,9 @@ class Bug {
         if(rectCollision(this.collider, player.collider)) {
             //signal.dispatch('keysChanged', {amount: 1})
             //inventory.items.keys -= 1;
-           collisionResponse(player, this);
+           if(player.hurtCooldown <= 0) {
+                collisionResponse(player, this);
+           } 
            player.hurt(10);
            
         }

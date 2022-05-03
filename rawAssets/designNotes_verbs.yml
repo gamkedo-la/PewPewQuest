@@ -1,0 +1,64 @@
+Verbs:
+    player verbs:
+        movement:
+            explore environment
+            escape enemies
+        swing a sabre:
+            damage enemies
+            do not damage tile type 1
+        shoot laser gun:
+            damage enemies
+            destroy specific tile types
+        use flashlight:
+            light dark labyrinth corridors
+            cannot use flashlight and weapon at the same time
+        open barrier:
+            requires key
+        hit barrier:
+            releases a spray of red shrapnel that can damage
+            nearby enemies
+    enemy verbs:
+        bats:
+            steal keys
+        bugs:
+            damage player on contact
+            are damaged by contact with barriers
+            push player
+        scrapper:
+            moves tiles, leaving behind a glitch tile
+            invulnerable except for killing tileeater
+        tile eater:
+            stationary, has turret that fires on player
+            scrapper delivers tiles to it
+
+    key inventory items:
+        saber:
+            melee weapon delivers more damage per swing than bullets,
+            has no effect on type 1 tiles   
+        gun: 
+            its a gun
+            auto-fires with a bit of random spray
+        
+        flashlight:
+            for lighting corridors
+        
+        keys(5):
+            not unique, some doors require multiple keys to open
+            inventory can only hold 5 at once
+        
+        chalice: 
+            needed to win the game. Take to the castle gate!
+
+    environment verbs:
+        destructible terrain:
+            tile type 1 is destructible with the gun.
+        doors: 
+            barriers exist that require keys to open
+        spawners:
+            spawns bugs at a steady rate, can be destroyed with saber
+            invulnerable to gun fire
+
+
+        
+
+

@@ -21,6 +21,7 @@ class Barrier {
 
         this.xVelocity = 0;
         this.yVelocity = 0;
+        this.orientation = 0
 
         this.collider = {
             x: this.x,
@@ -127,19 +128,27 @@ class Barrier {
                 
                 this.bump = 20;
                 
+                for(let i = 0; i < 10; i++) {
+                    if(this.direction == EAST || this.direction == WEST) {
+                        let angle = Math.random() > 0.5 ? Math.PI/2 : -Math.PI/2;
+                        world.bullets.push(new Bullet(this.x + Math.random()*this.width*8, this.y+Math.random()*this.height*8, Math.cos(angle), Math.sin(angle), COLORS.dirtyRed, 3, 3, 20));
+                    }else {
+                        let angle = Math.random() < 0.5 ? 0 : Math.PI;
+                        world.bullets.push(new Bullet(this.x + Math.random()*this.width*8, this.y+Math.random()*this.height*8, Math.cos(angle), Math.sin(angle), COLORS.dirtyRed, 3, 3, 20));
+                    }
+                }
             }
 
         }
 
-        //todo, need a line vs. rect method for bullets vs evertything
 
-        world.bullets.forEach(bullet => {
-            if(rectCollision(this.collider, bullet.collider)) {
-                bullet.die();
-                //bullet.collisionResponse(this);
-                this.bump = 20;
-            }
-        })
+        // world.bullets.forEach(bullet => {
+        //     if(rectCollision(this.collider, bullet.collider)) {
+        //         bullet.die();
+        //         //bullet.collisionResponse(this);
+        //         this.bump = 20;
+        //     }
+        // })
 
         
         
