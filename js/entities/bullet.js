@@ -15,6 +15,13 @@ class Bullet {
         this.prevY = this.y;
         this.gravity =  0.5;
         this.life = life;
+        this.angle = 0;
+        this.angleRate = 0;
+        this.radius = 1;
+        this.particles = 0;
+        this.particleColor = COLORS.mandy;
+        this.maxParticleTicks = 0;
+        this.particleTicks = 0;
         this.collider = {
             top: this.y - this.height / 2,
             bottom: this.y + this.height / 2,
@@ -25,6 +32,10 @@ class Bullet {
     }
 
     update() {
+        if (this.angleRate) {
+            this.angle += this.angleRate;
+            this.angle = clampRoll(this.angle, 0, Math.PI*2);
+        }
         this.updateCollider();
         this.prevX = this.x;
         this.prevY = this.y;
@@ -53,11 +64,54 @@ class Bullet {
         if(Math.round(this.xVelocity) == 0 && Math.round(this.yVelocity) == 0){
             this.die();
         }
+
+        // particles
+        if (this.particles) {
+            if (this.particleTicks-- <= 0) {
+                this.particleTicks = this.maxParticleTicks;
+                let dx = this.x-this.prevX;
+                let dy = this.y-this.prevY;
+                let angle = Math.atan2(dy, dx);
+                let x = this.x - Math.cos(angle)*this.radius;
+                let y = this.y - Math.sin(angle)*this.radius;
+                for(let i = 0; i < this.particles; i++) {
+                    let particle = new Particle(
+                        x + randomRange(-this.radius, this.radius),
+                        y + randomRange(-this.radius, this.radius),
+                        -Math.cos(angle)*this.radius/3, 
+                        -Math.sin(angle)*this.radius/3, 
+                        {color: this.particleColor, life: Math.random() * 10}
+                    );
+                    world.entities.push(particle);
+                }
+            }
+        }
     }
-    
+
     draw() {
-        pixelLine(this.x-view.x, this.y-view.y, this.prevX-view.x, this.prevY-view.y, this.color);
-        //fillRect(this.collider.left-view.x, this.collider.top-view.y, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
+        let x = this.x-view.x;
+        let y = this.y-view.y;
+        let px = this.prevX-view.x;
+        let py = this.prevY-view.y;
+        //pixelLine(this.x-view.x, this.y-view.y, this.prevX-view.x, this.prevY-view.y, this.color);
+        if (this.radius <= 1) {
+            pixelLine(x, y, px, py, this.color);
+        } else {
+            let r = this.radius;
+            // corners
+            let c1x = r*Math.cos(this.angle+Math.PI*.25), c1y = r*Math.sin(this.angle+Math.PI*.25);
+            let c2x = r*Math.cos(this.angle+Math.PI*.75), c2y = r*Math.sin(this.angle+Math.PI*.75);
+            let c3x = r*Math.cos(this.angle-Math.PI*.75), c3y = r*Math.sin(this.angle-Math.PI*.75);
+            let c4x = r*Math.cos(this.angle-Math.PI*.25), c4y = r*Math.sin(this.angle-Math.PI*.25);
+            let corners = [[c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y]];
+            // trailer
+            //pixelLine(x, y, px, py, this.color);
+            // rect
+            pixelLine(x+c1x,y+c1y, x+c2x,y+c2y, this.color);
+            pixelLine(x+c2x,y+c2y, x+c3x,y+c3y, this.color);
+            pixelLine(x+c3x,y+c3y, x+c4x,y+c4y, this.color);
+            pixelLine(x+c4x,y+c4y, x+c1x,y+c1y, this.color);
+        }
 
     }
 
@@ -85,7 +139,7 @@ class Bullet {
 
         audio.playSound(loader.sounds[`splode0${Math.floor(Math.random()*8)}`], map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.1, 1+Math.random()*0.2, false);
         if (this.enemy) {
-            world.enemyBullets.splice(world.bullets.indexOf(this), 1);
+            world.enemyBullets.splice(world.enemyBullets.indexOf(this), 1);
         } else {
             world.bullets.splice(world.bullets.indexOf(this), 1);
         }
