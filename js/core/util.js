@@ -78,6 +78,10 @@ function lerp(v0, v1, t) {
 function intLerp(v0, v1, t) {
     return Math.round(v0*(1-t)+v1*t);
 }
+function weightedLerp(min, max, minw, maxw, v) {
+    if (max === min) return minw;
+    return minw + (maxw-minw) * (v-min)/(max-min);
+}
 
 function inView(x,y, pad=10){
     let screenX = x - view.x,
