@@ -26,7 +26,6 @@ class Animation {
     
     this.margin = margin;
 
-    //practice commit
 
     if (!this.frames) {
       const imageWidth = this.spriteSheet.image.width;
