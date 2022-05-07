@@ -15,6 +15,13 @@ class Checkpoint {
         // -- range in which player needs to approach/attack from ... outside this range attacks do nothing
         this.dangerRange = 100;
 
+        // -- determine power by adjacent counters
+        let powers = [ONE, TWO, THREE, FOUR, FIVE];
+        let neighbors = [ northTile, southTile, eastTile, westTile ];
+        let whichPowers = powers.filter(element => neighbors.includes(element) );
+        this.power = clamp(whichPowers.reduce((acc,element) => acc+powers.indexOf(element)+1, 0), 1, 5);
+        console.log(`--- power is: ${this.power}`);
+
 
         this.collider = {
             x: this.x+3,
@@ -118,7 +125,7 @@ class Checkpoint {
                 this.cycleTicks = 240;
                 this.angleRate = -.12;
                 this.shooting = true;
-                this.maxShotTicks = 20;
+                this.maxShotTicks = weightedLerp(1,5, 30,10, this.power);
                 this.shotColor = COLORS.christi;
                 this.particleColor = COLORS.goldenFizz;
                 break;
@@ -126,7 +133,8 @@ class Checkpoint {
                 this.cycleTicks = 240;
                 this.angleRate = .12;
                 this.shooting = true;
-                this.maxShotTicks = 20;
+                //this.maxShotTicks = 20;
+                this.maxShotTicks = weightedLerp(1,5, 30,10, this.power);
                 this.shotColor = COLORS.dirtyRed;
                 this.particleColor = COLORS.tahitiGold;
                 break;
@@ -137,10 +145,11 @@ class Checkpoint {
                 this.shooting = false;
                 break;
             case 'boom':
-                this.cycleTicks = 60;
+                this.cycleTicks = Math.round(weightedLerp(1,5, 45,90, this.power));
                 this.angleRate = 1;
                 this.shooting = true;
-                this.maxShotTicks = 0;
+                this.maxShotTicks = weightedLerp(1, 5, 4, 0, this.power);
+                console.log(`maxShotTicks: ${this.maxShotTicks}`);
                 this.shotTicks = 0;
                 break;
         }
@@ -179,9 +188,10 @@ class Checkpoint {
         this.currentAnimation.update();
 
         if (this.shooting) {
-            this.shotTicks -= this.shotTick*distanceFactor;
+            let tock = this.shotTick*distanceFactor;
+            this.shotTicks -= tock;
             if (this.shotTicks <= 0) {
-                this.shotTicks = this.maxShotTicks;
+                this.shotTicks = Math.max(0, this.maxShotTicks + this.shotTicks);
                 this.fireBullet();
             }
             if (this.state === 'boom') {

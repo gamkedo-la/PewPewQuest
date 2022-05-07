@@ -302,10 +302,11 @@ World.prototype.populateMapObjects = function(){
                     break;
                 }
                 case SAFE_SPOT:{
+                    let neighbors = this.getNeighbors(i, j);
                     let safeSpot = {x: i, y: j};
                     world.safeSpots.push(safeSpot);
                     this.setTileAtPosition(i, j, 0);
-                    let checkpoint = new Checkpoint(i,j);   
+                    let checkpoint = new Checkpoint(i,j, ...neighbors);   
                     world.entities.push(checkpoint);
                     break;
 
