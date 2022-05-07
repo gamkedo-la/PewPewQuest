@@ -355,17 +355,26 @@ class Tileeater {
     }
 
     fireBullet() {
-        let tax = Math.cos(this.targetAngle);
-        let tay = Math.sin(this.targetAngle);
-        let fx = this.collider.left + this.width/2 + tax*36;
-        let fy = this.collider.top + this.height/2 + tay*36;
+        let angle = this.targetAngle + randomRange(-.1,.1);
+        let tax = Math.cos(angle)*1.2;
+        let tay = Math.sin(angle)*1.2;
+        let fx = this.collider.left + this.width/2 + tax*32;
+        let fy = this.collider.top + this.height/2 + tay*32;
         audio.playSound(loader.sounds.pewpew2, 0, 0.1)
-        for (let i=0; i<randomInt(2,8); i++) {
-            let bullet = new Bullet(fx, fy, tax, tay, '#F00', 3, 3, 400);
+        //for (let i=0; i<randomInt(2,4); i++) {
+            tax += randomRange(-.05,.05);
+            tay += randomRange(-.05,.05);
+            let bullet = new Bullet(fx, fy, tax, tay, COLORS.dirtyRed, 3, 3, 400);
+            bullet.damage = 50;
+            bullet.radius = 2;
             bullet.enemy = true;
             bullet.actor = this;
+            bullet.particles = 1;
+            this.particleColor = COLORS.tahitiGold;
+            bullet.angleRate = randomRange(-.3,.3);
+            bullet.maxParticleTicks = 1;
             world.enemyBullets.push(bullet);
-        }
+        //}
     }
 
     update() {
@@ -395,7 +404,7 @@ class Tileeater {
                     this.r3recalc = randomInt(60,150);
                 }
                 // detect state change
-                if (range < this.firingRange && this.r2alive) {
+                if ((this.hurt || range < this.firingRange) && this.r2alive) {
                     this.state = 'aiming';
                     this.r1anim = this.r1sprites.animations['idle'];
                     this.r2anim = this.r2sprites.animations['idle'];
@@ -411,7 +420,7 @@ class Tileeater {
             }
 
             case 'aiming': {
-                if (range > this.firingRange || !this.r2alive) {
+                if ((!this.hurt && range > this.firingRange) || !this.r2alive) {
                     this.state = 'idle';
                     this.r1anim = this.r1sprites.animations['idle'];
                     this.r2anim = this.r2sprites.animations['idle'];
@@ -423,6 +432,7 @@ class Tileeater {
                 // check if close enough to player angle, fire
                 if (this.rotateTo('r2', this.targetAngle+Math.PI*.5, .04)) {
                     this.state = 'firing';
+                    this.shots = 10;
                     this.r1anim = this.r1sprites.animations['idle'];
                     this.r2anim = this.r2sprites.animations['firing'];
                     this.r2anim.reset();
@@ -444,12 +454,17 @@ class Tileeater {
                 if (this.delay) {
                     this.delay--;
                 } else {
-                    if (range < this.firingRange) {
-                        this.fireBullet();
-                        this.state = 'aiming';
-                        this.r1anim = this.r1sprites.animations['idle'];
-                        this.r2anim = this.r2sprites.animations['idle'];
-                        this.r3anim = this.r3sprites.animations['alarm'];
+                    if (this.hurt || (range < this.firingRange)) {
+                        if (this.shots > 0) {
+                            this.fireBullet();
+                            this.shots--;
+                        } else {
+                            this.hurt = false;
+                            this.state = 'aiming';
+                            this.r1anim = this.r1sprites.animations['idle'];
+                            this.r2anim = this.r2sprites.animations['idle'];
+                            this.r3anim = this.r3sprites.animations['alarm'];
+                        }
                     } else {
                         this.state = 'idle';
                         this.r1anim = this.r1sprites.animations['idle'];
@@ -538,6 +553,7 @@ class Tileeater {
                             armorPoint.color = ticker%2==0? COLORS.dirtyRed : COLORS.white;
                         }
                         this.hurtTicks = 10;
+                        this.hurt = true;
                         bullet.hit();
                         bullet.die();
                     }
@@ -555,6 +571,7 @@ class Tileeater {
                     bullet.die();
                     this.health -= 5;
                     this.hurtTicks = 10;
+                    this.hurt = true;
                 }
             } else {
                 if (d < 18) {
