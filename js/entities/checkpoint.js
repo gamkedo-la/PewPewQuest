@@ -20,7 +20,7 @@ class Checkpoint {
         let neighbors = [ northTile, southTile, eastTile, westTile ];
         let whichPowers = powers.filter(element => neighbors.includes(element) );
         this.power = clamp(whichPowers.reduce((acc,element) => acc+powers.indexOf(element)+1, 0), 1, 5);
-        console.log(`--- power is: ${this.power}`);
+        //console.log(`--- power is: ${this.power}`);
 
 
         this.collider = {
@@ -149,7 +149,7 @@ class Checkpoint {
                 this.angleRate = 1;
                 this.shooting = true;
                 this.maxShotTicks = weightedLerp(1, 5, 4, 0, this.power);
-                console.log(`maxShotTicks: ${this.maxShotTicks}`);
+                //console.log(`maxShotTicks: ${this.maxShotTicks}`);
                 this.shotTicks = 0;
                 break;
         }
