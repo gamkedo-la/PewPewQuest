@@ -24,11 +24,10 @@ var player = {
     swingStart: 0,
     swingEnd: 0,
     swingTimer: 0,
-    swingTimerMax: 7,
+    //swingTimerMax: 7,
+    swingTimerMax: 20,
     swing: 0,
     steps: -1,
-   
-
     health: 350,
     startHealth: 350,
     maxHealth: 500,
@@ -53,6 +52,24 @@ var player = {
     },
 
     draw: function () {
+        if (!this.sabreSprites) {
+            this.sabreSprites = spritesheet({
+                image: img['sabre'],
+                frameWidth: 20,
+                frameHeight: 14,
+                frameMargin: 0,
+                animations: {
+                    swing: {
+                        frames: [0,1],
+                        frameRate: 60,
+                        loop: false,
+                        noInterrupt: true
+                    },
+                }
+            });
+            this.sabreAnim = this.sabreSprites.animations['swing'];
+        }
+
         if(!this.captured) {
             if(this.hurtCooldown > 0) {
                 if(ticker%4 == 0) {
@@ -72,14 +89,46 @@ var player = {
                 
             }
             if(this.swinging){
-                pixelLine(this.x-view.x + 3, this.y-view.y + 3,
-                    this.x + 3 -view.x + Math.cos(this.swing) * 20,
-                    this.y+ 3 -view.y + Math.sin(this.swing) * 20,
-                    );
+                /*
+                let x = Math.round(this.x-view.x + 3);
+                let y = Math.round(this.y-view.y + 3);
+                canvasContext.save();
+                canvasContext.translate(x,y);
+                //canvasContext.rotate(this.swing);
+                canvasContext.strokeStyle = 'red';
+                canvasContext.strokeRect(-3, -3, 20, 14);
+                this.sabreAnim.render({ x: -3, y: -7, width: 20, height: 14 });
+                canvasContext.restore();
+                //canvasContext.translate(-x,-y);
+                console.log(`render @ ${x},${y}`);
+                */
+                //canvasContext.drawImage(img["sabre"], this.x-view.x, this.y-view.y);
+                let cx = Math.round(this.x-view.x + 3);
+                let cy = Math.round(this.y-view.y + 3);
+                let s1x = cx + Math.cos(this.swing1)*5;
+                let s1y = cy + Math.sin(this.swing1)*5;
+                let s2x = cx + Math.cos(this.swing1)*20;
+                let s2y = cy + Math.sin(this.swing1)*20;
+                if (true) {
+                    canvasContext.beginPath();
+                    canvasContext.moveTo(s1x,s1y);
+                    canvasContext.lineTo(s2x,s2y);
+                    canvasContext.strokeStyle = COLORS.clairvoyant;
+                    canvasContext.lineWidth = 2;
+                    canvasContext.setLineDash([4,1]);
+                    canvasContext.stroke();
+                    canvasContext.setLineDash([]);
+                    canvasContext.strokeStyle = COLORS.dirtyRed;
+                    canvasContext.strokeRect(s2x-.5,s2y-.5, 1,1);
+                } else {
+                    pixelLine(s1x, s1y, s2x, s2y, COLORS.christi);
+                }
+                /*
                 pixelLine(this.x-view.x + 3, this.y-view.y + 3,
                     this.x + 3 -view.x + Math.cos(this.swing*0.8) * 20,
                     this.y+ 3 -view.y + Math.sin(this.swing*0.8) * 20,
                     "rgba(0,0,255,1)");
+                    */
                 //pixelLine(this.x-view.x, this.y-view.y, 100, 100);
             }
         }
@@ -91,13 +140,20 @@ var player = {
         
         //console.log(player.x, player.y, player.xVelocity, player.yVelocity);
         this.hurtCooldown--;
-        this.swingStart = this.swingAngle - Math.PI/2;
-        this.swingEnd = this.swingAngle + Math.PI/2;
-        this.swing = lerp(this.swingStart, this.swingEnd, this.swingTimer/this.swingTimerMax);
-        this.swingTimer--;
-        if(this.swingTimer < 0){
-            this.swinging = false;
+        //this.swingStart = this.swingAngle - Math.PI/2;
+        //this.swingEnd = this.swingAngle + Math.PI/2;
+        
+        if (this.swinging) {
+            this.swing1 = lerp(this.swingEnd, this.swingStart, this.swingTimer/this.swingTimerMax);
+            //this.swing2 = lerp(this.swingEnd, this.swingStart, this.swingTimer/this.swingTimerMax);
+            this.swingTimer--;
+            if(this.swingTimer < 0){
+                this.swinging = false;
+            }
+            this.sabreAnim.update();
         }
+        //if (this.swinging) {
+        //}
 
 
         if(this.captured){
@@ -447,20 +503,59 @@ var player = {
         }
     },
 
-    swingSabre(){
+    swingSabre(angle=0){
+        if (this.swinging) return;
+        console.log(`swingSabre`);
         this.swinging = true;
+        this.sabreAnim.reset();
+        this.swingTimer = this.swingTimerMax;
+
+        this.swingAngle = angle;
+        this.swingStart = this.swingAngle + Math.PI*.5;
+        this.swingEnd = this.swingAngle - Math.PI*.5;
+        this.swing1 = this.swingStart;
+        this.swing2 = this.swingEnd;
+
+        let bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle) * 15,
+            this.y +Math.sin(this.swingAngle) * 15,
+             //0, 0, COLORS.transparent,
+             0, 0, 'blue',
+            20, 20, 90);
+        world.bullets.push(bullet);
+        bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle-Math.PI/4) * 15,
+            this.y +Math.sin(this.swingAngle-Math.PI/4) * 15,
+             //0, 0, COLORS.transparent,
+             0, 0, 'blue',
+            20, 20, 45);
+        world.bullets.push(bullet);
+        bullet = new Bullet(
+            this.x +Math.cos(this.swingAngle+Math.PI/4) * 15,
+            this.y +Math.sin(this.swingAngle+Math.PI/4) * 15,
+             //0, 0, COLORS.transparent,
+             0, 0, 'blue',
+            20, 20, 45);
+        world.bullets.push(bullet);
 
     },
 
     mouseSwingSabre(){
-        this.swinging = true;
+        console.log(`mouseSwingSabre`);
+        //this.swinging = true;
+        //this.sabreAnim.reset();
        
         let worldMouseY = mouse.y + view.y;
         let worldMouseX = mouse.x + view.x;
         let bulletXDistance = worldMouseX - this.x;
         let bulletYDistance = worldMouseY - this.y;
-        this.swingAngle = Math.atan2(bulletYDistance, bulletXDistance);
-        this.swingTimer = this.swingTimerMax;
+        //this.swingAngle = 
+        let angle = Math.atan2(bulletYDistance, bulletXDistance);
+        //this.swingTimer = this.swingTimerMax;
+
+        this.swingSabre(angle);
+
+        /*
         let bullet = new Bullet(
             this.x +Math.cos(this.swingAngle) * 15,
             this.y +Math.sin(this.swingAngle) * 15,
@@ -479,6 +574,7 @@ var player = {
              0, 0, COLORS.transparent,
             20, 20, 45);
         world.bullets.push(bullet);
+        */
 
     },
 
