@@ -25,7 +25,9 @@ var player = {
     swingEnd: 0,
     swingTimer: 0,
     //swingTimerMax: 7,
-    swingTimerMax: 20,
+    swingTimerMax: 12,
+    swingDelay: 0,
+    swingDelayMax: 10,
     swing: 0,
     steps: -1,
     health: 350,
@@ -52,23 +54,6 @@ var player = {
     },
 
     draw: function () {
-        if (!this.sabreSprites) {
-            this.sabreSprites = spritesheet({
-                image: img['sabre'],
-                frameWidth: 20,
-                frameHeight: 14,
-                frameMargin: 0,
-                animations: {
-                    swing: {
-                        frames: [0,1],
-                        frameRate: 60,
-                        loop: false,
-                        noInterrupt: true
-                    },
-                }
-            });
-            this.sabreAnim = this.sabreSprites.animations['swing'];
-        }
 
         if(!this.captured) {
             if(this.hurtCooldown > 0) {
@@ -88,40 +73,29 @@ var player = {
             canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
                 
             }
-            if(this.swinging){
-                /*
-                let x = Math.round(this.x-view.x + 3);
-                let y = Math.round(this.y-view.y + 3);
-                canvasContext.save();
-                canvasContext.translate(x,y);
-                //canvasContext.rotate(this.swing);
-                canvasContext.strokeStyle = 'red';
-                canvasContext.strokeRect(-3, -3, 20, 14);
-                this.sabreAnim.render({ x: -3, y: -7, width: 20, height: 14 });
-                canvasContext.restore();
-                //canvasContext.translate(-x,-y);
-                console.log(`render @ ${x},${y}`);
-                */
-                //canvasContext.drawImage(img["sabre"], this.x-view.x, this.y-view.y);
+            if(this.swinging && this.swingTimer){
                 let cx = Math.round(this.x-view.x + 3);
                 let cy = Math.round(this.y-view.y + 3);
-                let s1x = cx + Math.cos(this.swing1)*5;
-                let s1y = cy + Math.sin(this.swing1)*5;
-                let s2x = cx + Math.cos(this.swing1)*20;
-                let s2y = cy + Math.sin(this.swing1)*20;
-                if (true) {
+                for (angle of [this.swing1, this.swing2]) {
+                //for (angle of [this.swing2]) {
+                    // the blade
+                    let s1x = cx + Math.cos(angle)*5;
+                    let s1y = cy + Math.sin(angle)*5;
+                    let s2x = cx + Math.cos(angle)*20;
+                    let s2y = cy + Math.sin(angle)*20;
+                    //let color = (angle === this.swing1) ?  COLORS.viking : COLORS.tahitiGold;
+                    let color = (angle === this.swing1) ?  COLORS.topaz : COLORS.topaz;
                     canvasContext.beginPath();
                     canvasContext.moveTo(s1x,s1y);
                     canvasContext.lineTo(s2x,s2y);
-                    canvasContext.strokeStyle = COLORS.clairvoyant;
+                    canvasContext.strokeStyle = color;
                     canvasContext.lineWidth = 2;
                     canvasContext.setLineDash([4,1]);
                     canvasContext.stroke();
                     canvasContext.setLineDash([]);
-                    canvasContext.strokeStyle = COLORS.dirtyRed;
-                    canvasContext.strokeRect(s2x-.5,s2y-.5, 1,1);
-                } else {
-                    pixelLine(s1x, s1y, s2x, s2y, COLORS.christi);
+                    //canvasContext.strokeStyle = COLORS.dirtyRed;
+                    canvasContext.lineWidth = 1;
+                    canvasContext.strokeRect(cx - Math.cos(angle)*5 - 1,cy - Math.sin(angle)*5 - 1, 2, 2);
                 }
                 /*
                 pixelLine(this.x-view.x + 3, this.y-view.y + 3,
@@ -140,20 +114,18 @@ var player = {
         
         //console.log(player.x, player.y, player.xVelocity, player.yVelocity);
         this.hurtCooldown--;
-        //this.swingStart = this.swingAngle - Math.PI/2;
-        //this.swingEnd = this.swingAngle + Math.PI/2;
         
         if (this.swinging) {
             this.swing1 = lerp(this.swingEnd, this.swingStart, this.swingTimer/this.swingTimerMax);
-            //this.swing2 = lerp(this.swingEnd, this.swingStart, this.swingTimer/this.swingTimerMax);
-            this.swingTimer--;
-            if(this.swingTimer < 0){
+            this.swing2 = lerp(this.swingStart, this.swingEnd, this.swingTimer/this.swingTimerMax);
+            if (this.swingTimer) {
+                this.swingTimer--;
+            } else if (this.swingDelay) {
+                this.swingDelay--;
+            } else {
                 this.swinging = false;
             }
-            this.sabreAnim.update();
         }
-        //if (this.swinging) {
-        //}
 
 
         if(this.captured){
@@ -268,7 +240,7 @@ var player = {
             //bullet firing-----------------------------------------------------
             if(this.hasSabre){
                 if (Key.justReleased(Key.z)) {
-                    this.swingSabre();
+                    this.mouseSwingSabre();
                 }
                 if(mouse.pressed){ this.mouseSwingSabre() }
                 if(gamepad.rightTrigger()){this.gamePadSwingSabre() }
@@ -374,6 +346,40 @@ var player = {
             }
             this.previousX = this.x;
             this.previousY = this.y;
+
+            // swing particles -----------------------------------------------------
+            if (this.swinging && this.swingTimer) {
+                let cx = this.x+3;
+                let cy = this.y+3;
+                for (const angle of [this.swing1, this.swing2]) {
+                //for (const angle of [this.swing2]) {
+                    // particles along the blade
+                    let s1x = cx + Math.cos(angle)*5;
+                    let s1y = cy + Math.sin(angle)*5;
+                    let s2x = cx + Math.cos(angle)*20;
+                    let s2y = cy + Math.sin(angle)*20;
+                    // particle angle
+                    let pangle = angle + Math.PI*.5;
+                    //let pcolor = (angle === this.swing1) ? COLORS.deepKoamaru : COLORS.oiledCedar;
+                    let pm = (angle === this.swing1) ? 1 : -1;
+                    for (let i=0; i<5; i++) {
+                        let pcolor = (Math.random() < .75) ? COLORS.deepKoamaru : COLORS.dirtyRed;
+                        // pick point along blade
+                        let k = Math.random();
+                        let px = s1x + (s2x-s1x)*k;
+                        let py = s1y + (s2y-s1y)*k;
+                        let particle = new Particle(
+                            px, py,
+                            pm*Math.cos(pangle)*1,
+                            pm*Math.sin(pangle)*1,
+                            {color: pcolor, life: Math.random() * 10}
+                        );
+                        particle.dbg = true;
+                        world.entities.push(particle);
+                    }
+                }
+            }
+
         }
     },
 
@@ -505,10 +511,10 @@ var player = {
 
     swingSabre(angle=0){
         if (this.swinging) return;
-        console.log(`swingSabre`);
+        console.log(`swingSabre angle: ${angle}`);
         this.swinging = true;
-        this.sabreAnim.reset();
         this.swingTimer = this.swingTimerMax;
+        this.swingDelay = this.swingDelayMax;
 
         this.swingAngle = angle;
         this.swingStart = this.swingAngle + Math.PI*.5;
@@ -541,40 +547,13 @@ var player = {
     },
 
     mouseSwingSabre(){
-        console.log(`mouseSwingSabre`);
-        //this.swinging = true;
-        //this.sabreAnim.reset();
-       
+        //console.log(`mouseSwingSabre`);
         let worldMouseY = mouse.y + view.y;
         let worldMouseX = mouse.x + view.x;
-        let bulletXDistance = worldMouseX - this.x;
-        let bulletYDistance = worldMouseY - this.y;
-        //this.swingAngle = 
+        let bulletXDistance = worldMouseX - (this.x+3);
+        let bulletYDistance = worldMouseY - (this.y+3);
         let angle = Math.atan2(bulletYDistance, bulletXDistance);
-        //this.swingTimer = this.swingTimerMax;
-
         this.swingSabre(angle);
-
-        /*
-        let bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle) * 15,
-            this.y +Math.sin(this.swingAngle) * 15,
-             0, 0, COLORS.transparent,
-            20, 20, 90);
-        world.bullets.push(bullet);
-        bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle-Math.PI/4) * 15,
-            this.y +Math.sin(this.swingAngle-Math.PI/4) * 15,
-             0, 0, COLORS.transparent,
-            20, 20, 45);
-        world.bullets.push(bullet);
-        bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle+Math.PI/4) * 15,
-            this.y +Math.sin(this.swingAngle+Math.PI/4) * 15,
-             0, 0, COLORS.transparent,
-            20, 20, 45);
-        world.bullets.push(bullet);
-        */
 
     },
 
@@ -585,7 +564,9 @@ var player = {
         // let worldMouseX = mouse.x + view.x;
         // let bulletXDistance = worldMouseX - this.x;
         // let bulletYDistance = worldMouseY - this.y;
-        this.swingAngle = Math.atan2(gamepad.rightStick_yAxis(), gamepad.rightStick_xAxis());
+        let angle = Math.atan2(gamepad.rightStick_yAxis(), gamepad.rightStick_xAxis());
+        this.swingSabre(angle);
+        /*
         this.swingTimer = this.swingTimerMax;
         let bullet = new Bullet(
             this.x +Math.cos(this.swingAngle) * 15,
@@ -605,6 +586,7 @@ var player = {
              0, 0, COLORS.transparent,
             20, 20, 45);
         world.bullets.push(bullet);
+        */
 
     }
 
