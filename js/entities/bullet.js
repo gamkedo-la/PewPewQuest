@@ -103,20 +103,22 @@ class Bullet {
         if (this.radius <= 1) {
             pixelLine(x, y, px, py, this.color);
         } else {
-            let r = this.radius;
-            // corners
-            let c1x = r*Math.cos(this.angle+Math.PI*.25), c1y = r*Math.sin(this.angle+Math.PI*.25);
-            let c2x = r*Math.cos(this.angle+Math.PI*.75), c2y = r*Math.sin(this.angle+Math.PI*.75);
-            let c3x = r*Math.cos(this.angle-Math.PI*.75), c3y = r*Math.sin(this.angle-Math.PI*.75);
-            let c4x = r*Math.cos(this.angle-Math.PI*.25), c4y = r*Math.sin(this.angle-Math.PI*.25);
-            let corners = [[c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y]];
-            // trailer
-            //pixelLine(x, y, px, py, this.color);
-            // rect
-            pixelLine(x+c1x,y+c1y, x+c2x,y+c2y, this.color);
-            pixelLine(x+c2x,y+c2y, x+c3x,y+c3y, this.color);
-            pixelLine(x+c3x,y+c3y, x+c4x,y+c4y, this.color);
-            pixelLine(x+c4x,y+c4y, x+c1x,y+c1y, this.color);
+             let r = this.radius;
+            // // corners
+            // let c1x = r*Math.cos(this.angle+Math.PI*.25), c1y = r*Math.sin(this.angle+Math.PI*.25);
+            // let c2x = r*Math.cos(this.angle+Math.PI*.75), c2y = r*Math.sin(this.angle+Math.PI*.75);
+            // let c3x = r*Math.cos(this.angle-Math.PI*.75), c3y = r*Math.sin(this.angle-Math.PI*.75);
+            // let c4x = r*Math.cos(this.angle-Math.PI*.25), c4y = r*Math.sin(this.angle-Math.PI*.25);
+            // let corners = [[c1x, c1y], [c2x, c2y], [c3x, c3y], [c4x, c4y]];
+            // // trailer
+            // //pixelLine(x, y, px, py, this.color);
+            // // rect
+            // pixelLine(x+c1x,y+c1y, x+c2x,y+c2y, this.color);
+            // pixelLine(x+c2x,y+c2y, x+c3x,y+c3y, this.color);
+            // pixelLine(x+c3x,y+c3y, x+c4x,y+c4y, this.color);
+            // pixelLine(x+c4x,y+c4y, x+c1x,y+c1y, this.color);
+
+            strokePolygon(x,y,r,4, this.angle, this.color);
         }
 
     }
