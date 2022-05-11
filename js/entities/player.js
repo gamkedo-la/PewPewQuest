@@ -116,9 +116,9 @@ var player = {
             if (this.swingTimer > 0) {
                 this.swingTimer--;
             } else if (this.swingDelay > 0) {
-                if (this.swingBullet) {
-                    this.swingBullet.die();
-                    this.swingBullet = null;
+                if (this.swingBullets) {
+                    for (const bullet of this.swingBullets) bullet.die();
+                    this.swingBullets = null;
                 }
                 this.swingDelay--;
             } else {
@@ -377,9 +377,14 @@ var player = {
                 }
 
                 // update swing bullet
-                if (this.swingBullet) {
-                    this.swingBullet.x = s2x;
-                    this.swingBullet.y = s2y;
+                if (this.swingBullets) {
+                    for (let i=0; i<=5; i++) {
+                        let k = i*.2;
+                        let bx = s1x + (s2x-s1x)*k;
+                        let by = s1y + (s2y-s1y)*k;
+                        this.swingBullets[i].x = bx;
+                        this.swingBullets[i].y = by;
+                    }
                 }
 
             }
@@ -532,19 +537,24 @@ var player = {
 
         let cx = this.x + 3;
         let cy = this.y + 3;
+        let s1x = cx + Math.cos(this.swing)*5;
+        let s1y = cy + Math.sin(this.swing)*5;
         let s2x = cx + Math.cos(this.swing)*20;
         let s2y = cy + Math.sin(this.swing)*20;
-        this.swingBullet = new Bullet(
-            s2x,
-            s2y,
-             //0, 0, COLORS.transparent,
-             0, 0, 'blue',
-            5, 5, 90);
-        //bullet.dbgCollider = true;
-        this.swingBullet.allowStatic = true;
-        this.swingBullet.dbgCollider = true;
-        this.swingBullet.damage = 20;
-        world.bullets.push(this.swingBullet);
+        this.swingBullets = [];
+        for (let i=0; i<=5; i++) {
+            let k = i*.2;
+            let bx = cx + (s2x-s1x)*k;
+            let by = s1y + (s2y-s1y)*k;
+            let bullet = new Bullet( bx, by, 0, 0, COLORS.transparent, 5, 5, 90);
+            this.swingBullets.push(bullet);
+            bullet.allowStatic = true;
+            //bullet.dbgCollider = true;
+            bullet.indestructable = true;
+            bullet.damage = 1;
+            bullet.killsTerrain = false;
+            world.bullets.push(bullet);
+        }
 
         /*
         let bullet = new Bullet(

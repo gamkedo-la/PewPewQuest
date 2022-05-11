@@ -24,6 +24,7 @@ class Bullet {
         this.particleTicks = 0;
         this.allowStatic = false;
         this.indestructable = false;
+        this.killsTerrain = true;
         this.collider = {
             top: this.y - this.height / 2,
             bottom: this.y + this.height / 2,
@@ -50,7 +51,7 @@ class Bullet {
         if(world.data[ world.pixelToTileIndex(this.x, this.y) ] > 0){
            
             this.hit();
-            if(world.data[ world.pixelToTileIndex(this.x, this.y) ] == COLOR_VALHALLA) {
+            if(this.killsTerrain && world.data[ world.pixelToTileIndex(this.x, this.y) ] == COLOR_VALHALLA) {
                 world.data[ world.pixelToTileIndex(this.x, this.y) ] = 0;
                 this.hit();
             }
@@ -62,6 +63,7 @@ class Bullet {
         }
         if(this.life <= 0){
             this.hit();
+            this.die();
         }
         if(!this.allowStatic && (Math.round(this.xVelocity) == 0 && Math.round(this.yVelocity) == 0)){
             this.die();
@@ -135,7 +137,9 @@ class Bullet {
       
 
        }
-        this.die();
+       if (!this.indestructable) {
+            this.die();
+       }
     }
 
     die() {
