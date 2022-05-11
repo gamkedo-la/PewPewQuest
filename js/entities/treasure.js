@@ -1,7 +1,7 @@
 class Treasure {
-    constructor(x,y) {
-        this.x = x * 8;
-        this.y = y * 8;
+    constructor(tilex,tiley) {
+        this.x = tilex * 8;
+        this.y = tiley * 8;
         this.width = 4;
         this.height = 4;
         this.left = this.x-4;
@@ -29,11 +29,13 @@ class Treasure {
     collect() {
         signal.dispatch('getTreasure', {item: this});
         audio.playSound(loader.sounds.test2);
+
         for(let i = 0; i < 20; i++) {
             let particle = new Particle(this.left + Math.random()*this.width, this.y-2, Math.random() * 2-1, Math.random() * -2,
              {color: COLORS.elfGreen, life: Math.random() * 20});
              world.entities.push(particle)
         }
+
         inventory.score += 100;
         if(player.health < player.maxHealth){
             player.health += 10;

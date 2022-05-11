@@ -71,6 +71,7 @@ const imageList = [
 'tileeater_r2',
 'tileeater_r3',
 'sabre',
+'titleCard',
 
 ]
 
@@ -144,7 +145,7 @@ const soundList = [
 
 ]
 
-var gameState = GAMESTATE_PLAY;
+var gameState = GAMESTATE_TITLE;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();

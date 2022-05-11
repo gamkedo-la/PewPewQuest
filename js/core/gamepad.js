@@ -13,8 +13,12 @@ var gamepad = {
     butt:function(num) {
         if (!navigator.getGamepads) return false;
         let joy = navigator.getGamepads()[0];
-        if (joy) return joy.buttons[num].value; else return false;
+        if (joy){
+            return joy.buttons[num].value;
+        }else{ return false }
     },
+    released: [],
+    
     leftStick_xAxis:function() { return this.axis(0); },
     leftStick_yAxis:function() { return this.axis(1); },
     rightStick_xAxis:function() { return this.axis(2); },
