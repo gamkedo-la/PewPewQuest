@@ -15,11 +15,12 @@ var titleScreen = {
                 ${Math.floor(255*Math.sin(ticker/60))})`;
 
             strokePolygon(canvas.width/2, canvas.height/2, 10*i, 7, ticker/100*i/2, color);
+            canvasContext.drawImage(img['titleCard'], 0, 0);
             
         }
         
         //title text
-        gameFont.drawText("PewPewQuest", { x: 10, y: 10 }, 0, 0, 2);
+        //gameFont.drawText("PewPewQuest", { x: 10, y: 10 }, 0, 0, 2);
         gameFont.drawText("Press Z to Start", { x: 10, y: 30 }, 0, 0);
         gameFont.drawText("Press C for Credits", { x: 10, y: 40 }, 0, 0);
 

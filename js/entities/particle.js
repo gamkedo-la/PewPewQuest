@@ -6,6 +6,8 @@ class Particle {
         this.yVelocity = yVelocity;
         this.color = options.color || '#8888FF';
         this.life = options.life || 10;
+        this.drop = options.drop || 0;
+        this.dropChance = options.dropChance || 0;
         this.x = x;
         this.y = y;
         this.prevX = this.x;
@@ -41,6 +43,11 @@ class Particle {
 
     die() {
         world.entities.splice(world.entities.indexOf(this), 1);
+        if(this.dropChance > Math.random()){
+            if(world.getTileAtPixel(this.x, this.y) == 0){
+                world.entities.push(new Treasure(this.x / 8, this.y / 8));
+            }
+        }
     }
 
 }
