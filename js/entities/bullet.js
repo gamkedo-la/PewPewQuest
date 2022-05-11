@@ -23,6 +23,7 @@ class Bullet {
         this.maxParticleTicks = 0;
         this.particleTicks = 0;
         this.allowStatic = false;
+        this.indestructable = false;
         this.collider = {
             top: this.y - this.height / 2,
             bottom: this.y + this.height / 2,

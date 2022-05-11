@@ -24,10 +24,9 @@ var player = {
     swingStart: 0,
     swingEnd: 0,
     swingTimer: 0,
-    //swingTimerMax: 7,
-    swingTimerMax: 12,
+    swingTimerMax: 7,
     swingDelay: 0,
-    swingDelayMax: 10,
+    swingDelayMax: 7,
     swing: 0,
     swingSwap: false,
     steps: -1,
@@ -114,9 +113,13 @@ var player = {
         
         if (this.swinging) {
             this.swing = lerp(this.swingEnd, this.swingStart, this.swingTimer/this.swingTimerMax);
-            if (this.swingTimer) {
+            if (this.swingTimer > 0) {
                 this.swingTimer--;
-            } else if (this.swingDelay) {
+            } else if (this.swingDelay > 0) {
+                if (this.swingBullet) {
+                    this.swingBullet.die();
+                    this.swingBullet = null;
+                }
                 this.swingDelay--;
             } else {
                 this.swinging = false;
@@ -343,7 +346,7 @@ var player = {
             this.previousX = this.x;
             this.previousY = this.y;
 
-            // swing particles -----------------------------------------------------
+            // swing updates -----------------------------------------------------
             if (this.swinging && this.swingTimer) {
                 let cx = this.x+3;
                 let cy = this.y+3;
@@ -372,6 +375,13 @@ var player = {
                     particle.dbg = true;
                     world.entities.push(particle);
                 }
+
+                // update swing bullet
+                if (this.swingBullet) {
+                    this.swingBullet.x = s2x;
+                    this.swingBullet.y = s2y;
+                }
+
             }
 
         }
@@ -520,6 +530,23 @@ var player = {
         this.swing = this.swingStart;
         this.swingSwap = !this.swingSwap;
 
+        let cx = this.x + 3;
+        let cy = this.y + 3;
+        let s2x = cx + Math.cos(this.swing)*20;
+        let s2y = cy + Math.sin(this.swing)*20;
+        this.swingBullet = new Bullet(
+            s2x,
+            s2y,
+             //0, 0, COLORS.transparent,
+             0, 0, 'blue',
+            5, 5, 90);
+        //bullet.dbgCollider = true;
+        this.swingBullet.allowStatic = true;
+        this.swingBullet.dbgCollider = true;
+        this.swingBullet.damage = 20;
+        world.bullets.push(this.swingBullet);
+
+        /*
         let bullet = new Bullet(
             this.x +Math.cos(this.swingAngle) * 15,
             this.y +Math.sin(this.swingAngle) * 15,
@@ -544,6 +571,7 @@ var player = {
             20, 20, 45);
         //bullet.dbgCollider = true;
         world.bullets.push(bullet);
+        */
 
     },
 
