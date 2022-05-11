@@ -358,7 +358,7 @@ var player = {
                 let pangle = this.swing + Math.PI*.5;
                 let pm = (this.swingSwap) ? 1 : -1;
                 for (let i=0; i<5; i++) {
-                    let pcolor = (Math.random() < .75) ? COLORS.deepKoamaru : COLORS.dirtyRed;
+                    let pcolor = (Math.random() < .75) ? COLORS.deepKoamaru : COLORS.dell;
                     // pick point along blade
                     let k = Math.random();
                     let px = s1x + (s2x-s1x)*k;
