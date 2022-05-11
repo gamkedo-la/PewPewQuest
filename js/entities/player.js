@@ -544,7 +544,7 @@ var player = {
         this.swingBullets = [];
         for (let i=0; i<=5; i++) {
             let k = i*.2;
-            let bx = cx + (s2x-s1x)*k;
+            let bx = s1x + (s2x-s1x)*k;
             let by = s1y + (s2y-s1y)*k;
             let bullet = new Bullet( bx, by, 0, 0, COLORS.transparent, 5, 5, 90);
             this.swingBullets.push(bullet);
