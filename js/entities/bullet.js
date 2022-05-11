@@ -22,6 +22,7 @@ class Bullet {
         this.particleColor = COLORS.mandy;
         this.maxParticleTicks = 0;
         this.particleTicks = 0;
+        this.allowStatic = false;
         this.collider = {
             top: this.y - this.height / 2,
             bottom: this.y + this.height / 2,
@@ -61,7 +62,7 @@ class Bullet {
         if(this.life <= 0){
             this.hit();
         }
-        if(Math.round(this.xVelocity) == 0 && Math.round(this.yVelocity) == 0){
+        if(!this.allowStatic && (Math.round(this.xVelocity) == 0 && Math.round(this.yVelocity) == 0)){
             this.die();
         }
 
@@ -93,6 +94,10 @@ class Bullet {
         let y = this.y-view.y;
         let px = this.prevX-view.x;
         let py = this.prevY-view.y;
+        if (this.dbgCollider) {
+            canvasContext.strokeStyle = 'red';
+            canvasContext.strokeRect(x-this.width/2, y-this.height/2, this.width, this.height);
+        }
         //pixelLine(this.x-view.x, this.y-view.y, this.prevX-view.x, this.prevY-view.y, this.color);
         if (this.radius <= 1) {
             pixelLine(x, y, px, py, this.color);
