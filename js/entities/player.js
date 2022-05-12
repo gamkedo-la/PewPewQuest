@@ -84,10 +84,18 @@ var player = {
                 canvasContext.beginPath();
                 canvasContext.moveTo(s1x,s1y);
                 canvasContext.lineTo(s2x,s2y);
+                canvasContext.strokeStyle = COLORS.deepKoamaru;
+                canvasContext.lineWidth = 5;
+                //canvasContext.setLineDash([4,1]);
+                canvasContext.stroke()
                 canvasContext.strokeStyle = COLORS.viking;
-                canvasContext.lineWidth = 2;
-                canvasContext.setLineDash([4,1]);
+                canvasContext.lineWidth = 3;
+                //canvasContext.setLineDash([4,1]);
                 canvasContext.stroke();
+                canvasContext.strokeStyle = COLORS.white;
+                canvasContext.lineWidth = 1;
+                //canvasContext.setLineDash([4,1]);
+                canvasContext.stroke()
                 canvasContext.setLineDash([]);
                 canvasContext.strokeStyle = COLORS.loulou;
                 canvasContext.lineWidth = 1;
@@ -360,8 +368,8 @@ var player = {
                 // particle angle
                 let pangle = this.swing + Math.PI*.5;
                 let pm = (this.swingSwap) ? 1 : -1;
-                for (let i=0; i<5; i++) {
-                    let pcolor = (Math.random() < .75) ? COLORS.deepKoamaru : COLORS.dell;
+                for (let i=0; i<15; i++) {
+                    let pcolor = (Math.random() < .75) ? COLORS.viking : COLORS.white;
                     // pick point along blade
                     let k = Math.random();
                     let px = s1x + (s2x-s1x)*k;
@@ -371,6 +379,21 @@ var player = {
                         pm*Math.cos(pangle)*1,
                         pm*Math.sin(pangle)*1,
                         {color: pcolor, life: Math.random() * 10}
+                    );
+                    particle.dbg = true;
+                    world.entities.push(particle);
+                }
+                for (let i=0; i<5; i++) {
+                    let pcolor = (Math.random() < .75) ? COLORS.deepKoamaru : COLORS.royalBlue;
+                    // pick point along blade
+                    let k = Math.random();
+                    let px = s1x + (s2x-s1x)*k;
+                    let py = s1y + (s2y-s1y)*k;
+                    let particle = new Particle(
+                        px, py,
+                        pm*Math.cos(pangle)*1,
+                        pm*Math.sin(pangle)*1,
+                        {color: pcolor, life: Math.random() * 35}
                     );
                     particle.dbg = true;
                     world.entities.push(particle);
@@ -597,7 +620,7 @@ var player = {
     },
 
     gamePadSwingSabre(){
-        this.swinging = true;
+        //this.swinging = true;
        
         // let worldMouseY = mouse.y + view.y;
         // let worldMouseX = mouse.x + view.x;
