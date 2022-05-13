@@ -155,25 +155,25 @@ var player = {
             this.updateCollider(this.x, this.y);
 
             //handle keyboard ARROWS input------------------------------
-            if (Key.isDown(Key.LEFT)) {
+            if (Key.isDown(Key.LEFT) || gamepad.dpadLeft()) {
                 this.xVelocity -= this.maxAcceleration;
                 this.yFacing = 0;
                 this.xFacing = -1;
                 this.xVelocity *= this.keyVelocityCap;
             }
-            else if (Key.isDown(Key.RIGHT)) {
+            else if (Key.isDown(Key.RIGHT) || gamepad.dpadRight()) {
                 this.xVelocity += this.maxAcceleration;
                 this.yFacing = 0;
                 this.xFacing = 1;
                 this.xVelocity *= this.keyVelocityCap;
             }
-            if (Key.isDown(Key.UP)) {
+            if (Key.isDown(Key.UP) || gamepad.dpadUp()) {
                 this.yVelocity -= this.maxAcceleration;
                 this.xFacing = 0;
                 this.yFacing = -1;
                 this.yVelocity *= this.keyVelocityCap;
             }
-            else if (Key.isDown(Key.DOWN)) {
+            else if (Key.isDown(Key.DOWN) || gamepad.dpadDown()) {
                 this.yVelocity += this.maxAcceleration;
                 this.xFacing = 0;
                 this.yFacing = 1;
