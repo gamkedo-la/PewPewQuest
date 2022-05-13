@@ -133,15 +133,12 @@ class Checkpoint {
                 this.cycleTicks = 240;
                 this.angleRate = .12;
                 this.shooting = true;
-                //this.maxShotTicks = 20;
                 this.maxShotTicks = weightedLerp(1,5, 30,10, this.power);
                 this.shotColor = COLORS.dirtyRed;
                 this.particleColor = COLORS.tahitiGold;
                 break;
             case 'delay':
                 this.cycleTicks = 60;
-                //this.angleRate = 0;
-                //this.angle = 0;
                 this.shooting = false;
                 break;
             case 'boom':
@@ -149,7 +146,6 @@ class Checkpoint {
                 this.angleRate = 1;
                 this.shooting = true;
                 this.maxShotTicks = weightedLerp(1, 5, 4, 0, this.power);
-                //console.log(`maxShotTicks: ${this.maxShotTicks}`);
                 this.shotTicks = 0;
                 break;
         }
@@ -252,11 +248,13 @@ class Checkpoint {
         audio.playSound(loader.sounds[`bigSplode0${Math.floor(Math.random()*8)}`],
             map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
+
         for(let i = 0; i < 20; i++) {
             let angle = (Math.PI*2/40) * i;
             world.entities.push(new Particle(this.x + this.width/2, this.y + this.width/2, Math.cos(angle)*2, Math.sin(angle)*2, {color: COLORS.goldenFizz, life: Math.random()*20+10}));
             world.bullets.push(new Bullet(this.x, this.y, Math.cos(angle)*4*Math.random(), Math.sin(angle)*2*Math.random(), COLORS.dirtyRed));
         }
+        
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.dirtyRed));
         world.entities.splice(world.entities.indexOf(this), 1);
     }

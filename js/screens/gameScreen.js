@@ -1,4 +1,4 @@
-var gameScreen = {
+const gameScreen = {
 
     cameraTypeToggle: true,
     bgmStarted: false,
@@ -47,20 +47,21 @@ var gameScreen = {
         player.draw();
         inventory.draw();
 
-        //draw aim cursor, depending on mouse or gamepad input
         cursorX = mouse.x;
         cursorY = mouse.y;
+        
         if(gamepad.axis(2) ){
             let angle = Math.atan2(gamepad.rightStick_yAxis(), gamepad.rightStick_xAxis());
             let x = player.x + 4 +  Math.cos(angle) * 20 - view.x;
             let y = player.y + 4 + Math.sin(angle) * 20 - view.y;
             cursorX = x;
             cursorY = y;
+            this.drawMouseCursor();
         }
-        strokePolygon(cursorX, cursorY, 3, 2, ticker/8,  COLORS.tahitiGold);
-        strokePolygon(cursorX, cursorY, 3, 2, Math.PI/2 + ticker/8,  COLORS.tahitiGold);
-
-
+        if(mouse.pressed) {
+            this.drawMouseCursor();
+        }
+        
     },
 
     update: function () {
@@ -158,5 +159,10 @@ var gameScreen = {
 
         player.update();
         inventory.update();
+    },
+
+    drawMouseCursor: function () {
+        strokePolygon(cursorX, cursorY, 3, 2, ticker/8,  COLORS.tahitiGold);
+        strokePolygon(cursorX, cursorY, 3, 2, Math.PI/2 + ticker/8,  COLORS.tahitiGold);
     }
 }

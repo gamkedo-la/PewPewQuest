@@ -626,7 +626,6 @@ class Tileeater {
         this.previous.x = this.x;
         this.previous.y = this.y;
 
-        // update scrappers
         this.scrappers.forEach(function(scrapper){
             scrapper.update();
         })
@@ -724,7 +723,6 @@ class Tileeater {
 
     findPlayerRange() {
         let center = {x: this.x + this.width/2, y: this.y + this.height/2};
-        //console.log(`center: ${center.x},${center.y} player: ${player.x},${player.y}`);
         return distanceBetweenPoints(center, player);
     }
 

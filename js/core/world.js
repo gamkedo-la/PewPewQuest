@@ -122,7 +122,6 @@ World.prototype.drawMap = function(){
                         if(inventory.items.torch && inventory.selectedItem == 'torch'){
                             this.drawLightGridRadius(i,j,player,50, "#202030");
                         }
-                        //this.drawFilledTile(i,j,tile);
                         this.drawImageTile(i,j,tile);
                         break;
                     case COLOR_DIRTY_RED:{
@@ -131,7 +130,6 @@ World.prototype.drawMap = function(){
 
                     }
                     default:
-                        //this.drawFilledTile(i,j,tile);
                         this.drawImageTile(i,j,tile);
                         break;
 
@@ -170,7 +168,6 @@ World.prototype.drawImageTile = function(i,j,basicTileColor){
     let tilesheet = img['tiles']
     let row = palette.indexOf(basicTileColor) * 8
     let column = this.decorData[this.widthInTiles * j + i] * 8
-    //console.log(`${row}, ${column}`)
     
     canvasContext.drawImage(
         tilesheet,
@@ -214,9 +211,7 @@ World.prototype.drawImageTileAt = function(x,y,tileInfo){
 World.prototype.drawGlitchTile = function(i,j,basicTileColor){
     let tilesheet = img['tiles']
     let row = palette.indexOf(basicTileColor) * 8
-    let column = this.decorData[this.widthInTiles * j + i] * 8
     let randomDecor = Math.floor(Math.random() * 32);
-    //console.log(`${row}, ${column}`)
     
     canvasContext.drawImage(
         tilesheet,
@@ -288,7 +283,7 @@ World.prototype.populateMapObjects = function(){
                 case SCRAPPER:{
                     let neighbors = this.getNeighbors(i, j);
                     let scrapper = new Scrapper(i,j, ...neighbors);
-                    //we want Enforcers to follow player beyond screen bounds, so
+                    //we want scrappers to update whether onscreen or not, so
                     //it goes in worldEntties. 
                     world.worldEntities.push(scrapper);
                     this.setTileAtPosition(i, j, 0);
@@ -314,8 +309,8 @@ World.prototype.populateMapObjects = function(){
                 case TILE_EATER:{
                     let neighbors = this.getNeighbors(i, j);
                     let tileeater = new Tileeater(i,j, ...neighbors);
-                    //we want Enforcers to follow player beyond screen bounds, so
-                    //it goes in worldEntties. ww
+                    //we want scrappers to update whether onscreen or not, so
+                    //it goes in worldEntties.
                     world.worldEntities.push(tileeater);
                     this.setTileAtPosition(i, j, 0);
                     break;
@@ -460,9 +455,9 @@ World.prototype.getNeighbors = function(i, j){
     let west = this.getTileAtPosition(i-1, j);
     return [north, south, east, west];
 }
+
 World.prototype.drawMiniMap = function(){
    scale = 8;
-    //--------------
     for(let i = 0; i < canvas.width; i++){
         for(let j = 0; j < canvas.height; j++){
             
@@ -478,6 +473,7 @@ World.prototype.drawMiniMap = function(){
 
         }
     }
+
     fillRect(
         player.x/scale - view.x/scale + canvas.width/2,
         player.y/scale - view.y/scale + canvas.height/2,

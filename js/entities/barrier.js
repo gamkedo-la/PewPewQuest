@@ -139,26 +139,12 @@ class Barrier {
                 }
             }
 
-        }
-
-
-        // world.bullets.forEach(bullet => {
-        //     if(rectCollision(this.collider, bullet.collider)) {
-        //         bullet.die();
-        //         //bullet.collisionResponse(this);
-        //         this.bump = 20;
-        //     }
-        // })
-
-        
-        
+        }        
     }
 
     removeBarrier() {
         signal.dispatch("removeBarrier", {item: this});
     }
-
-    
 
     updateCollider() {
         this.collider.x = this.x;
@@ -170,6 +156,5 @@ class Barrier {
         this.collider.top = this.y;
         this.collider.bottom = this.y + 8*this.height;
     }
-
 
 }

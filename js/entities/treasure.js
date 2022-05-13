@@ -22,7 +22,6 @@ class Treasure {
     }
     
     draw() {
-        //canvasContext.drawImage(img["key"], this.x-view.x, this.y-view.y);
         fillRect(this.left-view.x, this.top-view.y, this.width, this.height, COLORS.atlantis);
     }
 

@@ -40,7 +40,6 @@ var player = {
         x: 0,
         y: 0
     },
-    //items: inventory.items,
 
     collider: {
         left: 0,
@@ -69,7 +68,6 @@ var player = {
                 let x = -3 + Math.sin(angle+ticker/30)*radius;
                 let y = -1 + Math.cos(angle+ticker/30)*radius;
 
-            strokePolygon(this.x-view.x+x, this.y-view.y+y, 2, 3, ticker/20, COLORS.white);
             canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
                 
             }
@@ -86,28 +84,18 @@ var player = {
                 canvasContext.lineTo(s2x,s2y);
                 canvasContext.strokeStyle = COLORS.deepKoamaru;
                 canvasContext.lineWidth = 5;
-                //canvasContext.setLineDash([4,1]);
                 canvasContext.stroke()
                 canvasContext.strokeStyle = COLORS.viking;
                 canvasContext.lineWidth = 3;
-                //canvasContext.setLineDash([4,1]);
                 canvasContext.stroke();
                 canvasContext.strokeStyle = COLORS.white;
                 canvasContext.lineWidth = 1;
-                //canvasContext.setLineDash([4,1]);
                 canvasContext.stroke()
                 canvasContext.setLineDash([]);
                 canvasContext.strokeStyle = COLORS.loulou;
                 canvasContext.lineWidth = 1;
                 canvasContext.strokeRect(cx - Math.cos(this.swing)*5 - 1,cy - Math.sin(this.swing)*5 - 1, 2, 2);
 
-                /*
-                pixelLine(this.x-view.x + 3, this.y-view.y + 3,
-                    this.x + 3 -view.x + Math.cos(this.swing*0.8) * 20,
-                    this.y+ 3 -view.y + Math.sin(this.swing*0.8) * 20,
-                    "rgba(0,0,255,1)");
-                    */
-                //pixelLine(this.x-view.x, this.y-view.y, 100, 100);
             }
         }
         
@@ -116,7 +104,6 @@ var player = {
 
     update: function () {
         
-        //console.log(player.x, player.y, player.xVelocity, player.yVelocity);
         this.hurtCooldown--;
         
         if (this.swinging) {
@@ -166,6 +153,7 @@ var player = {
 
             //update rect:
             this.updateCollider(this.x, this.y);
+
             //handle keyboard ARROWS input------------------------------
             if (Key.isDown(Key.LEFT)) {
                 this.xVelocity -= this.maxAcceleration;
@@ -196,7 +184,6 @@ var player = {
             // analog values are in the range -1..0..1
             let gamepadx = gamepad.leftStick_xAxis();
             let gamepady = gamepad.leftStick_yAxis();
-            // console.log("gamepad: "+gamepadx+","+gamepady);
             
             if (gamepadx<-0.05) { // L
                 this.xVelocity = this.maxAcceleration * gamepadx;
@@ -261,8 +248,6 @@ var player = {
             //bullet collisions-----------------------------------------------------
             world.enemyBullets.forEach(bullet => {
                 if(rectCollision(this.collider, bullet.collider)) {
-                    //this.saved = true;
-                    //this.bump = 5;
                     // -- for now... just splode the bullet
                     player.hurt(bullet.damage);
                     bullet.hit();
@@ -271,15 +256,7 @@ var player = {
             });
 
         
-           
-
             //other actions-----------------------------------------------------
-
-            // slow motion effect test
-            // FIXME: remove and trigger during a cinematic moment
-            if (Key.justReleased(Key.o)) {
-                startSlowMotion(5000); // five second of slowmo
-            }
 
             if (Key.justReleased(Key.x) || gamepad.rightShoulder()) {
                 inventory.selection++;
@@ -296,7 +273,6 @@ var player = {
                     this.teleport();
                 }
             }
-
 
             //are we out of bounds? Scroll one screen in that direction
             if(this.collider.right - view.x < 0) {
@@ -565,6 +541,7 @@ var player = {
         let s2x = cx + Math.cos(this.swing)*20;
         let s2y = cy + Math.sin(this.swing)*20;
         this.swingBullets = [];
+
         for (let i=0; i<=5; i++) {
             let k = i*.2;
             let bx = s1x + (s2x-s1x)*k;
@@ -578,34 +555,6 @@ var player = {
             bullet.killsTerrain = false;
             world.bullets.push(bullet);
         }
-
-        /*
-        let bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle) * 15,
-            this.y +Math.sin(this.swingAngle) * 15,
-             //0, 0, COLORS.transparent,
-             0, 0, 'blue',
-            20, 20, 90);
-        //bullet.dbgCollider = true;
-        world.bullets.push(bullet);
-        bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle-Math.PI/4) * 15,
-            this.y +Math.sin(this.swingAngle-Math.PI/4) * 15,
-             //0, 0, COLORS.transparent,
-             0, 0, 'blue',
-            20, 20, 45);
-        //bullet.dbgCollider = true;
-        world.bullets.push(bullet);
-        bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle+Math.PI/4) * 15,
-            this.y +Math.sin(this.swingAngle+Math.PI/4) * 15,
-             //0, 0, COLORS.transparent,
-             0, 0, 'blue',
-            20, 20, 45);
-        //bullet.dbgCollider = true;
-        world.bullets.push(bullet);
-        */
-
     },
 
     mouseSwingSabre(){
@@ -620,38 +569,8 @@ var player = {
     },
 
     gamePadSwingSabre(){
-        //this.swinging = true;
-       
-        // let worldMouseY = mouse.y + view.y;
-        // let worldMouseX = mouse.x + view.x;
-        // let bulletXDistance = worldMouseX - this.x;
-        // let bulletYDistance = worldMouseY - this.y;
         let angle = Math.atan2(gamepad.rightStick_yAxis(), gamepad.rightStick_xAxis());
         this.swingSabre(angle);
-        /*
-        this.swingTimer = this.swingTimerMax;
-        let bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle) * 15,
-            this.y +Math.sin(this.swingAngle) * 15,
-             0, 0, COLORS.transparent,
-            20, 20, 90);
-        world.bullets.push(bullet);
-        bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle-Math.PI/4) * 15,
-            this.y +Math.sin(this.swingAngle-Math.PI/4) * 15,
-             0, 0, COLORS.transparent,
-            20, 20, 45);
-        world.bullets.push(bullet);
-        bullet = new Bullet(
-            this.x +Math.cos(this.swingAngle+Math.PI/4) * 15,
-            this.y +Math.sin(this.swingAngle+Math.PI/4) * 15,
-             0, 0, COLORS.transparent,
-            20, 20, 45);
-        world.bullets.push(bullet);
-        */
-
     }
-
-
 
 }
