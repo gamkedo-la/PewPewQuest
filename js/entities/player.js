@@ -35,6 +35,7 @@ var player = {
     maxHealth: 500,
     hurtCooldown: 0,
     hurtCooldownMax: 25,
+    sabreLength: 25,
 
     shootTarget: {
         x: 0,
@@ -77,8 +78,8 @@ var player = {
                 // the blade
                 let s1x = cx + Math.cos(this.swing)*5;
                 let s1y = cy + Math.sin(this.swing)*5;
-                let s2x = cx + Math.cos(this.swing)*20;
-                let s2y = cy + Math.sin(this.swing)*20;
+                let s2x = cx + Math.cos(this.swing)*this.sabreLength;
+                let s2y = cy + Math.sin(this.swing)*this.sabreLength;
                 canvasContext.beginPath();
                 canvasContext.moveTo(s1x,s1y);
                 canvasContext.lineTo(s2x,s2y);
@@ -338,8 +339,8 @@ var player = {
                 // particles along the blade
                 let s1x = cx + Math.cos(this.swing)*5;
                 let s1y = cy + Math.sin(this.swing)*5;
-                let s2x = cx + Math.cos(this.swing)*20;
-                let s2y = cy + Math.sin(this.swing)*20;
+                let s2x = cx + Math.cos(this.swing)*this.sabreLength;
+                let s2y = cy + Math.sin(this.swing)*this.sabreLength;
 
                 // particle angle
                 let pangle = this.swing + Math.PI*.5;

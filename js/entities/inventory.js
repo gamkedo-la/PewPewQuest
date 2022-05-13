@@ -38,13 +38,13 @@ var inventory = {
 //debug text------------------------------------------------------------------------------
 tinyFont.drawText(
     `E: ${world.entities.length} WE: ${world.worldEntities.length} B: ${world.bullets.length}`,
-    {x: 4, y: 4}, 0, 0, 1
+    {x: 200, y: 4}, 0, 0, 1
 );
-tinyFont.drawText(
-`A: ${gamepad.buttonA()} B: ${gamepad.buttonB()} X: ${gamepad.buttonX()} Y: ${gamepad.buttonY()}LT: ${gamepad.leftTrigger()} RT: ${gamepad.rightTrigger()}
-LX: ${gamepad.leftStick_xAxis()} LY: ${gamepad.leftStick_yAxis()} RX: ${gamepad.rightStick_xAxis()} RY: ${gamepad.rightStick_yAxis()}`,
-{x: 4, y: 12}, 0, 0, 1
-        );
+// tinyFont.drawText(
+// `A: ${gamepad.buttonA()} B: ${gamepad.buttonB()} X: ${gamepad.buttonX()} Y: ${gamepad.buttonY()}LT: ${gamepad.leftTrigger()} RT: ${gamepad.rightTrigger()}
+// LX: ${gamepad.leftStick_xAxis()} LY: ${gamepad.leftStick_yAxis()} RX: ${gamepad.rightStick_xAxis()} RY: ${gamepad.rightStick_yAxis()}`,
+// {x: 4, y: 12}, 0, 0, 1
+//         );
 //----------------------------------------------------------------------------------------
 
         //draw items
