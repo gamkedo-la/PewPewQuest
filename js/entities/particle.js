@@ -23,7 +23,6 @@ class Particle {
         }
         this.x += this.xVelocity;
         this.y += this.yVelocity + (Math.random()*2-1);
-        //this.yVelocity += this.gravity;
         this.life--
       
         if(!inView(this.x, this.y)){
@@ -45,6 +44,7 @@ class Particle {
         world.entities.splice(world.entities.indexOf(this), 1);
         if(this.dropChance > Math.random()){
             if(world.getTileAtPixel(this.x, this.y) == 0){
+                world.entities.push(new Splode(this.x, this.y, 20, COLORS.atlantis));
                 world.entities.push(new Treasure(this.x / 8, this.y / 8));
             }
         }

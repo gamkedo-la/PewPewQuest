@@ -6,11 +6,6 @@ class Scrapper {
         this.y = tileY * 8;
         this.startX = tileX * 8;
         this.startY = tileY * 8;
-        //this.northTile = northTile;
-        //this.southTile = southTile;
-        //this.eastTile = eastTile;
-        //this.westTile = westTile;
-        //sthis.neighbors = [ northTile, southTile, eastTile, westTile ];
         this.height = 15;
         this.angle = 0;
         this.width = 15;
@@ -18,7 +13,6 @@ class Scrapper {
         this.health = 100;
         this.tileTimer = 0;
         this.tileTimerMax = 200;
-        //this.moveInterval = 5;
         this.moveSpeed = 0.2;
         this.moveInterval = 300;
         this.dockRange = 20;
@@ -240,7 +234,6 @@ class Scrapper {
         // draw grabbed tile
         if (this.grabbedTile) {
             let offset = this.tileCarryOffsets[this.direction];
-            //fillRect(this.x-view.x+offset.x, this.y-view.y+offset.y, 8, 8, "green");
             world.drawImageTileAt(this.x+offset.x+this.unloadOffset.x, this.y+offset.y+this.unloadOffset.y, this.grabbedTile);
         }
 
@@ -254,10 +247,6 @@ class Scrapper {
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
         }
-        // pset(this.x - view.x + this.tileGripOffsets[0].x, this.y - view.y + this.tileGripOffsets[0].y, COLORS.tahitiGold);
-        // pset(this.x - view.x + this.tileGripOffsets[1].x, this.y - view.y + this.tileGripOffsets[1].y, COLORS.tahitiGold);
-        // pset(this.x - view.x + this.tileGripOffsets[2].x, this.y - view.y + this.tileGripOffsets[2].y, COLORS.tahitiGold);
-        // pset(this.x - view.x + this.tileGripOffsets[3].x, this.y - view.y + this.tileGripOffsets[3].y, COLORS.tahitiGold);
     }
 
     setDirectionalAnim(state, direction) {
@@ -277,10 +266,6 @@ class Scrapper {
         this.tileGripOffset = this.tileGripOffsets[this.direction];
 
         this.currentAnimation.update();
-        //console.log(`anim state: ${this.animState} cf: ${this.currentAnimation.currentFrame} fl: ${this.currentAnimation.frames.length} accum: ${this.currentAnimation.accumulator.toFixed(2)} done: ${this.currentAnimation.done} loop: ${this.currentAnimation.loop}`);
-
-        //eventually this will need to become find nearest tile eater, or parent tile eater
-        //let tileEater = world.worldEntities.filter(e => e.type === TILE_EATER)[0];
 
         // pick tile eater dock that is closest
         let bestDock = this.tileEater.findBestDock(this);
@@ -296,8 +281,6 @@ class Scrapper {
                 this.setDirectionalAnim("idle", this.direction);
                 //find nearest tile from spawn/start location that isn't eaten
                    //pick random tile location from onscreen tiles
-                   
-
                      //if tile is solid and not eaten, move to it
  
                 if(ticker%this.moveInterval == 0) {
@@ -414,7 +397,6 @@ class Scrapper {
                 // finish carrying to dock
                 } else if (range > .2) {
                     waitForDock = false;
-                    //this.directions = ['west', 'north', 'east', 'south'];
                     let dir = ['dock_west', 'dock_north', 'dock_east', 'dock_south'].indexOf(bestDock.state);
                     this.setDirectionalAnim("carry", dir);
                     this.angle = Math.atan2(this.startY - this.y, this.startX - this.x);
@@ -470,8 +452,6 @@ class Scrapper {
         if(this.bump < 0.01) { this.bump = 0;}
         
         if(rectCollision(this.collider, player.collider)) {
-            //signal.dispatch('keysChanged', {amount: 1})
-            //inventory.items.keys -= 1;
            collisionResponse(player, this);
            player.hurt(5);
            
@@ -481,7 +461,6 @@ class Scrapper {
             if(rectCollision(this.collider, bullet.collider)) {
                 audio.playSound(loader.sounds[`enemyHurt0${Math.floor(Math.random()*8)}`],
                 map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.4, 1+Math.random()*0.2, false);
-                //this.health -= 10;
                 //reaect but no health lost, scrappers invulnerable
                 bullet.die();
                 this.bump = 5;
@@ -498,10 +477,6 @@ class Scrapper {
         audio.playSound(loader.sounds[`bigSplode0${Math.floor(Math.random()*8)}`],
         map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
-
-        //scrappers exist in child array of tileEaters now, so we will handle splicing them there
-        //world.worldEntities.splice(world.entities.indexOf(this), 1);
-
 
         for(let i = 0; i < 40; i++) {
             let angle = (Math.PI*2/40) * i;

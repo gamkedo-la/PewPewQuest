@@ -20,9 +20,7 @@ var titleScreen = {
         }
         
         //title text
-        //gameFont.drawText("PewPewQuest", { x: 10, y: 10 }, 0, 0, 2);
-        gameFont.drawText("Press Z to Start", { x: 10, y: 30 }, 0, 0);
-        gameFont.drawText("Press C for Credits", { x: 10, y: 40 }, 0, 0);
+        gameFont.drawText("Start (X)  Credits (A)", { x: 10, y: 160 }, 0, 0);
 
 
 
@@ -32,9 +30,11 @@ var titleScreen = {
         if(Key.justReleased(Key.a)){
             audio.playSound(loader.sounds.test1);
         }
-        if(Key.justReleased(Key.z)) { signal.dispatch('startGame'); }
+        if(Key.justReleased(Key.x)) { signal.dispatch('startGame'); }
+        if(gamepad.buttonX()) { signal.dispatch('startGame'); }
 
-         if(Key.justReleased(Key.c)) { signal.dispatch('creditScreen'); }
+        if(Key.justReleased(Key.a)) { signal.dispatch('creditScreen'); }
+        if(gamepad.buttonA()) { signal.dispatch('creditScreen'); }
         
     }
 }

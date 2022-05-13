@@ -38,5 +38,6 @@ var creditsScreen = {
 
     update: function () {
        if(Key.justReleased(Key.ENTER)) { signal.dispatch('titleScreen'); }
+       if(gamepad.start()) { signal.dispatch('titleScreen'); }
     }
 }

@@ -9,10 +9,6 @@ class Bug {
         this.eastTile = eastTile;
         this.westTile = westTile;
         this.neighbors = [ northTile, southTile, eastTile, westTile ];
-        //
-        //this.keysNeeded = this.keyQuantities.filter(element => this.neighbors.includes(element) );
-        //this.direction = this.neighbors.indexOf(this.keysNeeded[0]);
-        //this.keysRequiredToUnlock = 1 + this.keyQuantities.indexOf(this.keysNeeded[0]);
         this.height = 10;
         this.width = 10;
         this.bump = 0;
@@ -105,7 +101,6 @@ class Bug {
         })
 
         this.currentAnimation = this.spritesheet.animations['east'];
-
         this.directions = ['west', 'northwest', 'north', 'northeast', 'east', 'southeast', 'south', 'southwest'];
 
     }
@@ -116,11 +111,7 @@ class Bug {
             y: Math.floor(this.y-view.y),
             width: 16,
             height: 16
-        })
-
-        // fillRect(this.collider.left-view.x, this.collider.top-view.y, this.collider.right - this.collider.left, this.collider.bottom - this.collider.top, 'rgba(255, 0,0,0.3)');
-
-    
+        })    
         if(this.health < 100) {
             fillRect(this.x - view.x, this.y - view.y - 5, this.health/10, 2, COLORS.tahitiGold);
         }
@@ -159,6 +150,9 @@ class Bug {
                 this.target.y += (Math.random() * 2 - 1) * 4;
                 this.target.x  += Math.cos(Math.PI/2) * moveAmount * randomTurnDirection;
                 this.target.y  += Math.sin(Math.PI/2) * moveAmount  * randomTurnDirection;
+
+                //this looks bad but it's simple and it works. we've already chosen which direction to turn
+                //with randomTurnDirection, now we just keep spinning until we find a spot that's not blocked
                 if(this.checkWorldCollision(this.target.x, this.target.y)){
                     this.target.x = startTarget.x;
                     this.target.y = startTarget.y;
@@ -196,16 +190,12 @@ class Bug {
         if(this.bump < 0.01) { this.bump = 0;}
         
         if(rectCollision(this.collider, player.collider)) {
-            //signal.dispatch('keysChanged', {amount: 1})
-            //inventory.items.keys -= 1;
            if(player.hurtCooldown <= 0) {
                 collisionResponse(player, this);
            } 
            player.hurt(10);
            
         }
-
-        //todo, need a line vs. rect method for bullets vs evertything
 
         world.bullets.forEach(bullet => {
             if(rectCollision(this.collider, bullet.collider)) {

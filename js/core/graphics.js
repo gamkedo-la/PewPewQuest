@@ -220,7 +220,6 @@ convertUint32ToRGBA = function convertUint32ToRGBA(color){
 }
 
 convertUint32ToHex = function convertUint32ToHex(color){
-    //return `#${(color>>16)&255}${(color>>8)&255}${color&255}`;
    return`#${(color>>16)&255}${(color>>8)&255},${color&255}${(color>>24)&255}`;z
 }
 

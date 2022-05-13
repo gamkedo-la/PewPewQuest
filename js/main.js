@@ -17,8 +17,8 @@ canvas.width = 320;
 canvas.height = 180;
 
 var stats = Stats();
-//stats.showPanel(0);
-//document.body.appendChild(stats.dom);
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
 
 
 //globals and constants
@@ -166,20 +166,10 @@ var view = {
 }
 
 var playerStart= { x: 1217, y: 591}
-
-
-// replaces old gamepad global
-//var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-//var gp = gamepads[0];
-
 mouse = {};
-
 var palette = [];
-
 function init(){
-    
     loadImages();
-    
 }
 
 function loadImages(){
@@ -187,10 +177,8 @@ function loadImages(){
 }
 
 function initAudio(){
-
     audio.init(loadSounds);
 }
-
 
 function loadSounds(){ 
     console.log('loading sounds');
@@ -198,23 +186,18 @@ function loadSounds(){
     loader.loadAudioBuffer();
 }
 
-function loadingComplete(){
-    
+function loadingComplete(){    
     audio.assignReverb(loader.sounds.reverbE);
-
     console.log('loading complete, initializing game');
     world = new World(img['map'].width, img['map'].height, 8);
-    world.populateWithImage(img['map']);
-   
+    world.populateWithImage(img['map'])
 
-     //create spriteFont
     gameFont = new spriteFont({
         width: 255,
         height: 128,
         characterHeight: 9,
         characterWidth: 6,
         image: img.smallFont
-        //remaining options are in spriteFont defaults
     })
 
     tinyFont = new spriteFont({
@@ -223,20 +206,9 @@ function loadingComplete(){
         characterHeight: 6,
         characterWidth: 4,
         image: img["3x5font"]
-        //remaining options are in spriteFont defaults
     })
 
     gameScreen.reset();
-    //signal.dispatch('startGame');
-
-    //setInterval no longer reliably (possibly never has) produced a steady framerate. 
-    //I get 40-50fps from stats on my gaming laptop when I'm setting FRAMES_PER_SECOND to 60.
-    //on the other hand, plain vanilla requestAnimationFrame is wildly different (way tooo fast) depending on browser
-    //and screen refresh rate, so we're combining a timer and requestAnimationFrame to get a fixed
-    //framerate and good performance. 
-
-    //setInterval(gameLoop, 1000/FRAMES_PER_SECOND);
-
     begin(60);
 }
 
@@ -245,12 +217,13 @@ function begin(fps) {
     then = Date.now();
     startTime = then;
     //pre-run some game logic so meta-items are eaten before the game starts
-    // if(gameState == GAMESTATE_PLAY){
-    //     let i = PRE_GAME_LOOP_COUNT;
-    //     while(i--){
-    //         gameLoop();
-    //     }
-    // }
+    if(gameState == GAMESTATE_PLAY){
+        let i = PRE_GAME_LOOP_COUNT;
+        while(i--){
+            gameLoop();
+        }
+    }
+
     mainLoop();
 }
 
@@ -259,12 +232,10 @@ function mainLoop(){
     requestAnimationFrame(mainLoop);
 
     // calc elapsed time since last loop
-
     now = Date.now();
     elapsed = (now - then) * slowmoTimeScale;
 
     // if enough time has elapsed, draw the next frame
-
     if (elapsed > fpsInterval) {
 
         // Get ready for next frame by setting then=now, but also adjust for your
@@ -273,18 +244,13 @@ function mainLoop(){
         then = now - (elapsed % fpsInterval);
 
         // Put your drawing code here
-        
-        
         gameLoop();
-
     }
 }
 
 function gameLoop() {
     ticker++;
     stats.begin();
-    //gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-    //gp = gamepads[0];
     switch (gameState) {
         case GAMESTATE_TITLE:
             titleScreen.draw();

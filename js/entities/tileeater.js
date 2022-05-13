@@ -529,11 +529,8 @@ class Tileeater {
         if(this.bump < 0.01) { this.bump = 0;}
         
         if (range < this.collisionRange) {
-        //if(rectCollision(this.collider, player.collider)) {
            collisionResponse(player, this);
         }
-
-        //todo, need a line vs. rect method for bullets vs evertything
 
         // countdown hurt
         if (this.hurtTicks > 0) this.hurtTicks--;
