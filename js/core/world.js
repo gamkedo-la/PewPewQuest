@@ -8,6 +8,7 @@ const World = function World(widthInTiles=100, heightInTiles=100, tileSize=8){
     this.bullets = [];
     this.enemyBullets = [];
     this.safeSpots = [];
+    this.stations = [0,0,0,0];
     this.noCollide = false;
     //world entities need updated every frame regardless of whether they are in the viewport
     this.worldEntities = [];

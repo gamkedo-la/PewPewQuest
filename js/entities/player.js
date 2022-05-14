@@ -64,14 +64,18 @@ var player = {
                 fillRect(Math.round(this.x-view.x), Math.round(this.y-view.y), this.width, this.height, COLORS.goldenFizz);
             }
             for(let i = 1; i <= inventory.items.keys; i++){
-            let radius = 20;
-            let angle = Math.PI*2/inventory.items.keys*i;
-            let x = -3 + Math.sin(angle+ticker/30)*radius;
-            let y = -1 + Math.cos(angle+ticker/30)*radius;
+                let radius = 20;
+                let angle = Math.PI*2/inventory.items.keys*i;
+                let x = -3 + Math.sin(angle+ticker/30)*radius;
+                let y = -1 + Math.cos(angle+ticker/30)*radius;
 
-            canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
-                
+                canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
             }
+
+            if(inventory.items.chalice == 1 && inventory.selectedItem == 'chalice') {
+                canvasContext.drawImage(img['chalice-inventory'], Math.floor(this.x-view.x), Math.floor(this.y-view.y));
+            }
+
             if(this.swinging && this.swingTimer){
                 let cx = Math.round(this.x-view.x + 3);
                 let cy = Math.round(this.y-view.y + 3);
@@ -578,6 +582,17 @@ var player = {
     gamePadSwingSabre(){
         let angle = Math.atan2(gamepad.rightStick_yAxis(), gamepad.rightStick_xAxis());
         this.swingSabre(angle);
+    },
+
+    checkForWin(){
+        if(inventory.items.chalice == true && inventory.selectedItem == 'chalice'){
+            let win = world.stations.filter(function(station){return station == 1});
+                    if(win.length == world.stations.length) {
+                        gameWon = true;
+                        gameWonText = gameWon ? congrats : noWin;
+                        signal.dispatch('creditScreen')
+                    }
+        }
     }
 
 }

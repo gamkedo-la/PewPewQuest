@@ -21,14 +21,9 @@ class StationLL{
     update() {
         this.checkForGlitch();
         if(this.canBeCollected){
-            // if(rectCollision(this, player.collider)) {
-            //     this.collect();
-            // }
-            // for(let i = 0; i < 2; i++) {
-            //     let particle = new Particle(this.left + Math.random()*this.width, this.y, 0, Math.random() * -1,
-            //     {color: COLORS.goldenFizz, life: Math.random() * 10});
-            //     world.entities.push(particle);
-            // }
+            world.stations[3] = 1;
+        }else {
+            world.stations[3] = 0;
         }
     }
     

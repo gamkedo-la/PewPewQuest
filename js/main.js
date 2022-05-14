@@ -158,6 +158,25 @@ var play = audio.playSound;
 var img, gameFont, tinyFont;
 var fps, fpsInterval, startTime, now, then, elapsed;
 
+var congrats =
+`
+
+CONGRATULATIONS!
+You have defeated the virus and saved Arcadia!
+
+`
+
+var noWin =
+`
+
+You have not yet finished the game.
+
+
+`
+var gameWon = false;
+gameWonText = gameWon ? congrats : noWin;
+
+
 var view = {
     x: 0,
     y: 0,
@@ -269,7 +288,7 @@ function gameLoop() {
             gameOverScreen.update();
             break;
         case GAMESTATE_CREDITS:
-            creditsScreen.draw();
+            creditsScreen.draw(gameWonText);
             creditsScreen.update();
             break;
         case GAMESTATE_MINIMAP:

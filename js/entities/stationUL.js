@@ -2,8 +2,8 @@ class StationUL {
     constructor(x,y) {
         this.x = x * 8;
         this.y = y * 8;
-        this.width = 18;
-        this.height = 28;
+        this.width = 30;
+        this.height = 30;
         this.left = this.x;
         this.right = this.x + this.width;
         this.top = this.y;
@@ -21,14 +21,12 @@ class StationUL {
     update() {
         this.checkForGlitch();
         if(this.canBeCollected){
-            // if(rectCollision(this, player.collider)) {
-            //     this.collect();
-            // }
-            // for(let i = 0; i < 2; i++) {
-            //     let particle = new Particle(this.left + Math.random()*this.width, this.y, 0, Math.random() * -1,
-            //     {color: COLORS.goldenFizz, life: Math.random() * 10});
-            //     world.entities.push(particle);
-            // }
+            world.stations[0] = 1;
+        }else {
+            world.stations[0] = 0;
+        }
+        if(rectCollision(this, player.collider)) {
+            player.checkForWin();
         }
     }
     

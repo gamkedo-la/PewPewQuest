@@ -1,4 +1,12 @@
-credits =
+const creditsScreen = {
+
+    reset: function(){
+        ticker = 0;
+    },
+
+    draw: function (additionalText="") {
+        this.credits=``+
+this.congratsText +
 `
 HomeTeam GameDev Presents:
 PewPewQuest
@@ -21,19 +29,13 @@ Credits Scroller
 Credits Scroller
 Credits Scroller
 `
-var creditsScreen = {
-    reset: function(){
-        ticker = 0;
-    },
-
-    draw: function () {
+        this.congratsText = additionalText;
         clearScreen('black');
-        //todo: add centered text function to spriteFont
-        verticalSpacing = 4;
-        creditsLength = credits.split(/\r?\n/).length * ( gameFont.characterHeight + verticalSpacing) + canvas.height;
-        console.log(credits.split(/\r?\n/).length);
-        gameFont.drawText( credits, { x: 10, y: canvas.height - (ticker/2) % creditsLength }, 0, verticalSpacing);
-        gameFont.drawText( credits, { x: 10, y: creditsLength + (ticker/2) % creditsLength }, 0, verticalSpacing);
+        let verticalSpacing = 4;
+        let creditsLength = this.credits.split(/\r?\n/).length * ( gameFont.characterHeight + verticalSpacing) + canvas.height;
+        console.log(this.credits.split(/\r?\n/).length);
+        gameFont.drawText( this.credits, { x: 10, y: canvas.height - (ticker/2) % creditsLength }, 0, verticalSpacing);
+        gameFont.drawText( this.credits, { x: 10, y: creditsLength + (ticker/2) % creditsLength }, 0, verticalSpacing);
     },
 
     update: function () {
