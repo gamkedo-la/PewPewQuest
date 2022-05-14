@@ -1,12 +1,9 @@
-class Gun {
-    
-}
-class Flashlight {
+class StationLR {
     constructor(x,y) {
         this.x = x * 8;
         this.y = y * 8;
-        this.width = 25;
-        this.height = 25;
+        this.width = 18;
+        this.height = 28;
         this.left = this.x;
         this.right = this.x + this.width;
         this.top = this.y;
@@ -14,10 +11,10 @@ class Flashlight {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1569,
-            y: 829,
-            width: 25,
-            height: 25
+            x: 1209,
+            y: 530,
+            width: 13,
+            height: 13 
         }
     }
 
@@ -45,10 +42,10 @@ class Flashlight {
             }
         }
     }
-    
+
     collect() {
-        console.log('collected flashlight');
-         signal.dispatch('getLight', {item: this});
+        console.log('collected treasure');
+        signal.dispatch('getTreasure', {item: this});
         audio.playSound(loader.sounds.test2);
         for(let i = 0; i < 20; i++) {
             let particle = new Particle(this.left + Math.random()*this.width, this.y-2, Math.random() * 2-1, Math.random() * -2,
@@ -75,5 +72,4 @@ class Flashlight {
             }
         }
     }
-    
 }

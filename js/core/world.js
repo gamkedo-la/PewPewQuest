@@ -177,7 +177,7 @@ World.prototype.drawImageTile = function(i,j,basicTileColor){
 
 }
 
-World.prototype.drawFromMap = function(spriteRect, dx, dy){
+World.prototype.drawFromMap = function(spriteRect, dx, dy, scale=1){
     let x = spriteRect.x,
         y = spriteRect.y,
         width = spriteRect.width,
@@ -190,7 +190,7 @@ World.prototype.drawFromMap = function(spriteRect, dx, dy){
                 color = Math.random() > 0.5 ? 0xFFFFFFFF : COLOR_BLACK_TRANSPARENT;
             }
             canvasContext.fillStyle = convertUint32ToRGBA(color);
-            canvasContext.fillRect(dx+i*2, dy+j*2, 2, 2);
+            canvasContext.fillRect(dx+i, dy+j, 1, 1);
         }
     }
 }
