@@ -10,7 +10,7 @@ var inventory = {
         chalice: 0
     },
 
-    itemList: ["keys", "torch", "sabre", "gun", "chalice"],
+    itemList: ["torch", "sabre", "gun", "chalice"],
     
     selection: 0,
 
@@ -55,9 +55,9 @@ tinyFont.drawText(
             canvasContext.drawImage(img['key'], drawPosition, this.rect.y+2);
             drawPosition += 18;
         }
-        if(this.selectedItem == "keys"){
-            pixelLine(start, this.rect.y+18, drawPosition-4, this.rect.y+18, COLORS.white);
-        }
+        // if(this.selectedItem == "keys"){
+        //     pixelLine(start, this.rect.y+18, drawPosition-4, this.rect.y+18, COLORS.white);
+        // }
 
         if(inventory.items.torch) {
             let start = drawPosition;
