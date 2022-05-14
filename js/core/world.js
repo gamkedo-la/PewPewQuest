@@ -316,14 +316,48 @@ World.prototype.populateMapObjects = function(){
                     break;
                 }
                 case CHALICE:{
-                    let safeSpot = {x: i, y: j};
-                    world.safeSpots.push(safeSpot);
                     this.setTileAtPosition(i, j, 0);
                     let chalice = new Chalice(i,j);   
                     world.entities.push(chalice);
                     break;
-
                 }
+                case GUN:{
+                    this.setTileAtPosition(i, j, 0);
+                    let gun = new PewPew(i,j);   
+                    world.entities.push(gun);
+                    break;
+                }
+                case SABRE:{
+                    this.setTileAtPosition(i, j, 0);
+                    let sabre = new Sabre(i,j);   
+                    world.entities.push(sabre);
+                    break;
+                }
+                case STATION_LL:{
+                    this.setTileAtPosition(i, j, 0);
+                    let station = new StationLL(i,j); 
+                    world.entities.push(station);
+                    break;
+                }
+                case STATION_LR:{
+                    this.setTileAtPosition(i, j, 0);
+                    let station = new StationLR(i,j);
+                    world.entities.push(station);
+                    break;
+                }
+                case STATION_UL:{
+                    this.setTileAtPosition(i, j, 0);
+                    let station = new StationUL(i,j); 
+                    world.entities.push(station);
+                    break;
+                }
+                case STATION_UR:{
+                    this.setTileAtPosition(i, j, 0);
+                    let station = new StationUR(i,j);
+                    world.entities.push(station);
+                    break;
+                }
+                    
             }
         }
     }
@@ -399,6 +433,12 @@ World.prototype.populateMapPalette = function(palette){
     SAFE_SPOT = palette[47];
     TILE_EATER = palette[48];
     CHALICE = palette[49];
+    GUN = palette[50];
+    SABRE = palette[51];
+    STATION_UL = palette[52];
+    STATION_UR = palette[53];
+    STATION_LL = palette[54];
+    STATION_LR = palette[55];
     PARTICLE = 1000;
 
     COMBAT_MODE=palette[8];

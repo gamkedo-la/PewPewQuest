@@ -240,7 +240,7 @@ var player = {
                 if(mouse.pressed){ this.mouseSwingSabre() }
                 if(gamepad.rightTrigger()){this.gamePadSwingSabre() }
                  
-            }else{
+            }else if(this.hasGun){
                 if (Key.justReleased(Key.z)) { this.fireBullet(); }
                 if(mouse.pressed){ this.mouseFireBullet(); }
                 if(gamepad.rightTrigger() ){this.gamepadFireBullet(); }
@@ -259,14 +259,20 @@ var player = {
         
             //other actions-----------------------------------------------------
 
-            if (Key.justReleased(Key.x) || gamepad.rightShoulder()) {
+            if (Key.justReleased(Key.x)) {
                 inventory.selection++;
                 inventory.selection = inventory.selection % inventory.itemList.length;
             }
+            
 
-            if (Key.justReleased(Key.l)) {
-                this.hasSabre = !this.hasSabre;
-            }
+            if(inventory.selectedItem == 'sabre' && inventory.items.sabre == 1){
+                this.hasSabre = true;
+            }else this.hasSabre = false;
+
+            if(inventory.selectedItem == 'gun' && inventory.items.gun == 1){
+                this.hasGun = true;
+            }else this.hasGun = false;
+
 
             //if our velocity is zero and we're colliding with a wall, allow the teleport button to be pressed
             if (this.xVelocity == 0 && this.yVelocity == 0 && this.tileCollisionCheck(world, 0)) {

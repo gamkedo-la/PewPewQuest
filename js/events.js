@@ -8,7 +8,10 @@ signal.addEventListener('miniMap', gotoMapScreen);
 
 signal.addEventListener('getKey', getKey);
 signal.addEventListener('getLight', getLight);
-signal.addEventListener('getBridge', getBridge);
+signal.addEventListener('getGun', getGun);
+signal.addEventListener('getSabre', getSabre);
+signal.addEventListener('getChalice', getChalice);
+
 signal.addEventListener ('removeBarrier', removeBarrier);
 signal.addEventListener ('keysChanged', splodeKeys);
 
@@ -78,6 +81,7 @@ function getLight(event){
     lightItem = event.detail.item;
     
         inventory.items.torch=1;
+        inventory.selectedItem == 'torch';
         audio.playSound(loader.sounds.test1);
         let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
@@ -85,18 +89,45 @@ function getLight(event){
 
 }
 
-function getBridge(event){
-    console.log('getLight triggered');
-    bridgeItem = event.detail.item;
-    inventory.bridge = bridgeItem;
+function getGun(event){
+    console.log('getGun triggered');
+    lightItem = event.detail.item;
     
-        inventory.items.bridge=1;
+        inventory.items.gun=1;
+        inventory.selectedItem == 'gun';
         audio.playSound(loader.sounds.test1);
-        let splode = new Splode(bridgeItem.x, bridgeItem.y, 10, COLORS.tahitiGold);
+        let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
-        //world.entities.splice(world.entities.indexOf(bridgeItem), 1);
+        world.entities.splice(world.entities.indexOf(lightItem), 1);
 
 }
+
+function getSabre(event){
+    console.log('getSabre triggered');
+    lightItem = event.detail.item;
+    
+        inventory.items.sabre=1;
+        inventory.selectedItem == 'sabre';
+        audio.playSound(loader.sounds.test1);
+        let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
+        world.entities.push(splode);
+        world.entities.splice(world.entities.indexOf(lightItem), 1);
+
+}
+
+function getChalice(event){
+    console.log('getChalice triggered');
+    lightItem = event.detail.item;
+    
+        inventory.items.chalice=1;
+        inventory.selectedItem == 'chalice';
+        audio.playSound(loader.sounds.test1);
+        let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
+        world.entities.push(splode);
+        world.entities.splice(world.entities.indexOf(lightItem), 1);
+
+}
+
 
 function removeBarrier(event){
     console.log('removeBarrier triggered');

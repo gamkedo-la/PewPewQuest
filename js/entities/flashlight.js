@@ -36,7 +36,6 @@ class Flashlight {
     }
     
     draw() {
-        //canvasContext.drawImage(img["key"], this.x-view.x, this.y-view.y);
         if(this.canBeCollected){
             world.drawFromMap(this.mapSprite, this.x-view.x, this.y-view.y);
         } else {
@@ -47,8 +46,7 @@ class Flashlight {
     }
     
     collect() {
-        console.log('collected flashlight');
-         signal.dispatch('getLight', {item: this});
+        signal.dispatch('getLight', {item: this});
         audio.playSound(loader.sounds.test2);
         for(let i = 0; i < 20; i++) {
             let particle = new Particle(this.left + Math.random()*this.width, this.y-2, Math.random() * 2-1, Math.random() * -2,
@@ -69,7 +67,6 @@ class Flashlight {
             for(let j = 0; j < height; j++){
                 color = world.getTileAtPosition(x+i, y+j);
                 if(color == COLOR_DIRTY_RED){
-                    //console.log('glitch');
                     this.canBeCollected = false;
                 }
             }

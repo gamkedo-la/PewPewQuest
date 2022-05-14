@@ -71,6 +71,10 @@ const imageList = [
 'tileeater_r2',
 'tileeater_r3',
 'sabre',
+'sabreItem',
+'sabre-inventory',
+'gun-inventory',
+'chalice-inventory',
 'titleCard',
 
 ]

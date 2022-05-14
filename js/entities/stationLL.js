@@ -11,8 +11,8 @@ class StationLL{
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1209,
-            y: 530,
+            x: 1615,
+            y: 883,
             width: 13,
             height: 13
         }
@@ -21,14 +21,14 @@ class StationLL{
     update() {
         this.checkForGlitch();
         if(this.canBeCollected){
-            if(rectCollision(this, player.collider)) {
-                this.collect();
-            }
-            for(let i = 0; i < 2; i++) {
-                let particle = new Particle(this.left + Math.random()*this.width, this.y, 0, Math.random() * -1,
-                {color: COLORS.goldenFizz, life: Math.random() * 10});
-                world.entities.push(particle);
-            }
+            // if(rectCollision(this, player.collider)) {
+            //     this.collect();
+            // }
+            // for(let i = 0; i < 2; i++) {
+            //     let particle = new Particle(this.left + Math.random()*this.width, this.y, 0, Math.random() * -1,
+            //     {color: COLORS.goldenFizz, life: Math.random() * 10});
+            //     world.entities.push(particle);
+            // }
         }
     }
     

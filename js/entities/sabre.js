@@ -2,8 +2,8 @@ class Sabre {
     constructor(tilex,tiley) {
         this.x = tilex * 8;
         this.y = tiley * 8;
-        this.width = 4;
-        this.height = 4;
+        this.width = 6;
+        this.height = 29;
         this.left = this.x-4;
         this.right = this.x + this.width;
         this.top = this.y;
@@ -22,13 +22,12 @@ class Sabre {
     }
     
     draw() {
-        canvasContext.drawImage(img["sabre"], Math.floor(this.x-view.x), Math.floor(this.y-view.y) );
+        canvasContext.drawImage(img["sabreItem"], Math.floor(this.x-view.x), Math.floor(this.y-view.y) );
         //fillRect(this.left-view.x, this.top-view.y, this.width, this.height, COLORS.atlantis);
     }
 
     collect() {
-        inventory.items.sabre = true;
-        //signal.dispatch('getTreasure', {item: this});
+        signal.dispatch('getSabre', {item: this});
         audio.playSound(loader.sounds.test2);
 
         for(let i = 0; i < 20; i++) {

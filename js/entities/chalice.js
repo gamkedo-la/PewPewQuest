@@ -11,8 +11,8 @@ class Chalice {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1209,
-            y: 530,
+            x: 1494,
+            y: 823,
             width: 9,
             height: 14
         }
@@ -44,8 +44,7 @@ class Chalice {
     }
 
     collect() {
-        console.log('collected treasure');
-        signal.dispatch('getTreasure', {item: this});
+        signal.dispatch('getChalice', {item: this});
         audio.playSound(loader.sounds.test2);
         for(let i = 0; i < 20; i++) {
             let particle = new Particle(this.left + Math.random()*this.width, this.y-2, Math.random() * 2-1, Math.random() * -2,

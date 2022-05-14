@@ -1,4 +1,6 @@
 var inventory = {
+    switchCooldown: 0,
+    switchCooldownMax: 10,
     items: {
         keys: 0,
         bridge: 0,
@@ -51,31 +53,56 @@ tinyFont.drawText(
         let start = drawPosition;
         for (var i = 0; i < this.items.keys; i++) {
             canvasContext.drawImage(img['key'], drawPosition, this.rect.y+2);
-            drawPosition += 14;
+            drawPosition += 18;
         }
         if(this.selectedItem == "keys"){
-            pixelLine(start, this.rect.y+18, drawPosition, this.rect.y+18, COLORS.white);
+            pixelLine(start, this.rect.y+18, drawPosition-4, this.rect.y+18, COLORS.white);
         }
 
         if(inventory.items.torch) {
             let start = drawPosition;
             canvasContext.drawImage(img['flashlight-inventory'], drawPosition, this.rect.y+2);
-            drawPosition += 14;
+            drawPosition += 18;
             if(this.selectedItem == "torch"){
-                pixelLine(start, this.rect.y+18, drawPosition, this.rect.y+18, COLORS.white);
+                pixelLine(start, this.rect.y+18, drawPosition-4, this.rect.y+18, COLORS.white);
             }
         }
-        if(inventory.items.bridge) {
+        if(inventory.items.sabre) {
             let start = drawPosition;
-            canvasContext.drawImage(img['bridge-inventory'], drawPosition+6, this.rect.y+2);
+            canvasContext.drawImage(img['sabre-inventory'], drawPosition, this.rect.y+2);
+            drawPosition += 18;
+            if(this.selectedItem == "sabre"){
+                pixelLine(start, this.rect.y+18, drawPosition-4, this.rect.y+18, COLORS.white);
+            }
+        }
+        if(inventory.items.gun) {
+            let start = drawPosition;
+            canvasContext.drawImage(img['gun-inventory'], drawPosition, this.rect.y+6);
             drawPosition += 20;
-            if(this.selectedItem == "bridge"){
-                pixelLine(start, this.rect.y+18, drawPosition, this.rect.y+18, COLORS.white);
+            if(this.selectedItem == "gun"){
+                pixelLine(start, this.rect.y+18, drawPosition-4, this.rect.y+18, COLORS.white);
+            }
+        }
+        if(inventory.items.chalice) {
+            let start = drawPosition;
+            canvasContext.drawImage(img['chalice-inventory'], drawPosition, this.rect.y+2);
+            drawPosition += 20;
+            if(this.selectedItem == "chalice"){
+                pixelLine(start, this.rect.y+18, drawPosition-4, this.rect.y+18, COLORS.white);
             }
         }
         
+        
     },
     update: function () {
-        this.selectedItem = this.itemList[this.selection];
+        inventory.switchCooldown--;
+        inventory.selectedItem = inventory.itemList[inventory.selection];
+        
+        if (gamepad.rightShoulder() && inventory.switchCooldown <= 0) {
+            inventory.switchCooldown = inventory.switchCooldownMax;
+            inventory.selection++;
+            inventory.selection = inventory.selection % inventory.itemList.length;
+        }
+
     }
 }

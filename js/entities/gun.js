@@ -1,9 +1,9 @@
-class Gun {
+class PewPew {
     constructor(x,y) {
         this.x = x * 8;
         this.y = y * 8;
-        this.width = 18;
-        this.height = 28;
+        this.width = 21;
+        this.height = 11;
         this.left = this.x;
         this.right = this.x + this.width;
         this.top = this.y;
@@ -11,10 +11,10 @@ class Gun {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1209,
-            y: 530,
-            width: 9,
-            height: 14
+            x: 1522,
+            y: 825,
+            width: 21,
+            height: 11
         }
     }
 
@@ -44,8 +44,7 @@ class Gun {
     }
 
     collect() {
-        console.log('collected gun');
-        inventory.items.gun = 1;
+        signal.dispatch('getGun', {item: this});
         audio.playSound(loader.sounds.test2);
         for(let i = 0; i < 20; i++) {
             let particle = new Particle(this.left + Math.random()*this.width, this.y-2, Math.random() * 2-1, Math.random() * -2,
