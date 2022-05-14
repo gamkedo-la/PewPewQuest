@@ -96,12 +96,23 @@ tinyFont.drawText(
     },
     update: function () {
         inventory.switchCooldown--;
-        inventory.selectedItem = inventory.itemList[inventory.selection];
+        //inventory.selectedItem = inventory.itemList[inventory.selection];
         
         if (gamepad.rightShoulder() && inventory.switchCooldown <= 0) {
             inventory.switchCooldown = inventory.switchCooldownMax;
             inventory.selection++;
             inventory.selection = inventory.selection % inventory.itemList.length;
+            inventory.selectedItem = inventory.itemList[inventory.selection];
+
+        }else if (gamepad.leftShoulder() && inventory.switchCooldown <= 0) {
+            inventory.switchCooldown = inventory.switchCooldownMax;
+            inventory.selection--;
+            if(inventory.selection < 0){
+                inventory.selection = inventory.itemList.length-1;
+            }
+            //inventory.selection = inventory.selection % inventory.itemList.length;
+            inventory.selectedItem = inventory.itemList[inventory.selection];
+
         }
 
     }
