@@ -126,7 +126,7 @@ class Checkpoint {
                 this.angleRate = -.12;
                 this.shooting = true;
                 this.maxShotTicks = weightedLerp(1,5, 30,10, this.power);
-                this.shotColor = COLORS.christi;
+                this.shotColor = COLORS.tahitiGold;
                 this.particleColor = COLORS.goldenFizz;
                 break;
             case 'right':
@@ -135,7 +135,7 @@ class Checkpoint {
                 this.shooting = true;
                 this.maxShotTicks = weightedLerp(1,5, 30,10, this.power);
                 this.shotColor = COLORS.dirtyRed;
-                this.particleColor = COLORS.tahitiGold;
+                this.particleColor = COLORS.valhalla;
                 break;
             case 'delay':
                 this.cycleTicks = 60;
@@ -192,7 +192,7 @@ class Checkpoint {
             }
             if (this.state === 'boom') {
                 if (this.shotColor === COLORS.dirtyRed) {
-                    this.shotColor = COLORS.christi;
+                    this.shotColor = COLORS.tahitiGold;
                     this.particleColor = COLORS.goldenFizz;
                 } else {
                     this.shotColor = COLORS.dirtyRed;
