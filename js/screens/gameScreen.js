@@ -72,7 +72,7 @@ const gameScreen = {
             this.bgmStarted = true;
             audio.playMusic(loader.sounds['bgm_exploration'], 0.8);
         }
-        if(Key.justReleased(Key.m)) {
+        if(Key.justReleased(Key.m) || Key.justReleased(Key.p) ) {
             signal.dispatch('miniMap');
         }
 

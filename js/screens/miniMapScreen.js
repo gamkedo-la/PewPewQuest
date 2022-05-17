@@ -5,10 +5,11 @@ var miniMapScreen = {
 
     draw: function () {
         clearScreen('black');
-        //todo: add centered text function to spriteFont
         world.drawMiniMap();
         strokePolygon(cursorX, cursorY, 3, 2, ticker/8,  COLORS.tahitiGold);
         strokePolygon(cursorX, cursorY, 3, 2, Math.PI/2 + ticker/8,  COLORS.tahitiGold);
+        fillRect(0,165, canvas.width, 15, '#111');
+        gameFont.drawText("PAUSE", { x: 145, y: 169 }, 0, 1, 1);
     },
 
     update: function () {
@@ -30,7 +31,7 @@ var miniMapScreen = {
             view.y += 32;
         }
         
-       if(Key.justReleased(Key.m)) { signal.dispatch('gameScreen'); }
+       if(Key.justReleased(Key.m) || Key.justReleased(Key.p) ) { signal.dispatch('gameScreen'); }
 
        if(mouse.pressed){
            //fillRect(mouse.x - view.x/8 + canvas.width/2, mouse.y - view.y/8 + canvas.height/2, 1,1, COLORS.goldenFizz);
