@@ -280,7 +280,7 @@ var player = {
 
             //if our velocity is zero and we're colliding with a wall, allow the teleport button to be pressed
             if (this.xVelocity == 0 && this.yVelocity == 0 && this.tileCollisionCheck(world, 0)) {
-                if (Key.justReleased(Key.t) || gamePad.buttonY()) {
+                if (Key.justReleased(Key.t) || gamepad.buttonY()) {
                     this.teleport();
                 }
             }
@@ -503,9 +503,17 @@ var player = {
         }
         world.entities.push(splode);
 
-        //this needs to be replaced with call to function that finds nearest walkable tile
-        this.x = world.safeSpots[0].x * world.tileSize;
-        this.y = world.safeSpots[0].y * world.tileSize;
+        //find an empty tile in view
+        let tries = 20*40; //size of screen in tiles
+        while(tries--){
+            let x = Math.floor(view.x/8) + Math.floor(Math.random()*40);
+            let y = Math.floor(view.y/8) + Math.floor(Math.random()*20);
+            if(this.tileCollisionCheck(world, 0)){
+                this.placeAtTile(x, y);
+                tries = 0;
+            }
+        }
+
         
         this.previousX = this.x;
         this.previousY = this.y;
