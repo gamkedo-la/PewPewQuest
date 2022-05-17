@@ -5,15 +5,18 @@ const gameScreen = {
     cursorX: 0,
     cursorY: 0,
    
-    reset: function () {
-       
+    reset: function (doWorldInit) {
+        if(doWorldInit) { worldInit(); }
         player.placeAtTile(playerStart.x, playerStart.y )
         player.health = player.startHealth;
+        player.score = 0;
+        inventory.reset();
         view.targetX = Math.floor((playerStart.x * world.tileSize) / view.width) * view.width
         view.targetY = Math.floor((playerStart.y * world.tileSize) / view.height) * view.height
         view.x = view.targetX
         view.y = view.targetY
         currentAreaMode = EXPLORATION_MODE
+
     },
     draw: function () {
         clearScreen('black');

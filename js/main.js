@@ -229,8 +229,7 @@ function loadSounds(){
 function loadingComplete(){    
     audio.assignReverb(loader.sounds.reverbE);
     console.log('loading complete, initializing game');
-    world = new World(img['map'].width, img['map'].height, 8);
-    world.populateWithImage(img['map'])
+    worldInit();
 
     gameFont = new spriteFont({
         width: 255,
@@ -248,8 +247,13 @@ function loadingComplete(){
         image: img["3x5font"]
     })
 
-    gameScreen.reset();
-    begin(60);
+    gameScreen.reset(false);
+    begin(FRAMES_PER_SECOND);
+}
+
+function worldInit(){
+    world = new World(img['map'].width, img['map'].height, 8);
+    world.populateWithImage(img['map'])
 }
 
 function begin(fps) {

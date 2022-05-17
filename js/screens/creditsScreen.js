@@ -36,6 +36,8 @@ Credits Scroller
         console.log(this.credits.split(/\r?\n/).length);
         gameFont.drawText( this.credits, { x: 10, y: canvas.height - (ticker/2) % creditsLength }, 0, verticalSpacing);
         gameFont.drawText( this.credits, { x: 10, y: creditsLength + (ticker/2) % creditsLength }, 0, verticalSpacing);
+        fillRect(0,165, canvas.width, 15, '#111');
+        tinyFont.drawText( "Press Enter to return to Title", { x: 190, y: 170}, 0, 0);
     },
 
     update: function () {

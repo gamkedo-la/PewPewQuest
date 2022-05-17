@@ -19,7 +19,7 @@ signal.addEventListener ('keysChanged', splodeKeys);
 
 function startGame(event){
     console.log('startGame triggered');
-    gameScreen.reset();
+    gameScreen.reset(false);
     gameState = GAMESTATE_PLAY;
     audio.playSound(loader.sounds.boop);
 }
@@ -42,6 +42,7 @@ function gameOver(event){
 
 function gotoTitleScreen(event){
     console.log('gotoTitleScreen triggered');
+    gameScreen.reset(true);
     gameState = GAMESTATE_TITLE;
 }
 

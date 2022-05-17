@@ -7,9 +7,12 @@ var gameOverScreen = {
     draw: function () {
         canvasContext.fillStyle = 'black';
         canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-        
+        //replace with big 'game over' graphic?
         gameFont.drawText("GAME OVER", { x: 30, y: 70 }, 0, 1, 5);
-        gameFont.drawText("(Y) Return To Title", { x: 90, y: 150 }, 0, 1);
+
+
+        fillRect(0,165, canvas.width, 15, '#111');
+        tinyFont.drawText( "Press (Y) or Enter to return to Title", { x: 170, y: 170}, 0, 0);
     },
     update: function () {
         if (Key.justReleased(Key.y)) { signal.dispatch('titleScreen'); }

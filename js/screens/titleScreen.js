@@ -20,7 +20,10 @@ var titleScreen = {
         }
         
         //title text
-        gameFont.drawText("Start (X)  Credits (A)", { x: 10, y: 160 }, 0, 0);
+       // gameFont.drawText("Start (X)  Credits (A)", { x: 40, y: 160 }, 0, 0);
+
+        fillRect(0,165, canvas.width, 15, '#111');
+        tinyFont.drawText( "Start (X)  Credits (A)", { x: 110, y: 170}, 0, 0);
 
 
 
