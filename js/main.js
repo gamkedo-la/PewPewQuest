@@ -16,10 +16,27 @@ canvas.imageSmoothingEnabled = false;
 canvas.width = 320;
 canvas.height = 180;
 
+// $CTK CSS HAXX 
+// additional (redundant!) code which successfully
+// gives up crisp edges on windows running the latest
+// chrome v.101.0.4951.67 (Official Build) (64-bit) on 2022-05-17
+canvas.style.cssText = 
+'image-rendering: optimizeSpeed;' +
+'image-rendering: -moz-crisp-edges;' +
+'image-rendering: -o-crisp-edges;' +
+'image-rendering: -webkit-crisp-edges;' +
+'image-rendering: crisp-edges;' +
+'image-rendering: -webkit-optimize-contrast;' +
+'image-rendering: pixelated; ' +
+'-ms-interpolation-mode: nearest-neighbor;';
+canvasContext.webkitImageSmoothingEnabled = false;
+canvasContext.mozImageSmoothingEnabled = false;
+canvasContext.msImageSmoothingEnabled = false;
+canvasContext.imageSmoothingEnabled = false;
+
 var stats = Stats();
 stats.showPanel(0);
 document.body.appendChild(stats.dom);
-
 
 //globals and constants
 
