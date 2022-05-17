@@ -30,7 +30,7 @@ class Bridge {
                 this.offsetY = player.y - this.y;
             }
 
-            if(Key.isDown(Key.SPACE) || gp?.buttons[0].pressed) {
+            if(Key.isDown(Key.SPACE) || gamepad.buttonX()) {
                 this.held = true;
                 if(!rectCollision(player.collider, this.activeArea)) {
                     this.x = player.x-this.offsetX;
@@ -41,24 +41,26 @@ class Bridge {
             this.held = false;
         }
 }
-        if(rectCollision(player.collider, this.activeArea)) {
-            world.noCollide = true;
-         }
-        else{
-            world.noCollide = false;
-        }
+        world.noCollide = rectCollision(player.collider, this.activeArea);
+        console.log(`world.noCollide: ${world.noCollide}`);
     }
     
     draw() {
         canvasContext.drawImage(img["bridge"], Math.floor(this.x-view.x), Math.floor(this.y-view.y) );
-        if(rectCollision(this, player.collider)) {
-            if(ticker%2 == 0) {
-                fillRect(this.activeArea.left-view.x,
-                    this.activeArea.top-view.y,
-                    this.activeArea.right-this.activeArea.left,
-                    this.activeArea.bottom-this.activeArea.top, '#8888FF');
-                }
-        }
+        if(ticker%4 == 0) {
+            fillRect(this.activeArea.left-view.x,
+                this.activeArea.top-view.y,
+                this.activeArea.right-this.activeArea.left,
+                this.activeArea.bottom-this.activeArea.top, '#000000');
+            }
+        // if(rectCollision(this, player.collider)) {
+        //     if(ticker%2 == 0) {
+        //         fillRect(this.activeArea.left-view.x,
+        //             this.activeArea.top-view.y,
+        //             this.activeArea.right-this.activeArea.left,
+        //             this.activeArea.bottom-this.activeArea.top, '#8888FF');
+        //         }
+        // }
         //fillRect(this.left-view.x, this.top-view.y, this.right-this.left, this.bottom-this.top, `rgba(255,0,0,0.5)`);
      }
 

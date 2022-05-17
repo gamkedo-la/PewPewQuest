@@ -24,6 +24,9 @@ var titleScreen = {
 
         fillRect(0,165, canvas.width, 15, '#111');
         tinyFont.drawText( "Start (X)  Credits (A)", { x: 110, y: 170}, 0, 0);
+        cursorX = mouse.x;
+        cursorY = mouse.y;
+        gameScreen.drawMouseCursor();
 
 
 
