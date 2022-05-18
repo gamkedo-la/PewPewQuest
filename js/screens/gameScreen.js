@@ -75,6 +75,9 @@ const gameScreen = {
         if(Key.justReleased(Key.m) || Key.justReleased(Key.p) ) {
             signal.dispatch('miniMap');
         }
+        if(Key.justReleased(Key.o)) {
+            signal.dispatch('gameOver');
+        }
 
         if(Key.justReleased(Key.ONE)) {
             gameScreen.cameraTypeToggle = !gameScreen.cameraTypeToggle;
