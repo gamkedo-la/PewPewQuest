@@ -30,7 +30,6 @@ canvas.style.cssText =
 'image-rendering: pixelated; ' +
 '-ms-interpolation-mode: nearest-neighbor;';
 canvasContext.webkitImageSmoothingEnabled = false;
-canvasContext.mozImageSmoothingEnabled = false;
 canvasContext.msImageSmoothingEnabled = false;
 canvasContext.imageSmoothingEnabled = false;
 
