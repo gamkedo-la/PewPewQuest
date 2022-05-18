@@ -156,18 +156,22 @@ class Enforcer {
         this.playerDistance = this.findDistanceToPlayer();
         //console.log(this.playerDistance);
         
-       
-      
-        if(this.state != this.states.PLAYER_CAPTURED) {
+        if(this.state == this.states.EVADE || this.state == this.states.CHASE) {
             let clampedDistance = clamp(this.playerDistance, 0, 500);
             let clampedOnScreenDistance = clamp(this.playerDistance, 0, 300);
             if(clampedDistance > 0){
                 this.onScreenSound.volume.gain.value = map(clampedOnScreenDistance,  1, 300, 0.5, 0);
                 this.offScreenSound.volume.gain.value = map(clampedDistance, 1, 500, 0.5, 0);
             }
-        }else{
+        }
+        else if (this.state == this.states.PLAYER_CAPTURED) {
             this.onScreenSound.volume.gain.value = 0.4;
             this.offScreenSound.volume.gain.value = 0.4;
+        }
+        // else state == WANDER
+        else {
+            this.onScreenSound.volume.gain.value = 0;
+            this.offScreenSound.volume.gain.value = 0;
         }
         
         
