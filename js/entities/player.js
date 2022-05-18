@@ -482,8 +482,8 @@ var player = {
         let bulletYDistance = worldMouseY - this.y + 3;
         let bulletAngle = Math.atan2(bulletYDistance, bulletXDistance);
         let bulletDistance = Math.sqrt(bulletXDistance * bulletXDistance + bulletYDistance * bulletYDistance);
-        let bulletXVelocity = Math.cos(bulletAngle) * 8 * map(bulletDistance, 0, view.width/2, 0.1, 1);
-        let bulletYVelocity = Math.sin(bulletAngle) * 8 * map(bulletDistance, 0, view.height/2, 0.1, 1);
+        let bulletXVelocity = Math.cos(bulletAngle) * 8; // * map(bulletDistance, 0, view.width/2, 0.1, 1);
+        let bulletYVelocity = Math.sin(bulletAngle) * 8; // * map(bulletDistance, 0, view.height/2, 0.1, 1);
         if(ticker%3==0){
             audio.playSound(loader.sounds.pewpew2, 0, 0.2)
             let bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
