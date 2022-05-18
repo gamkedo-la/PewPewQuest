@@ -478,8 +478,8 @@ var player = {
     mouseFireBullet(){
         let worldMouseY = mouse.y + view.y;
         let worldMouseX = mouse.x + view.x;
-        let bulletXDistance = worldMouseX - this.x + 3;
-        let bulletYDistance = worldMouseY - this.y + 3;
+        let bulletXDistance = worldMouseX - this.x - 3;
+        let bulletYDistance = worldMouseY - this.y - 3;
         let bulletAngle = Math.atan2(bulletYDistance, bulletXDistance);
         let bulletDistance = Math.sqrt(bulletXDistance * bulletXDistance + bulletYDistance * bulletYDistance);
         let bulletXVelocity = Math.cos(bulletAngle) * 8; // * map(bulletDistance, 0, view.width/2, 0.1, 1);
