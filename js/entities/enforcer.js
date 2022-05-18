@@ -101,6 +101,7 @@ class Enforcer {
             CHASE: 4,
             EVADE: 5
         }
+
         this.state = this.states.WANDER
 
     }
@@ -173,19 +174,47 @@ class Enforcer {
             this.onScreenSound.volume.gain.value = 0;
             this.offScreenSound.volume.gain.value = 0;
         }
-        
-        
-           
-       
-        //console.log(this.playerDistance);
                 
-        this.health = this.armorPoints.reduce((acc, armorPoint) => {acc += armorPoint.health; return acc}, 0);
+        this.health = this.armorPoints.reduce((acc, armorPoint) => { acc += armorPoint.health; return acc }, 0);
+
+        //if all armor points are gone, die
+        if(this.health < 0) {
+            this.die();
+        }
         
         this.currentAnimation.update();
         this.updateCollider();
 
-        if(this.health <= 100) {
-            this.state = this.states.EVADE;
+        // if the player is captured, keep capturing
+        if (this.state != this.states.PLAYER_CAPTURED) {
+
+            // if not Evading, figure out what to do
+            if (this.state != this.states.EVADE) {
+                // else figure it out
+                if(this.playerDistance < 150 & this.captureCoolDown <= 0) {
+                    this.state = this.states.CHASE;
+                }
+                else {
+                    this.state = this.states.WANDER;
+                }
+    
+                // evade trumps other states
+                if(this.health <= 100) {
+                    this.state = this.states.EVADE;
+                }
+            }
+            // else evade until health > 200
+            else if(this.health >= 200) {
+                this.state = this.states.WANDER;
+            }
+
+            if(this.playerDistance > 100) {
+                this.heal();
+            }
+
+            if (this.captureCoolDown > 0) {
+                this.captureCoolDown--;
+            }
         }
        
 
@@ -199,10 +228,10 @@ class Enforcer {
                 this.moveSpeed = 0.2;
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
-                this.captureCoolDown--;
-                if(this.playerDistance < 150 & this.captureCoolDown <= 0) {
-                    this.state = this.states.CHASE;
-                }
+                // this.captureCoolDown--;
+                // if(this.playerDistance < 150 & this.captureCoolDown <= 0) {
+                //     this.state = this.states.CHASE;
+                // }
                 break;
             }
 
@@ -213,9 +242,9 @@ class Enforcer {
                 this.moveSpeed = 0.3;
                 this.target.x += Math.cos(this.angle)*1.1 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*1.1 + Math.random() - 0.5
-                if(this.playerDistance > 300) {
-                    this.state = this.states.WANDER;
-                }
+                // if(this.playerDistance > 300) {
+                //     this.state = this.states.WANDER;
+                // }
                 break;
             }
 
@@ -228,12 +257,12 @@ class Enforcer {
                 this.moveSpeed = 0.3;
                 this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
-                if(this.playerDistance > 100) {
-                    this.heal();
-                }
-                if(this.health >= 200) {
-                    this.state = this.states.WANDER;
-                }
+                // if(this.playerDistance > 100) {
+                //     this.heal();
+                // }
+                // if(this.health >= 200) {
+                //     this.state = this.states.WANDER;
+                // }
                 
                 break;
             }
@@ -243,7 +272,7 @@ class Enforcer {
                 this.angle = this.findDirectionTowardsPoint({x:playerStart.x*8, y:playerStart.y*8});
                 this.target.x += Math.cos(this.angle)*3 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*3 + Math.random() - 0.5
-                player.capturer = this;
+                // player.capturer = this;
                 this.moveSpeed = 0.2;
                 //if distance from player start is less than ---> then go to wander
                 //release player
@@ -257,18 +286,12 @@ class Enforcer {
                     this.target.x += Math.cos(this.angle)*40 + Math.random() - 0.5
                     this.target.y += Math.sin(this.angle)*40 + Math.random() - 0.5
                     this.state = this.states.WANDER;
-
                 }
                 break;
             }
 
         }
 
-
-        //if all armor points are gone, die
-        if(this.health < 0) {
-            this.die();
-        }
         this.bump = lerp(this.bump, 0, 0.1);
         this.x = lerp(this.x, this.target.x, this.moveSpeed);
         this.y = lerp(this.y, this.target.y, this.moveSpeed);
@@ -276,9 +299,10 @@ class Enforcer {
 
         if(this.bump < 0.01) { this.bump = 0;}
         
-        if(rectCollision(this.collider, player.collider) && this.captureCoolDown <= 0) {
+        if(rectCollision(this.collider, player.collider) && this.captureCoolDown <= 0 && this.state != this.states.PLAYER_CAPTURED) {
             this.state = this.states.PLAYER_CAPTURED;
             player.captured = true;
+            player.capturer = this;
         }
 
         world.bullets.forEach(bullet => {
