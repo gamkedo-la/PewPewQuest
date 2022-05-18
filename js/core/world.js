@@ -511,6 +511,7 @@ World.prototype.drawMiniMap = function(){
     if (ticker % 15 == 1) { // must be an odd number so entities flash
         scale = 8;
         canvasContext = this.miniMapContext; // temporary redirect
+        fillRect(0,0,canvas.width,canvas.height,"black");
         for(let i = 0; i < canvas.width; i++){
             for(let j = 0; j < canvas.height; j++){
                 let tileX = Math.floor( view.x/scale - (canvas.width/2));
