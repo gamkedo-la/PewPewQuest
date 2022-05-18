@@ -57,7 +57,7 @@ class Bridge {
         
 
 
-        console.log(`world.noCollide: ${world.noCollide}`);
+        // console.log(`world.noCollide: ${world.noCollide}`);
     }
     
     draw() {

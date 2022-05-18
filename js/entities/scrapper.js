@@ -424,7 +424,7 @@ class Scrapper {
                     // finish ... go back to seeking next tile
                     } else {
                         //audio.playSound(loader.sounds.unloadingComplete, 0, 0.15);
-                        console.log(`loading is done: ${this.currentAnimation.done}`);
+                        // console.log(`loading is done: ${this.currentAnimation.done}`);
                         this.unloading = false;
                         let dir = ['dock_west', 'dock_north', 'dock_east', 'dock_south'].indexOf(bestDock.state);
                         this.setDirectionalAnim("carry", dir);
