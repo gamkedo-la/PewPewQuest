@@ -498,42 +498,50 @@ World.prototype.getNeighbors = function(i, j){
 }
 
 World.prototype.drawMiniMap = function(){
-   scale = 8;
-    for(let i = 0; i < canvas.width; i++){
-        for(let j = 0; j < canvas.height; j++){
-            
-            
-            let tileX = Math.floor( view.x/scale - (canvas.width/2));
-            let tileY = Math.floor( view.y/scale - (canvas.height/2));
 
-            tileX += i;
-            tileY += j;
-
-            let tile = this.getTileAtPosition(tileX, tileY);
-            fillRect(i, j, 1,1, convertUint32ToRGBA(tile));
-
-        }
+    if (!this.miniMapCache) {
+        this.miniMapCache = document.createElement('canvas');
+        this.miniMapCache.width = canvas.width;
+        this.miniMapCache.height = canvas.height;
+        this.miniMapContext = this.miniMapCache.getContext("2d");
+        this.gameContext = canvasContext;
     }
 
-    fillRect(
-        player.x/scale - view.x/scale + canvas.width/2,
-        player.y/scale - view.y/scale + canvas.height/2,
-        1*(8/scale), 1*(8/scale), COLORS.goldenFizz);
-
-    world.entities.forEach(function(entity){
+    // only redraw minimap occasionally: for perf
+    if (ticker % 15 == 1) { // must be an odd number so entities flash
+        scale = 8;
+        canvasContext = this.miniMapContext; // temporary redirect
+        for(let i = 0; i < canvas.width; i++){
+            for(let j = 0; j < canvas.height; j++){
+                let tileX = Math.floor( view.x/scale - (canvas.width/2));
+                let tileY = Math.floor( view.y/scale - (canvas.height/2));
+                tileX += i;
+                tileY += j;
+                let tile = this.getTileAtPosition(tileX, tileY);
+                fillRect(i, j, 1,1, convertUint32ToRGBA(tile));
+            }
+        }
         fillRect(
-            (entity.x/scale) - (view.x/scale) + canvas.width/2,
-            (entity.y/scale) - (view.y/scale) + canvas.height/2,
-            1*(8/scale),1*(8/scale),
-            ticker%2 == 0 ? COLORS.goldenFizz : COLORS.dell);
+            player.x/scale - view.x/scale + canvas.width/2,
+            player.y/scale - view.y/scale + canvas.height/2,
+            1*(8/scale), 1*(8/scale), COLORS.goldenFizz);
+        world.entities.forEach(function(entity){
+            fillRect(
+                (entity.x/scale) - (view.x/scale) + canvas.width/2,
+                (entity.y/scale) - (view.y/scale) + canvas.height/2,
+                1*(8/scale),1*(8/scale),
+                ticker%2 == 0 ? COLORS.goldenFizz : COLORS.dell);
+        });
+        world.worldEntities.forEach(function(entity){
+            fillRect(
+                (entity.x/scale) - (view.x/scale) + canvas.width/2,
+                (entity.y/scale) - (view.y/scale) + canvas.height/2,
+                1*(8/scale),1*(8/scale),
+                ticker%2 == 0 ? COLORS.dirtyRed : COLORS.dell);
+        });
+        canvasContext = this.gameContext; // reset to normal
+    }
 
-    })
-    world.worldEntities.forEach(function(entity){
-        fillRect(
-            (entity.x/scale) - (view.x/scale) + canvas.width/2,
-            (entity.y/scale) - (view.y/scale) + canvas.height/2,
-            1*(8/scale),1*(8/scale),
-            ticker%2 == 0 ? COLORS.dirtyRed : COLORS.dell);
+    canvasContext.drawImage(this.miniMapCache,0,0); // output (cached) minimap
 
-    })
 }
