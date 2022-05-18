@@ -367,8 +367,12 @@ class Enforcer {
         map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.goldenFizz));
         world.worldEntities.splice(world.worldEntities.indexOf(this), 1);
-        this.offScreenSound.stop();
-        this.onScreenSound.stop();
+        // enforcer sound doesn't stop when they die...
+        // stop() is not a function error in console.
+        // this.offScreenSound.stop();
+        // this.onScreenSound.stop();
+        this.onScreenSound.volume.gain.value = 0;
+        this.offScreenSound.volume.gain.value = 0;
 
         for(let i = 0; i < 40; i++) {
             let angle = (Math.PI*2/40) * i;
