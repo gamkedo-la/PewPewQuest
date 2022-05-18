@@ -190,12 +190,21 @@ class Enforcer {
 
             // if not Evading, figure out what to do
             if (this.state != this.states.EVADE) {
-                // else figure it out
-                if(this.playerDistance < 150 & this.captureCoolDown <= 0) {
-                    this.state = this.states.CHASE;
+
+                // if chasing, extend range
+                if (this.state == this.states.CHASE) {
+                    if (this.playerDistance > 300) {
+                        this.state = this.states.WANDER;
+                    }
                 }
                 else {
+                    // wander if nothing else going on
                     this.state = this.states.WANDER;
+                }
+
+                // chase trumps wander
+                if(this.playerDistance < 150 && this.captureCoolDown <= 0) {
+                    this.state = this.states.CHASE;
                 }
     
                 // evade trumps other states
