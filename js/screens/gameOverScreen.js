@@ -152,12 +152,22 @@ var gameOverScreen = {
             this.needSpawn = false;
             this.spawn();
         }
-        if (Key.justReleased(Key.y)) { signal.dispatch('titleScreen'); }
-        if (gamepad.buttonY()) { signal.dispatch('titleScreen'); }
+        if (Key.justReleased(Key.y) || Key.justReleased(Key.ENTER)) { 
+            this.reset();
+            signal.dispatch('titleScreen'); 
+        }
+        if (gamepad.buttonY()) { 
+            this.reset();
+            signal.dispatch('titleScreen'); 
+        }
         this.box.x = canvas.width/2 - 5;
         this.box.y = canvas.height/2 - 5;
         this.box.x += Math.sin(ticker/10) * 50;
         this.box.y += Math.cos(ticker/10) * 50;
         for (const bug of this.bugs) bug.update();
-    }
+    },
+    reset: function () {
+        this.bugs = [];
+        this.needSpawn = true;
+    },
 }
