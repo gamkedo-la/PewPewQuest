@@ -69,7 +69,7 @@ var player = {
                 let x = -3 + Math.sin(angle+ticker/30)*radius;
                 let y = -1 + Math.cos(angle+ticker/30)*radius;
 
-                canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x), Math.floor(this.y-view.y+y));
+                canvasContext.drawImage(img['orbit-key'], Math.floor(this.x-view.x+x+3), Math.floor(this.y-view.y+y+3));
             }
 
             if(inventory.items.chalice == 1 && inventory.selectedItem == 'chalice') {
