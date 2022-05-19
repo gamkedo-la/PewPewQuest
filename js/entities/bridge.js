@@ -68,8 +68,8 @@ class Bridge {
                 this.activeArea.right-this.activeArea.left,
                 this.activeArea.bottom-this.activeArea.top, '#000000');
             }
-        if(rectCollision(this, player.collider)) {
-            if(ticker%2 == 0) {
+        if(rectCollision(this.activeArea, player.collider)) {
+            if(ticker%2 == 0 || ticker%3 == 1 || ticker%5 == 0) {
                 fillRect(this.activeArea.left-view.x,
                     this.activeArea.top-view.y,
                     this.activeArea.right-this.activeArea.left,
