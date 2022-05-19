@@ -4,10 +4,10 @@ class DoorKey {
         this.y = y;
         this.width = 8;
         this.height = 8;
-        this.left = x-4;
-        this.right = x + 8;
-        this.top = y-4;
-        this.bottom = y + 8;
+        this.left = x + 4;
+        this.right = x + 12;
+        this.top = y + 4;
+        this.bottom = y + 12;
     }
 
     update() {
