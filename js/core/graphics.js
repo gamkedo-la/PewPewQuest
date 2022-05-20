@@ -70,6 +70,16 @@ function fillRect(x,y,width,height, color='white'){
 }
 
 /**
+ * draws a rectangle given an object (collider)
+ * @param {*} rectangle: object with left, right, top, and bottom properties
+ * @param {*} color 
+ */
+function fillRectangle(rectangle, color = 'white') {
+    canvasContext.fillStyle = color;
+    canvasContext.fillRect(rectangle.left - view.x, rectangle.top - view.y, rectangle.right - rectangle.left, rectangle.bottom - rectangle.top);
+}
+
+/**
  * draws a stroked rectangle. assumes canvasContext exists
  * @param  {} x: x position of center
  * @param  {} y: y position of center
@@ -220,6 +230,6 @@ convertUint32ToRGBA = function convertUint32ToRGBA(color){
 }
 
 convertUint32ToHex = function convertUint32ToHex(color){
-   return`#${(color>>16)&255}${(color>>8)&255},${color&255}${(color>>24)&255}`;z
+   return`#${(color>>16)&255}${(color>>8)&255},${color&255}${(color>>24)&255}`;
 }
 
