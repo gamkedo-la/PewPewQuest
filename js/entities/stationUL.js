@@ -1,7 +1,7 @@
 class StationUL {
     constructor(x,y) {
-        this.x = x * 8;
-        this.y = y * 8;
+        this.x = x * 8 - 3;
+        this.y = y * 8 - 3;
         this.width = 30;
         this.height = 30;
         this.left = this.x;
@@ -11,8 +11,8 @@ class StationUL {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1572,
-            y: 885,
+            x: 1365,
+            y: 144,
             width: 13,
             height: 13
         }

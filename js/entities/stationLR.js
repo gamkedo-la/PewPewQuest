@@ -1,7 +1,7 @@
 class StationLR {
     constructor(x,y) {
-        this.x = x * 8;
-        this.y = y * 8;
+        this.x = x * 8 - 3;
+        this.y = y * 8 - 3;
         this.width = 18;
         this.height = 28;
         this.left = this.x;
@@ -11,8 +11,8 @@ class StationLR {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1573,
-            y: 865,
+            x: 1381,
+            y: 160,
             width: 13,
             height: 13 
         }
