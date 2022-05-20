@@ -259,13 +259,13 @@ function begin(fps) {
     fpsInterval = 1000/fps;
     then = Date.now();
     startTime = then;
-    //pre-run some game logic so meta-items are eaten before the game starts
-    // if(gameState == GAMESTATE_PLAY){
-    //     let i = PRE_GAME_LOOP_COUNT;
-    //     while(i--){
-    //         gameLoop();
-    //     }
-    // }
+   // pre-run some game logic so meta-items are eaten before the game starts
+    if(gameState == GAMESTATE_PLAY){
+        let i = PRE_GAME_LOOP_COUNT;
+        while(i--){
+            gameLoop();
+        }
+    }
 
     mainLoop();
 }
