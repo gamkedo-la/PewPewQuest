@@ -41,7 +41,7 @@ class Bridge {
             }
         }
     }
-    
+
     draw() {
         canvasContext.drawImage(img["bridge"], Math.floor(this.x-view.x), Math.floor(this.y-view.y) );
 
@@ -94,6 +94,10 @@ class Bridge {
             top: this.y,
             bottom: this.y + 30,
         }
+    }
+
+    bridgeWallCollision() {
+        return rectCollision(player.collider, this.leftCollider) || rectCollision(player.collider, this.rightCollider);
     }
 
     debug() {

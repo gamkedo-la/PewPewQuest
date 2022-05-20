@@ -306,7 +306,10 @@ var player = {
 
             //check for x collisions
             this.updateCollider(this.x, this.y);
-            if(this.tileCollisionCheck(world, 0) && !world.noCollide){
+            if (
+                (this.tileCollisionCheck(world, 0) && !world.noCollide) ||
+                this.bridgeWallCollision()
+            ) {
                 this.x = this.previousX;
                 this.xVelocity = 0;
                 this.updateCollider(this.x, this.y);
@@ -319,7 +322,10 @@ var player = {
         
             //check for y collisions
             this.updateCollider(this.x, this.y);
-            if(this.tileCollisionCheck(world, 0) && !world.noCollide){
+            if (
+                (this.tileCollisionCheck(world, 0) && !world.noCollide) ||
+                this.bridgeWallCollision()
+            ) {
                 this.y = this.previousY;
                 this.yVelocity = 0;
                 this.updateCollider(this.x, this.y);
@@ -451,6 +457,17 @@ var player = {
 
     tilesThatCollide(tile){
         return tile >= 0;
+    },
+
+    bridgeWallCollision() {
+        if (!this.bridge) {
+            // this is rather fragile... there must be a better way.
+            this.bridge = world.worldEntities[
+                world.worldEntities.findIndex((a) => a.type == BRIDGE)
+            ];
+        }
+
+        return this.bridge.bridgeWallCollision();
     },
 
     fireBullet(){
