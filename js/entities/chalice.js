@@ -11,8 +11,8 @@ class Chalice {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1494,
-            y: 823,
+            x: 1466,
+            y: 543,
             width: 9,
             height: 14
         }
