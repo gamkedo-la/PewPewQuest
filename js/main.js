@@ -204,7 +204,7 @@ var view = {
     targetY: 0,
 }
 
-var playerStart= { x: 1217, y: 591}
+var playerStart= { x: 1210, y: 589}
 mouse = {};
 var palette = [];
 function init(){
