@@ -111,6 +111,7 @@ const gameScreen = {
             if(!player.combat){
                 player.combat = true;
                 gameScreen.cameraTypeToggle = false;
+                //insert music switcing here
 
             }
         }else{

@@ -165,7 +165,7 @@ const soundList = [
 
 ]
 
-var gameState = GAMESTATE_TITLE;
+var gameState = GAMESTATE_PLAY;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();
@@ -260,12 +260,12 @@ function begin(fps) {
     then = Date.now();
     startTime = then;
     //pre-run some game logic so meta-items are eaten before the game starts
-    if(gameState == GAMESTATE_PLAY){
-        let i = PRE_GAME_LOOP_COUNT;
-        while(i--){
-            gameLoop();
-        }
-    }
+    // if(gameState == GAMESTATE_PLAY){
+    //     let i = PRE_GAME_LOOP_COUNT;
+    //     while(i--){
+    //         gameLoop();
+    //     }
+    // }
 
     mainLoop();
 }
