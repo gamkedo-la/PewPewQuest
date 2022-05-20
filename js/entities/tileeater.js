@@ -660,7 +660,7 @@ class Tileeater {
             this.restoreTiles();
 
             this.scrappers.forEach(scrapper => {
-                scrapper.tileEater.tilesEaten.push(this.grabbedTile);
+                scrapper.tileEater.tilesEaten.push(scrapper.grabbedTile);
                 scrapper.die();
             })
 
