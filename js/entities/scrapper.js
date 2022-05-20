@@ -374,7 +374,9 @@ class Scrapper {
                     this.unloading = false;
                     
                     //we go ahead and pass along the tile to the tile eater anyways, so restoration is possible
-                    this.tileEater.tilesEaten.push(this.grabbedTile);
+                    if(this.grabbedTile != null) {
+                        this.tileEater.tilesEaten.push(this.grabbedTile);
+                    }
 
                     this.grabbedTile = null;
                     this.unloadOffset = { x: 0, y: 0};
@@ -428,7 +430,9 @@ class Scrapper {
                         this.unloading = false;
                         let dir = ['dock_west', 'dock_north', 'dock_east', 'dock_south'].indexOf(bestDock.state);
                         this.setDirectionalAnim("carry", dir);
-                        this.tileEater.tilesEaten.push(this.grabbedTile);
+                        if(this.grabbedTile != null) {
+                            this.tileEater.tilesEaten.push(this.grabbedTile);
+                        }
                         //console.log(this.tileEater.tilesEaten);
                         this.state = this.states.SEEK_TILE;
                         this.grabbedTile = null;
@@ -441,6 +445,9 @@ class Scrapper {
         
         this.updateCollider();
         if(this.health < 0) {
+            if(this.grabbedTile != null) {
+                this.tileEater.tilesEaten.push(this.grabbedTile);
+            }
             this.die();
         }
         this.bump = lerp(this.bump, 0, 0.1);

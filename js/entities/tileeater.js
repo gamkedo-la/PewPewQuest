@@ -657,13 +657,14 @@ class Tileeater {
         } else {
             this.r3alive = false;
             inventory.score+=10000;
-            this.restoreTiles();
 
             this.scrappers.forEach(scrapper => {
-                scrapper.tileEater.tilesEaten.push(scrapper.grabbedTile);
+                if(scrapper.grabbedTile != null) {
+                    scrapper.tileEater.tilesEaten.push(scrapper.grabbedTile);
+                }
                 scrapper.die();
             })
-
+            this.restoreTiles();
             this.scrappers = [];
             world.worldEntities.splice(world.worldEntities.indexOf(this), 1);
             

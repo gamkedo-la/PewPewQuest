@@ -165,7 +165,7 @@ const soundList = [
 
 ]
 
-var gameState = GAMESTATE_PLAY;
+var gameState = GAMESTATE_TITLE;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();

@@ -63,7 +63,7 @@ class PewPew {
         this.canBeCollected = true;
         for(let i = 0; i < width; i++){
             for(let j = 0; j < height; j++){
-                color = world.getTileAtPosition(x+i, y+j);
+                let color = world.getTileAtPosition(x+i, y+j);
                 if(color == COLOR_DIRTY_RED){
                     //console.log('glitch');
                     this.canBeCollected = false;
