@@ -220,14 +220,14 @@ function initAudio(){
 }
 
 function loadSounds(){ 
-    console.log('loading sounds');
+    //console.log('loading sounds');
     loader.soundLoader({context: audio.context, urlList: soundList, callback: loadingComplete});
     loader.loadAudioBuffer();
 }
 
 function loadingComplete(){    
     audio.assignReverb(loader.sounds.reverbE);
-    console.log('loading complete, initializing game');
+    //console.log('loading complete, initializing game');
     worldInit();
 
     gameFont = new spriteFont({

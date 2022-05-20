@@ -19,6 +19,6 @@ function startSlowMotion(timespanInMS=3000) {
 }
 
 function endSlowMotion() {
-    console.log("ending slow motion!");
+    //console.log("ending slow motion!");
     slowmoTimeScale = 1;
 }

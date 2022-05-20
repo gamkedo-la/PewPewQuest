@@ -140,7 +140,7 @@ class Bat {
             if (!this.carryingKey && inventory.items.keys > 0) {            
                 this.carryingKey = true;
                 inventory.items.keys--;
-                console.log("a bat just stole a key! you now have "+inventory.items.keys);
+                //console.log("a bat just stole a key! you now have "+inventory.items.keys);
             }
 
         }
@@ -165,7 +165,7 @@ class Bat {
     die() {
 
         if (this.carryingKey) {
-            console.log("bat is dropping a key!");
+            //console.log("bat is dropping a key!");
 
             let tile = world.getTileAtPixel(this.x,this.y);
             if(tile == 0){

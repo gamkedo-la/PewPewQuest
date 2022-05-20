@@ -59,7 +59,7 @@ class Bridge {
     }
 
     collect() {
-        console.log('collected bridge');
+        //console.log('collected bridge');
         signal.dispatch('getBridge', {item: this});
     }
 

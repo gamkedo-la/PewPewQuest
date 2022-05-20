@@ -18,7 +18,7 @@ signal.addEventListener ('keysChanged', splodeKeys);
 
 
 function startGame(event){
-    console.log('startGame triggered');
+   // console.log('startGame triggered');
     gameScreen.reset(false);
     gameState = GAMESTATE_PLAY;
     audio.playSound(loader.sounds.boop);
@@ -35,26 +35,26 @@ function gotoMapScreen(event){
 }
 
 function gameOver(event){
-    console.log('gameOver triggered');
+    //console.log('gameOver triggered');
     gameOverScreen.gameEndState = event.detail;
     gameState = GAMESTATE_GAME_OVER;
 }
 
 function gotoTitleScreen(event){
-    console.log('gotoTitleScreen triggered');
+    //console.log('gotoTitleScreen triggered');
     gameScreen.reset(true);
     gameState = GAMESTATE_TITLE;
 }
 
 function gotoCreditScreen(event){
-    console.log('gotoCreditScreen triggered');
+    //console.log('gotoCreditScreen triggered');
     creditsScreen.reset();
     gameState = GAMESTATE_CREDITS;
     audio.playSound(loader.sounds.boop);
 }
 
 function getKey(event){
-    console.log('getKey triggered');
+    //console.log('getKey triggered');
     keyItem = event.detail.item;
     if(inventory.items.keys < 5){
         inventory.items.keys++;
@@ -71,14 +71,14 @@ function getKey(event){
     }
     else {
         audio.playSound(loader.sounds.test2);
-        console.log(
-            'You have too many keys! You can only carry 5 keys at a time.'
-        )
+        //console.log(
+        //    'You have too many keys! You can only carry 5 keys at a time.'
+        //)
     }
 }
 
 function getLight(event){
-    console.log('getLight triggered');
+    //console.log('getLight triggered');
     lightItem = event.detail.item;
     
         inventory.items.torch=1;
@@ -91,7 +91,7 @@ function getLight(event){
 }
 
 function getGun(event){
-    console.log('getGun triggered');
+    //console.log('getGun triggered');
     lightItem = event.detail.item;
     
         inventory.items.gun=1;
@@ -104,7 +104,7 @@ function getGun(event){
 }
 
 function getSabre(event){
-    console.log('getSabre triggered');
+    //console.log('getSabre triggered');
     lightItem = event.detail.item;
     
         inventory.items.sabre=1;
@@ -117,7 +117,7 @@ function getSabre(event){
 }
 
 function getChalice(event){
-    console.log('getChalice triggered');
+    //console.log('getChalice triggered');
     lightItem = event.detail.item;
     
         inventory.items.chalice=1;
@@ -131,7 +131,7 @@ function getChalice(event){
 
 
 function removeBarrier(event){
-    console.log('removeBarrier triggered');
+    //console.log('removeBarrier triggered');
     barrierItem = event.detail.item;
     if(barrierItem.width > barrierItem.height){
         for(var i = 0; i < barrierItem.width; i++){

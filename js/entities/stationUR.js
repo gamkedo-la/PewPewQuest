@@ -39,7 +39,7 @@ class StationUR {
     }
 
     collect() {
-        console.log('collected treasure');
+        //console.log('collected treasure');
         signal.dispatch('getTreasure', {item: this});
         audio.playSound(loader.sounds.test2);
         for(let i = 0; i < 20; i++) {

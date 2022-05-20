@@ -259,7 +259,7 @@ World.prototype.populateMapObjects = function(){
                     break;
                 }
                 case BRIDGE:{
-                    console.log("bridge placed")
+                    //console.log("bridge placed")
                     let bridge = new Bridge(i,j);
                     world.worldEntities.push(bridge);
                     this.setTileAtPosition(i, j, 0);
@@ -293,7 +293,7 @@ World.prototype.populateMapObjects = function(){
                 case TREASURE:{
                     let treasure = new Treasure(i,j);   
                     world.entities.push(treasure);
-                    console.log("treasure placed");
+                    //console.log("treasure placed");
                     this.setTileAtPosition(i, j, 0);
                     break;
                 }

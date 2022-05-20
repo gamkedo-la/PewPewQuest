@@ -26,7 +26,7 @@ const AudioGlobal = function AudioGlobal() {
 	this.init = function(callback) {
 		if (this.initialized) return;
 
-		console.log("Initializing Audio...");
+		//console.log("Initializing Audio...");
 		// note: this causes a browser error if user has not interacted w page yet    
 		audioCtx = new (window.AudioContext || window.webkitAudioContext)(); // FIXME: error in chrome
 		this.context = audioCtx;
