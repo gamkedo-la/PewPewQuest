@@ -124,8 +124,11 @@ const gameScreen = {
                 audio.playMusic(loader.sounds['bgm_attack'], 0.8);
             }
         }else{
-            player.combat = false;
-            gameScreen.cameraTypeToggle = true;
+            if(player.combat){
+                audio.playMusic(loader.sounds['bgm_exploration'], 0.8);
+                player.combat = false;
+                gameScreen.cameraTypeToggle = true;
+            }
         }
             
 
