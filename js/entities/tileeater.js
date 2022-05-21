@@ -739,11 +739,5 @@ class Tileeater {
             world.setTileAtPosition(tile.i, tile.j, tile.tile);
         })
 
-        // this.scrappers.forEach(scrapper => {
-        //     let tile = scrapper.grabbedTile;
-        //     if(tile){
-        //         world.setTileAtPosition(tile.i, tile.j, tile.tile);
-        //     }
-        // })
     }
 }

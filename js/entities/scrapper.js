@@ -349,20 +349,23 @@ class Scrapper {
                     this.state = this.states.DELIVERING_TILE;
                     let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
 
-                    if(tile != 0) {
+                    if(tile != 0 && tile != COLOR_DIRTY_RED) {
+
+                        this.grabbedTile = {
+                            tile: tile,
+                            i: Math.floor((this.x + this.tileGripOffset.x)/8),
+                            j: Math.floor((this.y + this.tileGripOffset.y)/8),
+                        };
+
                         world.data[ world.pixelToTileIndex(
                         this.x + this.tileGripOffset.x,
                         this.y + this.tileGripOffset.y) ] = COLOR_DIRTY_RED;
+
                     }
-
-                    this.grabbedTile = {
-                        tile: tile,
-                        i: Math.floor((this.x + this.tileGripOffset.x)/8),
-                        j: Math.floor((this.y + this.tileGripOffset.y)/8),
-                    };
-
                     // push here, forget about it
-                    this.tileEater.tilesEaten.push(this.grabbedTile);
+                    if(this.grabbedTile != null){
+                        this.tileEater.tilesEaten.push(this.grabbedTile);
+                    }
                 }
                 break;
             }   
