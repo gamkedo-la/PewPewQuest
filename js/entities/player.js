@@ -263,10 +263,10 @@ var player = {
         
             //other actions-----------------------------------------------------
 
-            if (Key.justReleased(Key.x)) {
-                inventory.selection++;
-                inventory.selection = inventory.selection % inventory.itemList.length;
-            }
+            // if (Key.justReleased(Key.x)) {
+            //     inventory.selection++;
+            //     inventory.selection = inventory.selection % inventory.itemList.length;
+            // }
 
 
             //CHEATS-------------------------------------------------------------------
