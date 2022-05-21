@@ -49,7 +49,7 @@ class Scrapper {
         }
         this.state = this.states.SEEK_TILE;
 
-        this.tilesEaten = [];
+        // this.tilesEaten = [];
 
         this.spritesheet = spritesheet({
             image: img['scrapper'],
@@ -340,16 +340,21 @@ class Scrapper {
                     audio.playSound(loader.sounds.deliverTile, 0, 0.15);
                     this.state = this.states.DELIVERING_TILE;
                     let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
+
                     if(tile != 0) {
                         world.data[ world.pixelToTileIndex(
                         this.x + this.tileGripOffset.x,
                         this.y + this.tileGripOffset.y) ] = COLOR_DIRTY_RED;
                     }
+
                     this.grabbedTile = {
                         tile: tile,
                         i: Math.floor((this.x + this.tileGripOffset.x)/8),
                         j: Math.floor((this.y + this.tileGripOffset.y)/8),
                     };
+
+                    // push here, forget about it
+                    this.tileEater.tilesEaten.push(this.grabbedTile);
                 }
                 break;
             }   
@@ -374,9 +379,9 @@ class Scrapper {
                     this.unloading = false;
                     
                     //we go ahead and pass along the tile to the tile eater anyways, so restoration is possible
-                    if(this.grabbedTile != null) {
-                        this.tileEater.tilesEaten.push(this.grabbedTile);
-                    }
+                    // if(this.grabbedTile != null) {
+                    //     this.tileEater.tilesEaten.push(this.grabbedTile);
+                    // }
 
                     this.grabbedTile = null;
                     this.unloadOffset = { x: 0, y: 0};
@@ -430,9 +435,9 @@ class Scrapper {
                         this.unloading = false;
                         let dir = ['dock_west', 'dock_north', 'dock_east', 'dock_south'].indexOf(bestDock.state);
                         this.setDirectionalAnim("carry", dir);
-                        if(this.grabbedTile != null) {
-                            this.tileEater.tilesEaten.push(this.grabbedTile);
-                        }
+                        // if(this.grabbedTile != null) {
+                        //     this.tileEater.tilesEaten.push(this.grabbedTile);
+                        // }
                         //console.log(this.tileEater.tilesEaten);
                         this.state = this.states.SEEK_TILE;
                         this.grabbedTile = null;
@@ -445,9 +450,9 @@ class Scrapper {
         
         this.updateCollider();
         if(this.health < 0) {
-            if(this.grabbedTile != null) {
-                this.tileEater.tilesEaten.push(this.grabbedTile);
-            }
+            // if(this.grabbedTile != null) {
+            //     this.tileEater.tilesEaten.push(this.grabbedTile);
+            // }
             this.die();
         }
         this.bump = lerp(this.bump, 0, 0.1);
@@ -480,9 +485,9 @@ class Scrapper {
     }
 
     die() {
-        if(this.grabbedTile != null) {
-            this.tileEater.tilesEaten.push(this.grabbedTile);
-        }
+        // if(this.grabbedTile != null) {
+        //     this.tileEater.tilesEaten.push(this.grabbedTile);
+        // }
         inventory.score+=100;
         audio.playSound(loader.sounds[`bigSplode0${Math.floor(Math.random()*8)}`],
         map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);

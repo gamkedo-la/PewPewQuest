@@ -659,9 +659,9 @@ class Tileeater {
             inventory.score+=10000;
 
             this.scrappers.forEach(scrapper => {
-                if(scrapper.grabbedTile != null) {
-                    scrapper.tileEater.tilesEaten.push(scrapper.grabbedTile);
-                }
+                // if(scrapper.grabbedTile != null) {
+                //     scrapper.tileEater.tilesEaten.push(scrapper.grabbedTile);
+                // }
                 scrapper.die();
             })
             this.restoreTiles();
