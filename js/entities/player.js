@@ -73,7 +73,7 @@ var player = {
             }
 
             if(inventory.items.chalice == 1 && inventory.selectedItem == 'chalice') {
-                canvasContext.drawImage(img['chalice-inventory'], Math.floor(this.x-view.x), Math.floor(this.y-view.y));
+                canvasContext.drawImage(img['chalice-inventory'], Math.floor(this.x-view.x - 1), Math.floor(this.y-view.y - 18));
             }
 
             if(this.swinging && this.swingTimer){
