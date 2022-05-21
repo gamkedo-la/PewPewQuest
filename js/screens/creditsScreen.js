@@ -14,20 +14,45 @@ PewPewQuest
 a JS game led by Ryan Malm from
 March 21st thru May 22th 2022
 
-John Doe: thing 1 and thing 2
-Jane Doe: thing 3 and thing 4
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
-Credits Scroller
+Ryan Malm: Project lead, core gameplay, tile art, 
+map system, collisions, items, bridge feature, 
+level design, inventory, key barriers, minimap 
+fast travel, base enemy mechanics, enemy behavior 
+(bat, bug, enforcer, scrapper polish), camera 
+movement, treasure tile glitch effect, explode 
+sounds, particle system, sounds (player hurt, 
+footstep), custom vector draw code, win state
+
+Tylor Allison: Armor rings, player sabre weapon, 
+enemy functionality (tile eater, scrapper, 
+checkpoint), sprites (bat, bug, spawner, tile 
+eater), various bullet improvements, assorted 
+gameplay tuning, game over
+
+Evan Sklarski: Enforcer AI improvements, better
+mouse targeting, Firefox compatiblity fix, audio
+bug patched, key carry effect, bridge glitch
+tweaks, collision debug draw
+
+Michael "Misha" Fewkes: Sounds (explosions,
+enforcer), reverb support, sound voice limiting,
+bit crush
+
+Klaim (A. Joel Lamotte): Exploration music
+
+Christer "McFunkypants" Kaitila: Bats stealing
+keys, slow motion effect, gamepad support, minimap
+optimization, analog input, additional sounds
+(scrapper), pixel sharp fix
+
+Patrick McKeown: Sounds (tile pickup, hurt,
+pause/unpause, player captured), initial sound
+test code
+
+H Trayford: Collision precision fix, dpad movement,
+animation loading improvements
+
+Syed Daniyal Ali: Practice commit
 `
         this.congratsText = additionalText;
         clearScreen('black');
