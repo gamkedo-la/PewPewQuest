@@ -121,8 +121,7 @@ const gameScreen = {
             if(!player.combat){
                 player.combat = true;
                 gameScreen.cameraTypeToggle = false;
-                //insert music switcing here
-
+                audio.playMusic(loader.sounds['bgm_attack'], 0.8);
             }
         }else{
             player.combat = false;
