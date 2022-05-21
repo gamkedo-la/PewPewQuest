@@ -112,32 +112,42 @@ var inventory = {
         
         if (gamepad.rightShoulder() && inventory.switchCooldown <= 0) {
             inventory.switchCooldown = inventory.switchCooldownMax;
-            inventory.selection++;
-            inventory.selection = inventory.selection % inventory.itemList.length;
-            inventory.selectedItem = inventory.itemList[inventory.selection];
-
+            this.inventoryForward();
         }else if (gamepad.leftShoulder() && inventory.switchCooldown <= 0) {
             inventory.switchCooldown = inventory.switchCooldownMax;
-            inventory.selection--;
-            if(inventory.selection < 0){
-                inventory.selection = inventory.itemList.length-1;
-            }
-            inventory.selectedItem = inventory.itemList[inventory.selection];
-
+            this.inventoryReverse();
         }
 
-        if(Key.justReleased(Key.c)){
-            inventory.selection++;
-            inventory.selection = inventory.selection % inventory.itemList.length;
-            inventory.selectedItem = inventory.itemList[inventory.selection];
+        if (Key.justReleased(Key.c)) {
+            this.inventoryForward();
         }else if (Key.justReleased(Key.x)) {
-            inventory.selection--;
-            if(inventory.selection < 0){
-                inventory.selection = inventory.itemList.length-1;
-            }
-            inventory.selectedItem = inventory.itemList[inventory.selection];
-
+            this.inventoryReverse();
         }
+    },
 
+    inventoryForward: function () {
+        let count = 0;
+
+        do {
+            this.selection++;
+            this.selection = this.selection % this.itemList.length;
+            this.selectedItem = this.itemList[this.selection];
+            count++;
+        }
+        while (this.items[this.selectedItem] != 1 && count < this.itemList.length);
+    },
+
+    inventoryReverse: function () {
+        let count = 0;
+
+        do {
+            this.selection--;
+            if(this.selection < 0){
+                this.selection = this.itemList.length-1;
+            }
+            this.selectedItem = this.itemList[this.selection];
+            count++;
+        }
+        while (this.items[this.selectedItem] != 1 && count < this.itemList.length);
     }
 }
