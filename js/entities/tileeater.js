@@ -665,7 +665,7 @@ class Tileeater {
                 scrapper.die();
             })
             this.restoreTiles();
-            this.scrappers = [];
+            //this.scrappers = [];
             world.worldEntities.splice(world.worldEntities.indexOf(this), 1);
             
         }
@@ -739,11 +739,11 @@ class Tileeater {
             world.setTileAtPosition(tile.i, tile.j, tile.tile);
         })
 
-        this.scrappers.forEach(scrapper => {
-            let tile = scrapper.grabbedTile;
-            if(tile){
-                world.setTileAtPosition(tile.i, tile.j, tile.tile);
-            }
-        })
+        // this.scrappers.forEach(scrapper => {
+        //     let tile = scrapper.grabbedTile;
+        //     if(tile){
+        //         world.setTileAtPosition(tile.i, tile.j, tile.tile);
+        //     }
+        // })
     }
 }

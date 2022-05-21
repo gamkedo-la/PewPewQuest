@@ -480,6 +480,9 @@ class Scrapper {
     }
 
     die() {
+        if(this.grabbedTile != null) {
+            this.tileEater.tilesEaten.push(this.grabbedTile);
+        }
         inventory.score+=100;
         audio.playSound(loader.sounds[`bigSplode0${Math.floor(Math.random()*8)}`],
         map(this.x-view.x, 0, canvas.width, -0.7, 0.7), 0.7, 1+Math.random()*0.2, false);
@@ -491,6 +494,7 @@ class Scrapper {
             world.bullets.push(new Bullet(this.x, this.y, Math.cos(angle)*4*Math.random(), Math.sin(angle)*2*Math.random(), COLORS.dirtyRed));
         }
         world.entities.push(new Splode(this.x + this.width/2, this.y + this.width/2, 20, COLORS.dirtyRed));
+        this.tileEater.scrappers.splice(this.tileEater.scrappers.indexOf(this), 1);
     }
 
     updateCollider() {

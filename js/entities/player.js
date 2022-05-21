@@ -278,19 +278,19 @@ var player = {
                 signal.addEventListener('getChalice', getChalice);
             */
             if (Key.justReleased(Key.TWO)) {
-                signal.dispatch('getKey')
+                inventory.items.keys++;
             }
             if (Key.justReleased(Key.THREE)) {
-                signal.dispatch('getLight')
+                inventory.items.torch = 1;
             }
             if (Key.justReleased(Key.FOUR)) {
-                signal.dispatch('getGun')
+                inventory.items.gun = 1;
             }
             if (Key.justReleased(Key.FIVE)) {
-                signal.dispatch('getSabre')
+                inventory.items.sabre = 1;
             }
             if (Key.justReleased(Key.SIX)) {
-                signal.dispatch('getChalice')
+                inventory.items.chalice = 1;
             }
 
 
@@ -512,6 +512,16 @@ var player = {
             if(ticker%2==0){
                 audio.playSound(loader.sounds.pewpew2, 0, 0.1)
                 let bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+                world.bullets.push(bullet);
+                bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+                world.bullets.push(bullet);
+                bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+                world.bullets.push(bullet);
+                bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+                world.bullets.push(bullet);
+                bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+                world.bullets.push(bullet);
+                bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
                 world.bullets.push(bullet);
                 bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
                 world.bullets.push(bullet);

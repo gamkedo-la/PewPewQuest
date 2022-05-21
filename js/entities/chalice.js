@@ -9,6 +9,7 @@ class Chalice {
         this.top = this.y;
         this.bottom = this.y + this.height;
         this.canBeCollected = true;
+        this.glitch = 0;
 
         this.mapSprite = {
             x: 1466,
@@ -61,14 +62,18 @@ class Chalice {
             width = this.mapSprite.width,
             height = this.mapSprite.height;
         this.canBeCollected = true;
+        this.glitch = 0;
         for(let i = 0; i < width; i++){
             for(let j = 0; j < height; j++){
                 let color = world.getTileAtPosition(x+i, y+j);
                 if(color == COLOR_DIRTY_RED){
-                    //console.log('glitch');
-                    this.canBeCollected = false;
+                    this.glitch += 1;
+                    
                 }
             }
+        }
+        if(this.glitch > 3){
+            this.canBeCollected = false;
         }
     }
 }
