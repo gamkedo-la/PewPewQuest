@@ -267,6 +267,33 @@ var player = {
                 inventory.selection++;
                 inventory.selection = inventory.selection % inventory.itemList.length;
             }
+
+
+            //CHEATS-------------------------------------------------------------------
+            /*
+                signal.addEventListener('getKey', getKey);
+                signal.addEventListener('getLight', getLight);
+                signal.addEventListener('getGun', getGun);
+                signal.addEventListener('getSabre', getSabre);
+                signal.addEventListener('getChalice', getChalice);
+            */
+            if (Key.justReleased(Key.TWO)) {
+                signal.dispatch('getKey')
+            }
+            if (Key.justReleased(Key.THREE)) {
+                signal.dispatch('getLight')
+            }
+            if (Key.justReleased(Key.FOUR)) {
+                signal.dispatch('getGun')
+            }
+            if (Key.justReleased(Key.FIVE)) {
+                signal.dispatch('getSabre')
+            }
+            if (Key.justReleased(Key.SIX)) {
+                signal.dispatch('getChalice')
+            }
+
+
             
 
             if(inventory.selectedItem == 'sabre' && inventory.items.sabre == 1){
