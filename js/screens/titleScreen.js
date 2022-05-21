@@ -1,5 +1,15 @@
 var titleScreen = {
 
+    enter: function() {
+        audio.setMute(false);
+        this.bgmStarted = true;
+        audio.playMusic(loader.sounds['bgm_title'], 0.8);
+    },
+
+    leave: function() {
+        audio.playMusic(loader.sounds['bgm_exploration'], 0.8);
+    },
+
     draw: function () {
 
         //fill background

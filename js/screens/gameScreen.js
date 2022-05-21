@@ -77,11 +77,6 @@ const gameScreen = {
     },
 
     update: function () {
-        if(!this.bgmStarted) {
-            audio.setMute(false);
-            this.bgmStarted = true;
-            audio.playMusic(loader.sounds['bgm_exploration'], 0.8);
-        }
         if(Key.justReleased(Key.m) || Key.justReleased(Key.p) ) {
             signal.dispatch('miniMap');
         }

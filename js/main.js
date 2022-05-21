@@ -162,11 +162,13 @@ const soundList = [
 
     { name: "bgm_exploration", url:"snd/bgm-exploration-2-v1.mp3" },
     { name: "bgm_attack", url:"snd/bgm-attack-v1.mp3" },
+    { name: "bgm_title", url:"snd/bgm-adventure-v1.mp3" },
     // { name: "bullethit", url:"snd/Shoot 245"}
 
 ]
 
 var gameState = GAMESTATE_TITLE;
+var previousGameState = null;
 var ticker = 0;
 var loader = new AssetLoader();
 var audio = new AudioGlobal();
@@ -287,8 +289,12 @@ function mainLoop(){
 function gameLoop() {
     ticker++;
     stats.begin();
+    const lastLoopGameState = previousGameState;
+    previousGameState = gameState;
     switch (gameState) {
         case GAMESTATE_TITLE:
+            if(lastLoopGameState !== GAMESTATE_TITLE)
+                titleScreen.enter();
             titleScreen.draw();
             titleScreen.update();
             break;
@@ -312,6 +318,11 @@ function gameLoop() {
     audio.update();
     Key.update();
     stats.end();
+    
+    if(lastLoopGameState ===  GAMESTATE_TITLE  && previousGameState !== GAMESTATE_TITLE)
+    {
+        titleScreen.leave();
+    }
 }
 
 function soundInit(){ 
