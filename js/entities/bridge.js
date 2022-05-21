@@ -94,10 +94,48 @@ class Bridge {
             top: this.y,
             bottom: this.y + 30,
         }
+
+        this.upperCollider = {
+            left: this.x+13,
+            right: this.x + 23,
+            top: this.y - 8,
+            bottom: this.y,
+        }
+
+        this.lowerCollider = {
+            left: this.x+13,
+            right: this.x + 23,
+            top: this.y + 31,
+            bottom: this.y + 39,
+        }
     }
 
     bridgeWallCollision() {
-        return rectCollision(player.collider, this.leftCollider) || rectCollision(player.collider, this.rightCollider);
+        return rectCollision(player.collider, this.leftCollider) ||
+            rectCollision(player.collider, this.rightCollider) ||
+            this.tileCollisionCheck(this.upperCollider) ||
+            this.tileCollisionCheck(this.lowerCollider);
+    }
+
+    tileCollisionCheck(collider){
+        if (rectCollision(player.collider, collider) && world.noCollide) {
+            let leftTile =      Math.floor(collider.left / world.tileSize),
+                rightTile =     Math.floor(collider.right / world.tileSize),
+                topTile =       Math.floor(collider.top / world.tileSize),
+                bottomTile = Math.floor(collider.bottom / world.tileSize)
+
+            for(let i = leftTile; i <=rightTile; i++){
+                for(let j = topTile; j<= bottomTile; j++){
+                    let tile = world.getTileAtPosition(i, j)
+
+                    if(tile > 0){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     debug() {
@@ -110,5 +148,7 @@ class Bridge {
         // collider rects
         fillRectangle(this.leftCollider, `rgba(0,255,0,0.3)`);
         fillRectangle(this.rightCollider, `rgba(0,255,0,0.3)`);
+        fillRectangle(this.upperCollider, `rgba(0,255,0,0.3)`);
+        fillRectangle(this.lowerCollider, `rgba(0,255,0,0.3)`);
     }
 }
