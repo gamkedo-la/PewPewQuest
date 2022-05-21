@@ -83,6 +83,7 @@ function getLight(event){
     
         inventory.items.torch=1;
         inventory.selectedItem = 'torch';
+        inventory.selection = inventory.itemList.indexOf(inventory.selectedItem);
         audio.playSound(loader.sounds.test1);
         let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
@@ -96,6 +97,7 @@ function getGun(event){
     
         inventory.items.gun=1;
         inventory.selectedItem = 'gun';
+        inventory.selection = inventory.itemList.indexOf(inventory.selectedItem);
         audio.playSound(loader.sounds.test1);
         let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
@@ -109,6 +111,7 @@ function getSabre(event){
     
         inventory.items.sabre=1;
         inventory.selectedItem = 'sabre';
+        inventory.selection = inventory.itemList.indexOf(inventory.selectedItem);
         audio.playSound(loader.sounds.test1);
         let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
@@ -122,6 +125,7 @@ function getChalice(event){
     
         inventory.items.chalice=1;
         inventory.selectedItem = 'chalice';
+        inventory.selection = inventory.itemList.indexOf(inventory.selectedItem);
         audio.playSound(loader.sounds.test1);
         let splode = new Splode(lightItem.x, lightItem.y, 10, COLORS.tahitiGold);
         world.entities.push(splode);
