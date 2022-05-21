@@ -4,6 +4,7 @@ const gameScreen = {
     bgmStarted: false,
     cursorX: 0,
     cursorY: 0,
+    preUpdateCount: 3000,
    
     reset: function (doWorldInit) {
         if(doWorldInit) { worldInit(); }
@@ -16,8 +17,16 @@ const gameScreen = {
         view.x = view.targetX
         view.y = view.targetY
         currentAreaMode = EXPLORATION_MODE
-
+        let i = this.preUpdateCount
+        while(i--){
+            gameScreen.update();
+            if(i == 1){
+                //audio.setMute(true);
+                //this.bgmStarted = false;
+            }
+        }
     },
+
     draw: function () {
         clearScreen('black');
         world.drawMap();
@@ -69,6 +78,7 @@ const gameScreen = {
 
     update: function () {
         if(!this.bgmStarted) {
+            audio.setMute(false);
             this.bgmStarted = true;
             audio.playMusic(loader.sounds['bgm_exploration'], 0.8);
         }

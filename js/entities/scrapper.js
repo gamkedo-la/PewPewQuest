@@ -18,6 +18,9 @@ class Scrapper {
         this.dockRange = 20;
         this.unloadOffset = {x: 0, y: 0};
         this.tileEater = parent;
+        this.clampedDistance = 0;
+        this.soundVolume = 0.5;
+        this.playerDistance = 0;
 
         this.collider = {
             x: this.x,
@@ -273,6 +276,11 @@ class Scrapper {
         this.startY = bestDock.y;
         let waitForDock = false;
 
+        //sound distance check
+        this.playerDistance = this.findDistanceToPlayer();
+        this.clampedDistance = clamp(this.playerDistance, 0, 230);
+        //this.soundVolume =  map(this.clampedDistance,  1, 300, 0.5, 0);
+
        switch(this.state){
             case this.states.DAMAGED: {
                 break;
@@ -292,7 +300,7 @@ class Scrapper {
                 this.captureCoolDown--;
                 let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
                 if(tile != 0 && tile != COLOR_DIRTY_RED) {
-                    audio.playSound(loader.sounds.eatingTile, 0, 0.15);
+                    audio.playSound(loader.sounds.eatingTile, 0, map(this.clampedDistance,  1, 300, 0.15, 0));
                     this.tileTimer = this.tileTimerMax;
                     this.state = this.states.EATING_TILE;
                 }
@@ -337,7 +345,7 @@ class Scrapper {
                 }
                 
                 if(this.tileTimer <= 0) {
-                    audio.playSound(loader.sounds.deliverTile, 0, 0.15);
+                    audio.playSound(loader.sounds.deliverTile, 0, map(this.clampedDistance,  1, 300, 0.15, 0));
                     this.state = this.states.DELIVERING_TILE;
                     let tile = world.getTileAtPixel(this.x + this.tileGripOffset.x, this.y + this.tileGripOffset.y);
 
@@ -412,7 +420,7 @@ class Scrapper {
                 // within range of dock...
                 } else {
                     if (!this.unloading) {
-                        audio.playSound(loader.sounds.unloadingTile, 0, 0.15);
+                        audio.playSound(loader.sounds.unloadingTile, 0, map(this.clampedDistance,  1, 300, 0.15, 0));
                         this.unloading = true;
                         // animation is set to unloading, which is a non-looping animation
                         this.animState = bestDock.unloadAnim;
@@ -545,6 +553,14 @@ class Scrapper {
         let yDir = py - this.y;
         let angle = Math.atan2(yDir, xDir);
         return angle;
+    }
+
+    findDistanceToPlayer() {
+        let px  = player.x;
+        let py = player.y;
+        let xDir = px - this.x;
+        let yDir = py - this.y;
+        return Math.sqrt(xDir*xDir + yDir*yDir);
     }
 
 }

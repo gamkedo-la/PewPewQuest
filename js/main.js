@@ -45,7 +45,7 @@ const GAMESTATE_GAME_OVER = 2;
 const GAMESTATE_CREDITS = 3;
 const GAMESTATE_MINIMAP = 4;
 
-const PRE_GAME_LOOP_COUNT = 1000;
+const PRE_GAME_LOOP_COUNT = 4000;
 
 
 const FRAMES_PER_SECOND = 60;
@@ -259,14 +259,6 @@ function begin(fps) {
     fpsInterval = 1000/fps;
     then = Date.now();
     startTime = then;
-   // pre-run some game logic so meta-items are eaten before the game starts
-    if(gameState == GAMESTATE_PLAY){
-        let i = PRE_GAME_LOOP_COUNT;
-        while(i--){
-            gameLoop();
-        }
-    }
-
     mainLoop();
 }
 
