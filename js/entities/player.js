@@ -593,6 +593,12 @@ var player = {
             this.hurtCooldown = this.hurtCooldownMax;
             audio.playSound(loader.sounds.playerHurt01, 0, 0.5)
             this.health -= damage;
+
+            for(let i = 0; i < 20; i++){
+                let particle = new Particle(this.x + 3, this.y + 3, Math.random()*2 - 1, Math.random() * 2 - 1,
+                {color: COLORS.dirtyRed, life: this.hurtCooldownMax*0.5});
+               world.entities.push(particle);
+            }
         }
         if(this.health <= 0){
             this.health = 0;
