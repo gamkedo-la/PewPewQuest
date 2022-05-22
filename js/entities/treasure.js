@@ -4,14 +4,20 @@ class Treasure {
         this.y = tiley * 8;
         this.width = 4;
         this.height = 4;
-        this.left = this.x-4;
+        this.left = this.x;
         this.right = this.x + this.width;
         this.top = this.y;
         this.bottom = this.y + this.height;
+        this.collider = {
+            left: this.left - 4,
+            right: this.right + 4,
+            top: this.top - 4,
+            bottom: this.bottom + 4
+        };
     }
 
     update() {
-        if(rectCollision(this, player.collider)) {
+        if(rectCollision(this.collider, player.collider)) {
             this.collect();
         }
         for(let i = 0; i < 2; i++) {
