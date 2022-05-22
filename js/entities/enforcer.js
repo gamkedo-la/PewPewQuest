@@ -213,7 +213,7 @@ class Enforcer {
                 }
             }
             // else evade until health > 200
-            else if(this.health >= 200) {
+            else if(this.health >= 200 && this.captureCoolDown <= 0) {
                 this.state = this.states.WANDER;
             }
 
@@ -231,16 +231,14 @@ class Enforcer {
 
             case this.states.WANDER:{
                 this.currentAnimation = this.spritesheet.animations['idle'];
-                if(ticker%this.moveInterval == 0) {
-                    this.angle = Math.random() * Math.PI*2;
+
+                if (this.captureCoolDown > 0) {
+                    this.evade();
                 }
-                this.moveSpeed = 0.2;
-                this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
-                this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
-                // this.captureCoolDown--;
-                // if(this.playerDistance < 150 & this.captureCoolDown <= 0) {
-                //     this.state = this.states.CHASE;
-                // }
+                else {
+                    this.wander();
+                }
+
                 break;
             }
 
@@ -251,28 +249,14 @@ class Enforcer {
                 this.moveSpeed = 0.3;
                 this.target.x += Math.cos(this.angle)*1.1 + Math.random() - 0.5
                 this.target.y += Math.sin(this.angle)*1.1 + Math.random() - 0.5
-                // if(this.playerDistance > 300) {
-                //     this.state = this.states.WANDER;
-                // }
                 break;
             }
 
             case this.states.EVADE: {
-
                 this.currentAnimation = this.spritesheet.animations['idle'];
 
-                this.angle = this.findDirectionTowardsPoint(player);
-                this.angle += Math.PI; //flip it 180 degrees
-                this.moveSpeed = 0.3;
-                this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
-                this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
-                // if(this.playerDistance > 100) {
-                //     this.heal();
-                // }
-                // if(this.health >= 200) {
-                //     this.state = this.states.WANDER;
-                // }
-                
+                this.evade();
+
                 break;
             }
 
@@ -362,12 +346,24 @@ class Enforcer {
 
             if(armorPoint.bump < 0.01) { armorPoint.bump = 0;}
         })
+    }
 
-        if(this.health <= 0) {
-            this.die();
+    evade() {
+        this.angle = this.findDirectionTowardsPoint(player);
+        this.angle += Math.PI; //flip it 180 degrees
+        this.moveSpeed = 0.3;
+        this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
+        this.target.y += Math.sin(this.angle)*0.7 + Math.random() - 0.5
+    }
+
+    wander() {
+        if(ticker%this.moveInterval == 0) {
+            this.angle = Math.random() * Math.PI*2;
         }
 
-        
+        this.moveSpeed = 0.2;
+        this.target.x += Math.cos(this.angle)*0.7 + Math.random() - 0.5
+        this.target.y += Math.sin(this.angle) * 0.7 + Math.random() - 0.5
     }
 
     die() {

@@ -1,6 +1,7 @@
 var inventory = {
     switchCooldown: 0,
     switchCooldownMax: 10,
+    healthBarColor: 0,
     items: {
         keys: 0,
         bridge: 0,
@@ -46,7 +47,7 @@ var inventory = {
         //player health rectangle
         let playerHealthBarWidthMax = 320-230;
         let playerHealthBarWidth = playerHealthBarWidthMax * player.health / player.maxHealth;
-        fillRect(230, this.rect.y, playerHealthBarWidth, this.rect.height, COLORS.elfGreen);
+        fillRect(230, this.rect.y, playerHealthBarWidth, this.rect.height, this.healthBarColor);
         //textString, pos={x: 0, y: 0}, hspacing=0, vspacing = 2, scale=1
         gameFont.drawText(this.score.toString().padStart(12, '0'), {x: 240, y: this.rect.y + 6}, 0, 0, 1);
 
@@ -108,6 +109,7 @@ var inventory = {
         
     },
     update: function () {
+        this.healthBarColor = player.hurtCooldown > 0 ? COLORS.dirtyRed : COLORS.elfGreen;
         inventory.switchCooldown--;
         
         if (gamepad.rightShoulder() && inventory.switchCooldown <= 0) {

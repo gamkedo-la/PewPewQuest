@@ -109,10 +109,7 @@ const gameScreen = {
             currentAreaMode = updateAreaMode;
         }
 
-        if(world.environmentData[
-            world.getIndexAtPosition(
-                Math.floor(player.x/8), Math.floor(player.y/8))
-            ] == COMBAT_MODE) {
+        if(currentAreaMode == COMBAT_MODE) {
             if(!player.combat){
                 player.combat = true;
                 gameScreen.cameraTypeToggle = false;
