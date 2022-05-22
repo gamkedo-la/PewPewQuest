@@ -75,7 +75,7 @@ const imageList = [
 'flashlight-inventory',
 'flashlight',
 'key',
-'map.',
+'mapb',
 'map',
 'maptest',
 'orbit-key',
