@@ -38,7 +38,8 @@ Michael "Misha" Fewkes: Sounds (explosions,
 enforcer), reverb support, sound voice limiting,
 bit crush
 
-Klaim (A. Joel Lamotte): Exploration music
+Klaim (A. Joel Lamotte): Exploration music,
+Title screen music, Action/Combat music
 
 Christer "McFunkypants" Kaitila: Bats stealing
 keys, slow motion effect, gamepad support, minimap
