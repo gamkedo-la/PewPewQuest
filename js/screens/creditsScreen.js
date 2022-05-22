@@ -12,7 +12,7 @@ HomeTeam GameDev Presents:
 PewPewQuest
 
 a JS game led by Ryan Malm from
-March 21st thru May 22th 2022
+March 21st thru May 22nd 2022
 
 Ryan Malm: Project lead, core gameplay, tile art, 
 map system, collisions, items, bridge feature, 

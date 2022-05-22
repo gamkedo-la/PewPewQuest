@@ -27,8 +27,8 @@ var Stats = function () {
 	function showPanel( id ) {
 
 		for ( var i = 0; i < container.children.length; i ++ ) {
-
-			container.children[ i ].style.display = i === id ? 'block' : 'none';
+			// slightly brutal hack on next line for release to ensure dev panels don't appear
+			container.children[ i ].style.display = 'none';//i === id ? 'block' : 'none';
 
 		}
 
