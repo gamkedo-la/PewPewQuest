@@ -14,8 +14,8 @@ class Flashlight {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1130,
-            y: 600,
+            x: 957,
+            y: 591,
             width: 25,
             height: 25
         }

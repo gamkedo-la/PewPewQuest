@@ -11,8 +11,8 @@ class PewPew {
         this.canBeCollected = true;
 
         this.mapSprite = {
-            x: 1208,
-            y: 504,
+            x: 1132,
+            y: 392,
             width: 21,
             height: 11
         }
