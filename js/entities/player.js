@@ -32,7 +32,7 @@ var player = {
     steps: -1,
     health: 350,
     startHealth: 350,
-    maxHealth: 500,
+    maxHealth: 2000,
     hurtCooldown: 0,
     hurtCooldownMax: 25,
     sabreLength: 25,
@@ -541,6 +541,16 @@ var player = {
         if(ticker%3==0){
             audio.playSound(loader.sounds.pewpew2, 0, 0.2)
             let bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+            bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+            bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+            bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+            bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
+            world.bullets.push(bullet);
+            bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
             bullet = new Bullet(this.x + 3, this.y + 3, bulletXVelocity, bulletYVelocity);
             world.bullets.push(bullet);
