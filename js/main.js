@@ -162,7 +162,7 @@ const soundList = [
 
     { name: "bgm_exploration", url:"snd/bgm-exploration-2-v1.mp3" },
     { name: "bgm_attack", url:"snd/bgm-attack-v1.mp3" },
-    { name: "bgm_title", url:"snd/bgm-adventure-v1.mp3" },
+    { name: "bgm_title", url:"snd/bgm-adventure-v2.mp3" },
     // { name: "bullethit", url:"snd/Shoot 245"}
 
 ]
