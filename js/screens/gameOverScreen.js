@@ -154,10 +154,12 @@ var gameOverScreen = {
         }
         if (Key.justReleased(Key.y) || Key.justReleased(Key.ENTER)) { 
             this.reset();
+            audio.setBitDepth(16)
             signal.dispatch('titleScreen'); 
         }
         if (gamepad.buttonY()) { 
             this.reset();
+            audio.setBitDepth(16)
             signal.dispatch('titleScreen'); 
         }
         this.box.x = canvas.width/2 - 5;
