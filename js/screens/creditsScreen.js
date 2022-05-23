@@ -35,7 +35,7 @@ bug patched, key carry effect, bridge glitch
 tweaks, collision debug draw
 
 Michael "Misha" Fewkes: Sounds (explosions,
-enforcer), reverb support, sound voice limiting,
+enforcer, enemy hurt, footsteps, collisions), reverb support, sound voice limiting,
 bit crush
 
 Klaim (A. Joel Lamotte): Exploration music,
