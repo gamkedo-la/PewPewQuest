@@ -20,6 +20,7 @@ const AudioGlobal = function AudioGlobal() {
 	var soundEffectsVolume;
 	var currentMusicTrack;
 	var musicStartTime = 0;
+	var currentBitDepth = 0;
 
 //--//Set up WebAudioAPI nodes------------------------------------------------
 	this.init = function(callback) {
@@ -216,6 +217,7 @@ const AudioGlobal = function AudioGlobal() {
 
 	this.setBitDepth = function(value) {
 		if (value > 16) value = 16;
+		if (value == currentBitDepth) return;
 
 		var x;
 		var nSamples = 65536
@@ -226,7 +228,10 @@ const AudioGlobal = function AudioGlobal() {
 			curve[i] = (2 * Math.floor(x) + 1) / nLevels - 1;
 		}
 		bitCrushBus.curve = curve;
+
 		bitCrushGainBus.gain.setTargetAtTime(Math.min((value)/8, 1), audioCtx.currentTime, 0);
+
+		currentBitDepth = value;
 	}
 
 	this.duckMusic = function (duration, volume = 0) {

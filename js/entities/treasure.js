@@ -44,6 +44,7 @@ class Treasure {
         inventory.score += 100;
         if(player.health < player.maxHealth){
             player.health += 10;
+            audio.setBitDepth(player.health/(player.maxHealth/2)*16)
         }
         world.entities.splice(world.entities.indexOf(this), 1);
     }
